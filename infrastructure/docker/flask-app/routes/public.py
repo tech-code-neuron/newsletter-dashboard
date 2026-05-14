@@ -53,7 +53,7 @@ def serve_og_image():
 def get_yesterday_url() -> str:
     """Get URL for yesterday's newsletter archive."""
     yesterday = datetime.now(ET) - timedelta(days=1)
-    return f"https://reitsheet.co/news/archive/{yesterday.strftime('%Y-%m-%d')}/"
+    return f"https://your-domain.com/news/archive/{yesterday.strftime('%Y-%m-%d')}/"
 
 
 def get_current_date_formatted() -> str:

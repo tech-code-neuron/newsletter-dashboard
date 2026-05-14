@@ -38,7 +38,7 @@ FILINGS_TABLE = os.environ.get('FILINGS_TABLE', 'reitsheet-8k-disclosures')
 PROCESSOR_QUEUE_URL = os.environ.get('PROCESSOR_QUEUE_URL', '')
 
 # SEC EDGAR Configuration
-SEC_USER_AGENT = "REITSheet/1.0 (contact@reitsheet.com)"
+SEC_USER_AGENT = "PressReleasePipeline/1.0 (contact@your-domain.comm)"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik}.json"
 SEC_RATE_LIMIT_DELAY = 0.12  # 10 req/sec max, use 0.12s to be safe
 

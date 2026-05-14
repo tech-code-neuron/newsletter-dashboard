@@ -429,7 +429,7 @@ class PublisherGenerator:
     <div style="{self.STYLES['container']}">
         <!-- Header -->
         <div style="{self.STYLES['header']}">
-            <div style="{self.STYLES['logo']}">THE REIT SHEET</div>
+            <div style="{self.STYLES['logo']}">Press Release Pipeline</div>
             <div style="{self.STYLES['date']}">{date_str}</div>
         </div>
 
@@ -441,7 +441,7 @@ class PublisherGenerator:
         <!-- Footer -->
         <div style="{self.STYLES['footer']}">
             <div style="margin-bottom: 12px;">
-                <a href="https://reitsheet.co" style="{self.STYLES['footer_link']}">reitsheet.co</a>
+                <a href="https://your-domain.com" style="{self.STYLES['footer_link']}">your-domain.com</a>
             </div>
             <div style="font-size: 11px;">
                 <a href="{{{{unsubscribe_url}}}}" style="{self.STYLES['footer_link']}">Unsubscribe</a> ·

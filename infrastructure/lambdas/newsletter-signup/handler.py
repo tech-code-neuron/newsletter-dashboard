@@ -48,8 +48,8 @@ def _ensure_initialized():
 
     _config['SUBSCRIBERS_TABLE'] = os.environ['SUBSCRIBERS_TABLE']
     _config['SES_SENDER_EMAIL'] = os.environ['SES_SENDER_EMAIL']
-    _config['REPLY_TO_EMAIL'] = os.environ.get('REPLY_TO_EMAIL', 'hello@reitsheet.co')
-    _config['BASE_URL'] = os.environ.get('BASE_URL', 'https://reitsheet.co')
+    _config['REPLY_TO_EMAIL'] = os.environ.get('REPLY_TO_EMAIL', 'hello@your-domain.com')
+    _config['BASE_URL'] = os.environ.get('BASE_URL', 'https://your-domain.com')
     _config['COMPANY_ADDRESS'] = os.environ.get('COMPANY_ADDRESS', '3010 Edgeview Ln #312, Charlotte, NC 28209')
 
     _tables['subscribers'] = _clients['dynamodb'].Table(_config['SUBSCRIBERS_TABLE'])
@@ -190,7 +190,7 @@ def send_verification_email(email: str, verification_token: str) -> bool:
 
     subject = "Confirm your subscription to The Press Release Pipeline"
 
-    text_body = f"""THE REIT SHEET
+    text_body = f"""Press Release Pipeline
 
 Confirm your subscription
 
@@ -222,7 +222,7 @@ Copyright {current_year} The Press Release Pipeline. All rights reserved.
                     <tr>
                         <td align="center" style="padding: 32px 40px 24px 40px; background-color: #f9f9f9; border-radius: 8px 8px 0 0;">
                             <a href="{base_url}" style="text-decoration: none;">
-                                <img src="{logo_url}" alt="THE REIT SHEET" style="max-width: 280px; height: auto;">
+                                <img src="{logo_url}" alt="Press Release Pipeline" style="max-width: 280px; height: auto;">
                             </a>
                         </td>
                     </tr>
@@ -312,7 +312,7 @@ def send_already_subscribed_notification(email: str) -> bool:
 
     subject = "You're already subscribed to The Press Release Pipeline"
 
-    text_body = f"""THE REIT SHEET
+    text_body = f"""Press Release Pipeline
 
 You're already subscribed!
 
@@ -346,7 +346,7 @@ Copyright {current_year} The Press Release Pipeline. All rights reserved.
                     <tr>
                         <td align="center" style="padding: 32px 40px 24px 40px; background-color: #f9f9f9; border-radius: 8px 8px 0 0;">
                             <a href="{base_url}" style="text-decoration: none;">
-                                <img src="{base_url}/logo.png" alt="THE REIT SHEET" style="max-width: 280px; height: auto;">
+                                <img src="{base_url}/logo.png" alt="Press Release Pipeline" style="max-width: 280px; height: auto;">
                             </a>
                         </td>
                     </tr>

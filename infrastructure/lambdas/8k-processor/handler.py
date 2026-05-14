@@ -33,7 +33,7 @@ bedrock = boto3.client('bedrock-runtime', region_name='us-east-1')
 FILINGS_TABLE = os.environ.get('FILINGS_TABLE', 'reitsheet-8k-disclosures')
 
 # SEC
-SEC_USER_AGENT = "REITSheet/1.0 (contact@reitsheet.com)"
+SEC_USER_AGENT = "PressReleasePipeline/1.0 (contact@your-domain.comm)"
 SEC_RATE_LIMIT_DELAY = 0.15
 
 # Eastern timezone for SEC timestamp conversion

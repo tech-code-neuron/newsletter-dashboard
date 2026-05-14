@@ -62,7 +62,7 @@ except ImportError:
 # Constants
 REQUEST_TIMEOUT = 30
 MAX_RETRIES = 3
-USER_AGENT = 'Mozilla/5.0 (compatible; REITSheet/1.0)'
+USER_AGENT = 'Mozilla/5.0 (compatible; PressReleasePipeline/1.0)'
 
 
 def scrape_with_curl_cffi(url):

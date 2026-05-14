@@ -76,7 +76,7 @@ COLORS = {
     'border_dark': '#0066cc',
     'border_info': '#cce0ff',
 
-    # Email-specific borders (match reitsheet.co website)
+    # Email-specific borders (match your-domain.com website)
     'border_section': '#e5e5e5',   # Section header underlines
     'border_item': '#f0f0f0',      # Item row separators
     'border_footer': '#cccccc',    # Footer separator

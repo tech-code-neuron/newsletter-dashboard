@@ -59,9 +59,9 @@ def generate_unsubscribe_url(email: str) -> str:
         email: Subscriber email
 
     Returns:
-        Full unsubscribe URL (e.g., https://reitsheet.co/unsubscribe?email=...&sig=...)
+        Full unsubscribe URL (e.g., https://your-domain.com/unsubscribe?email=...&sig=...)
     """
-    base_url = os.environ.get('PUBLIC_BASE_URL', 'https://reitsheet.co')
+    base_url = os.environ.get('PUBLIC_BASE_URL', 'https://your-domain.com')
     sig = generate_unsubscribe_signature(email)
     params = urlencode({'email': email.lower(), 'sig': sig})
     return f"{base_url}/unsubscribe?{params}"

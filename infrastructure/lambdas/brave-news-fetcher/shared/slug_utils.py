@@ -2,7 +2,7 @@
 Slug Generation Utility
 =======================
 Generates URL-safe slugs for press release titles.
-Used by social media pipeline for reitsheet.co permalinks.
+Used by social media pipeline for your-domain.com permalinks.
 
 Usage:
     from shared.slug_utils import generate_release_slug

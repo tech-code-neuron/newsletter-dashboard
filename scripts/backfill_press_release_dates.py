@@ -34,7 +34,7 @@ def fetch_html(url: str, timeout: int = 10) -> Optional[str]:
     """Fetch HTML content from URL."""
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (compatible; REITSheet/1.0; +https://reitsheet.co)'
+            'User-Agent': 'Mozilla/5.0 (compatible; PressReleasePipeline/1.0; +https://your-domain.com)'
         }
         response = requests.get(url, headers=headers, timeout=timeout, allow_redirects=True)
 

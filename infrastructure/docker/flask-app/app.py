@@ -227,21 +227,21 @@ import uuid
 def require_authentication():
     """
     Require authentication for ALL routes except:
-    - Public domain (reitsheet.co) - no auth required
+    - Public domain (your-domain.com) - no auth required
     - /health (ALB health check)
     - /login (login page)
     - /auth/* (OAuth callbacks)
     - /static/* (static files)
 
     Domain architecture:
-    - reitsheet.co = PUBLIC (newsletter, archives, no auth)
-    - app.reitsheet.co = ADMIN (dashboard, publisher, requires auth)
+    - your-domain.com = PUBLIC (newsletter, archives, no auth)
+    - app.your-domain.com = ADMIN (dashboard, publisher, requires auth)
     """
-    # PUBLIC DOMAIN: No auth required for reitsheet.co
+    # PUBLIC DOMAIN: No auth required for your-domain.com
     if is_public_domain():
         return None
 
-    # ADMIN DOMAIN (app.reitsheet.co): Check auth
+    # ADMIN DOMAIN (app.your-domain.com): Check auth
     # Skip auth for these specific paths
     public_paths = ['/', '/health', '/login', '/auth/', '/static/', '/logged-out', '/contact',
                     '/subscribe', '/verify', '/unsubscribe', '/api/subscribe', '/api/unsubscribe',

@@ -203,10 +203,10 @@ class ArchiveParser:
             if not url or url == '#':
                 return None
 
-            # Skip navigation links (archive pages, reitsheet.co links)
-            if 'reitsheet.co/news/archive' in url or url.startswith('/news/archive'):
+            # Skip navigation links (archive pages, your-domain.com links)
+            if 'your-domain.com/news/archive' in url or url.startswith('/news/archive'):
                 return None
-            if 'reitsheet.co' in url and '/news/' not in url:
+            if 'your-domain.com' in url and '/news/' not in url:
                 # Skip non-archive reitsheet links (e.g., front page)
                 return None
 

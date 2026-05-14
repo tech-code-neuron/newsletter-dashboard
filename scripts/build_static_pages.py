@@ -3,7 +3,7 @@
 Build Static Pages for S3 Homepage
 
 Generates static HTML pages from Flask/Jinja2 templates, ensuring consistency
-between app.reitsheet.co and reitsheet.co.
+between app.your-domain.com and your-domain.com.
 
 Usage:
     python scripts/build_static_pages.py                    # Build all pages

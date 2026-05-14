@@ -2810,7 +2810,7 @@ def check_brand_standards():
     Examples of violations:
     - "Press Release Pipeline" instead of "Press Release Pipeline"
     - "Click here" instead of action-oriented CTAs
-    - "reitsheet.com" instead of "reitsheet.co"
+    - "your-domain.comm" instead of "your-domain.com"
     """
     print(f"\n{YELLOW}[33/36] Brand Standards Validation{RESET}")
 
@@ -3151,8 +3151,8 @@ def check_domain_routing():
     """Check 37: Verify domain-based routing is properly configured.
 
     Domain architecture (same Flask app, domain-based routing):
-    - reitsheet.co = PUBLIC (newsletter) - uses @public_only or is_public_domain()
-    - app.reitsheet.co = ADMIN (requires auth) - uses @admin_only or @login_required
+    - your-domain.com = PUBLIC (newsletter) - uses @public_only or is_public_domain()
+    - app.your-domain.com = ADMIN (requires auth) - uses @admin_only or @login_required
 
     BLOCKS commit if domain routing middleware is missing or misconfigured.
     """
@@ -3188,8 +3188,8 @@ def check_domain_routing():
 
     if not issues:
         print(f"{GREEN}✅ Domain routing properly configured{RESET}")
-        print(f"{CYAN}   reitsheet.co → @public_only (no auth){RESET}")
-        print(f"{CYAN}   app.reitsheet.co → @login_required (auth){RESET}")
+        print(f"{CYAN}   your-domain.com → @public_only (no auth){RESET}")
+        print(f"{CYAN}   app.your-domain.com → @login_required (auth){RESET}")
         return True
 
     print(f"{RED}❌ Domain routing not configured!{RESET}\n")
@@ -3197,8 +3197,8 @@ def check_domain_routing():
         print(f"  • {issue}")
 
     print(f"\n{RED}Domain Architecture:{RESET}")
-    print("  reitsheet.co      = PUBLIC (newsletter, no auth)")
-    print("  app.reitsheet.co  = ADMIN (dashboard, requires auth)")
+    print("  your-domain.com      = PUBLIC (newsletter, no auth)")
+    print("  app.your-domain.com  = ADMIN (dashboard, requires auth)")
     print(f"\n{RED}Required:{RESET}")
     print("  1. Create middleware/domain_router.py with @public_only, @admin_only")
     print("  2. Add is_public_domain() check to app.py authentication")

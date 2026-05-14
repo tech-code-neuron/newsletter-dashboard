@@ -22,7 +22,7 @@ from pathlib import Path
 # AWS Configuration
 AWS_REGION = 'us-east-1'
 DYNAMODB_V2_TABLE = 'reitsheet-reit-news-v2'
-SQLITE_DB_PATH = 'data/reit_newsletter.db'
+SQLITE_DB_PATH = 'data/press_releases.db'
 
 # Initialize AWS clients
 dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)

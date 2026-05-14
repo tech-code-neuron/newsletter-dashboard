@@ -36,7 +36,7 @@ SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik}.json"
 SEC_SEARCH_URL = "https://efts.sec.gov/LATEST/search-index?q={query}&dateRange=custom&startdt=2020-01-01&enddt=2030-12-31&forms=10-K"
 
 # User-Agent required by SEC (they block requests without proper UA)
-SEC_USER_AGENT = "REITSheet/1.0 (contact@reitsheet.com)"
+SEC_USER_AGENT = "PressReleasePipeline/1.0 (contact@your-domain.comm)"
 
 # DynamoDB table (single source of truth)
 COMPANIES_TABLE = "reitsheet-companies-config"

@@ -21,7 +21,7 @@ from sqlalchemy.orm import sessionmaker
 from models import Company
 
 # Database setup
-DATABASE_URL = "sqlite:///data/reit_newsletter.db"
+DATABASE_URL = "sqlite:///data/press_releases.db"
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 

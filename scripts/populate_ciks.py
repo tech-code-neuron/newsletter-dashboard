@@ -14,7 +14,7 @@ import boto3
 import requests
 
 # SEC API settings
-SEC_USER_AGENT = "REITSheet/1.0 (contact@reitsheet.com)"
+SEC_USER_AGENT = "PressReleasePipeline/1.0 (contact@your-domain.comm)"
 SEC_RATE_LIMIT = 0.15  # 10 req/sec max, use 0.15s to be safe
 
 # DynamoDB

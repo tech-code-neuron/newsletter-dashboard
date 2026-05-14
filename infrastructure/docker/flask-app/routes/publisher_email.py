@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('publisher_email', __name__, url_prefix='/publisher/email')
 
 # Email configuration
-RECIPIENT_EMAIL = 'reitsheet@outlook.com'
-SENDER_EMAIL = 'alerts@reitsheet.co'  # Verified in SES (same as email-forwarder)
+RECIPIENT_EMAIL = 'your-email@your-domain.com'
+SENDER_EMAIL = 'alerts@your-domain.com'  # Verified in SES (same as email-forwarder)
 
 ET = ZoneInfo('America/New_York')
 

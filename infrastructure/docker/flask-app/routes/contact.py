@@ -31,7 +31,7 @@ CONFIG_KEY = 'contact_form'
 # Default configuration
 DEFAULT_CONFIG = {
     'config_type': CONFIG_KEY,
-    'recipient_email': 'alerts@reitsheet.co',
+    'recipient_email': 'alerts@your-domain.com',
     'headline': 'Say Hello',
     'tagline': "Questions, feedback, or just want to chat REITs? We're listening.",
     'name_placeholder': 'Warren Buffett',
@@ -40,7 +40,7 @@ DEFAULT_CONFIG = {
 }
 
 # Email sender (verified in SES)
-SENDER_EMAIL = 'alerts@reitsheet.co'
+SENDER_EMAIL = 'alerts@your-domain.com'
 
 
 def login_required(f):

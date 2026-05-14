@@ -111,7 +111,7 @@ HTTP_STATUS_FORBIDDEN = 403
 HTTP_STATUS_NOT_FOUND = 404
 
 # User Agent
-USER_AGENT = 'Mozilla/5.0 (compatible; REITSheet/1.0; +https://reitsheet.co)'
+USER_AGENT = 'Mozilla/5.0 (compatible; PressReleasePipeline/1.0; +https://your-domain.com)'
 
 # URL Selection - Landing Page Detection
 GENERIC_PAGE_SEGMENTS = {

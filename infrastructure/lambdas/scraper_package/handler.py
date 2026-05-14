@@ -90,7 +90,7 @@ dynamodb = boto3.resource('dynamodb')
 REIT_NEWS_TABLE = os.environ['REIT_NEWS_TABLE']
 URL_CACHE_TABLE = os.environ.get('URL_CACHE_TABLE', 'reitsheet-url-cache')
 LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
-USER_AGENT = os.environ.get('USER_AGENT', 'REITSheet/1.0 (+https://reitsheet.co)')
+USER_AGENT = os.environ.get('USER_AGENT', 'PressReleasePipeline/1.0 (+https://your-domain.com)')
 
 # Configure logging
 logger = logging.getLogger()

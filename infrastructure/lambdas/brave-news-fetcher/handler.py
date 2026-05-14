@@ -27,8 +27,8 @@ COMPANIES_TABLE = os.environ.get("COMPANIES_TABLE", "reitsheet-companies-config"
 REIT_NEWS_TABLE = os.environ.get("REIT_NEWS_TABLE", "reitsheet-reit-news-v2")
 MANUAL_REVIEW_TABLE = os.environ.get("MANUAL_REVIEW_TABLE", "reitsheet-manual-review")
 CONFIDENCE_THRESHOLD = int(os.environ.get("CONFIDENCE_THRESHOLD", "75"))
-SUMMARY_TO = os.environ.get("SUMMARY_TO", "reitsheet@outlook.com")
-SUMMARY_FROM = os.environ.get("SUMMARY_FROM", "alerts@reitsheet.co")
+SUMMARY_TO = os.environ.get("SUMMARY_TO", "your-email@your-domain.com")
+SUMMARY_FROM = os.environ.get("SUMMARY_FROM", "alerts@your-domain.com")
 
 # AWS clients
 dynamodb = boto3.resource("dynamodb")

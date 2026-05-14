@@ -403,7 +403,7 @@ class SubscriberService:
         from email.mime.multipart import MIMEMultipart
         from email.mime.text import MIMEText
 
-        base_url = os.environ.get('PUBLIC_BASE_URL', 'https://reitsheet.co')
+        base_url = os.environ.get('PUBLIC_BASE_URL', 'https://your-domain.com')
         verify_url = f"{base_url}/verify?token={token}"
 
         # Get configurable email content
@@ -419,7 +419,7 @@ class SubscriberService:
         expiry_notice = email_config.get('expiry_notice', 'This link expires in 24 hours.')
         ignore_notice = email_config.get('ignore_notice', "If you didn't sign up, you can safely ignore this email.")
         brand_name = brand.get('name', 'The Press Release Pipeline')
-        privacy_url = footer.get('privacy_url', 'https://reitsheet.co/privacy')
+        privacy_url = footer.get('privacy_url', 'https://your-domain.com/privacy')
 
         # Generate unsubscribe URL
         unsubscribe_url = generate_unsubscribe_url(email)
@@ -575,7 +575,7 @@ Unsubscribe: {unsubscribe_url}
         subject = email_config.get('subject', f"You're already subscribed to {brand_name}")
         heading = email_config.get('heading', "You're already subscribed!")
         body_text = email_config.get('body', f"Someone (hopefully you!) just tried to sign up for {brand_name} using this email address. Since you're already on our list, there's nothing you need to do.")
-        privacy_url = footer.get('privacy_url', 'https://reitsheet.co/privacy')
+        privacy_url = footer.get('privacy_url', 'https://your-domain.com/privacy')
 
         # Generate unsubscribe URL
         unsubscribe_url = generate_unsubscribe_url(email)

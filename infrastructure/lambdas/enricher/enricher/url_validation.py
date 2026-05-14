@@ -19,7 +19,7 @@ logger = logging.getLogger()
 # Constants
 URL_VALIDATION_TIMEOUT = 5  # HTTP HEAD request timeout (seconds)
 HTTP_STATUS_OK = 200
-USER_AGENT = 'Mozilla/5.0 (compatible; REITSheet/1.0; +https://reitsheet.co)'
+USER_AGENT = 'Mozilla/5.0 (compatible; PressReleasePipeline/1.0; +https://your-domain.com)'
 
 
 def validate_url_exists(url: str) -> Tuple[bool, str, int]:

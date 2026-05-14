@@ -24,7 +24,7 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 NEWSLETTERS_DIR = os.path.join(DATA_DIR, 'newsletters')
 
 # Database
-DB_PATH = os.path.join(DATA_DIR, 'reit_newsletter.db')
+DB_PATH = os.path.join(DATA_DIR, 'press_releases.db')
 DB_URL = f'sqlite:///{DB_PATH}'
 
 # ============================================================================

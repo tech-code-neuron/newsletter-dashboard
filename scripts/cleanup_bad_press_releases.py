@@ -68,7 +68,7 @@ def delete_bad_press_releases(conn, press_release_ids):
 
 def main():
     """Main cleanup function."""
-    db_path = 'data/reit_newsletter.db'
+    db_path = 'data/press_releases.db'
 
     print("=" * 70)
     print("Email Signup Link Cleanup")

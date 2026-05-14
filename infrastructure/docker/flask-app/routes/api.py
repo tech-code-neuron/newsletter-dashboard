@@ -146,7 +146,7 @@ def lookup_cik():
     try:
         # SEC's official ticker-to-CIK mapping
         SEC_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
-        SEC_USER_AGENT = "REITSheet/1.0 (contact@reitsheet.co)"
+        SEC_USER_AGENT = "PressReleasePipeline/1.0 (contact@your-domain.com)"
 
         headers = {"User-Agent": SEC_USER_AGENT}
         response = requests.get(SEC_TICKERS_URL, headers=headers, timeout=10)

@@ -25,7 +25,7 @@ import boto3
 import requests
 
 # SEC API settings
-SEC_USER_AGENT = "REITSheet/1.0 (contact@reitsheet.com)"
+SEC_USER_AGENT = "PressReleasePipeline/1.0 (contact@your-domain.comm)"
 SEC_RATE_LIMIT = 0.15  # 150ms between requests (10 req/sec max)
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik}.json"
 SEC_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"

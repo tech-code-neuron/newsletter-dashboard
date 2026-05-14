@@ -152,13 +152,13 @@ def load_site_config() -> Dict[str, Any]:
             },
             'footer': {
                 'tagline': 'Never miss a REIT release',
-                'contact_email': 'hello@reitsheet.co',
-                'privacy_url': 'https://reitsheet.co/privacy.html'
+                'contact_email': 'hello@your-domain.com',
+                'privacy_url': 'https://your-domain.com/privacy.html'
             },
             'site': {
                 'name': 'The Press Release Pipeline',
-                'url': 'https://reitsheet.co',
-                'logo_url': 'https://reitsheet.co/logo.png'
+                'url': 'https://your-domain.com',
+                'logo_url': 'https://your-domain.com/logo.png'
             }
         }
 
@@ -228,7 +228,7 @@ class PublisherGenerator:
         font_body = get_font('body')
         font_ui = get_font('ui')
 
-        # Email-specific border colors (match reitsheet.co website)
+        # Email-specific border colors (match your-domain.com website)
         border_section = get_color('border_section')  # #e5e5e5 - section header underlines
         border_item = get_color('border_item')        # #f0f0f0 - item row separators
         border_footer = get_color('border_footer')    # #cccccc - footer separator
@@ -313,7 +313,7 @@ class PublisherGenerator:
 
         return f'''        <div style="{banner_style}">
             You are viewing an archived version ·
-            <a href="https://reitsheet.co" style="{link_style}">View today's issue</a>
+            <a href="https://your-domain.com" style="{link_style}">View today's issue</a>
         </div>'''
 
     def _generate_archive_nav(self, prior_date: Optional[str], next_date: Optional[str]) -> str:
@@ -338,12 +338,12 @@ class PublisherGenerator:
         if prior_date:
             prior_dt = datetime.strptime(prior_date, '%Y-%m-%d').date()
             prior_label = prior_dt.strftime('%b %-d')
-            left_link = f'<a href="https://reitsheet.co/news/archive/{prior_date}/" style="{link_style}">← Prior Issue ({prior_label})</a>'
+            left_link = f'<a href="https://your-domain.com/news/archive/{prior_date}/" style="{link_style}">← Prior Issue ({prior_label})</a>'
 
         if next_date:
             next_dt = datetime.strptime(next_date, '%Y-%m-%d').date()
             next_label = next_dt.strftime('%b %-d')
-            right_link = f'<a href="https://reitsheet.co/news/archive/{next_date}/" style="{link_style}">Next Issue ({next_label}) →</a>'
+            right_link = f'<a href="https://your-domain.com/news/archive/{next_date}/" style="{link_style}">Next Issue ({next_label}) →</a>'
 
         # If no links, return empty
         if not left_link and not right_link:
@@ -488,7 +488,7 @@ class PublisherGenerator:
 
         Email footer has:
         - Tagline (Never miss a REIT release)
-        - Site link (reitsheet.co)
+        - Site link (your-domain.com)
         - Privacy Policy | Unsubscribe links
         - Physical address (CAN-SPAM compliance)
 
@@ -499,7 +499,7 @@ class PublisherGenerator:
         text_muted = get_color('text_muted')
         text_light = get_color('text_light')
         primary = get_color('primary')
-        border_footer = get_color('border_footer')  # #cccccc - matches reitsheet.co
+        border_footer = get_color('border_footer')  # #cccccc - matches your-domain.com
         font_body = get_font('body')
         font_ui = get_font('ui')
 
@@ -508,10 +508,10 @@ class PublisherGenerator:
         <div style="text-align: center; padding: 24px 0; margin-top: 16px;">
             <div style="font-family: {font_body}; font-size: 14px; font-style: italic; color: {text_muted};">Never miss a REIT release</div>
             <div style="margin-top: 8px;">
-                <a href="https://reitsheet.co" style="font-family: {font_ui}; font-size: 12px; color: {primary}; text-decoration: none;">reitsheet.co</a>
+                <a href="https://your-domain.com" style="font-family: {font_ui}; font-size: 12px; color: {primary}; text-decoration: none;">your-domain.com</a>
             </div>
             <div style="margin-top: 12px; font-family: {font_ui}; font-size: 12px;">
-                <a href="https://reitsheet.co/privacy.html" style="color: {text_light}; text-decoration: none;">Privacy Policy</a>
+                <a href="https://your-domain.com/privacy.html" style="color: {text_light}; text-decoration: none;">Privacy Policy</a>
                 <span style="color: {border_footer}; margin: 0 8px;">|</span>
                 <a href="{{{{unsubscribe_url}}}}" style="color: {text_light}; text-decoration: none;">Unsubscribe</a>
             </div>
@@ -727,7 +727,7 @@ class PublisherGenerator:
             </div>
         </div>'''
         else:
-            # Email footer (with reitsheet.co link, Unsubscribe, address)
+            # Email footer (with your-domain.com link, Unsubscribe, address)
             footer_html = self._generate_email_footer()
 
         # Generate archive prev/next navigation (only for archives, goes above Headlines)
@@ -761,16 +761,16 @@ class PublisherGenerator:
     <meta name="keywords" content="REIT, real estate investment trust, press releases, earnings, dividends, acquisitions, commercial real estate">
     <meta name="author" content="The Press Release Pipeline">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://reitsheet.co">
+    <link rel="canonical" href="https://your-domain.com">
 
     <!-- Open Graph for iMessage, WhatsApp, Slack, Facebook -->
     <meta property="og:title" content="The Press Release Pipeline - Never Miss a REIT Release">
     <meta property="og:description" content="Never miss a REIT release">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://reitsheet.co">
+    <meta property="og:url" content="https://your-domain.com">
     <meta property="og:site_name" content="The Press Release Pipeline">
     <meta property="og:locale" content="en_US">
-    <meta property="og:image" content="https://reitsheet.co/og-image.jpg">
+    <meta property="og:image" content="https://your-domain.com/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="The Press Release Pipeline logo">
@@ -779,7 +779,7 @@ class PublisherGenerator:
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="The Press Release Pipeline - Never Miss a REIT Release">
     <meta name="twitter:description" content="Never miss a REIT release">
-    <meta name="twitter:image" content="https://reitsheet.co/og-image.jpg">
+    <meta name="twitter:image" content="https://your-domain.com/og-image.jpg">
 
     <!-- Structured Data for Google -->
     <script type="application/ld+json">
@@ -787,7 +787,7 @@ class PublisherGenerator:
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "The Press Release Pipeline",
-        "url": "https://reitsheet.co",
+        "url": "https://your-domain.com",
         "description": "Daily curated press releases from publicly traded REITs"
     }}
     </script>
@@ -837,8 +837,8 @@ class PublisherGenerator:
     <div style="{self.STYLES['container']}">
         <!-- Header -->
         <div style="{self.STYLES['header']}">
-            <a href="https://reitsheet.co" style="text-decoration: none;">
-                <img src="https://reitsheet.co/logo.png" alt="THE REIT SHEET" style="max-width: 100%; width: 400px; height: auto; cursor: pointer;">
+            <a href="https://your-domain.com" style="text-decoration: none;">
+                <img src="https://your-domain.com/logo.png" alt="Press Release Pipeline" style="max-width: 100%; width: 400px; height: auto; cursor: pointer;">
             </a>
             <div style="{self.STYLES['date']}">{date_str}</div>
         </div>

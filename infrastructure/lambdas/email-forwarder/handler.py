@@ -320,14 +320,14 @@ def lambda_handler(event, context):
         while 'DKIM-Signature' in msg:
             del msg['DKIM-Signature']
 
-        # Simple changes: From = alerts@reitsheet.co, add Fw: to subject
-        msg.replace_header('From', 'alerts@reitsheet.co')
+        # Simple changes: From = alerts@your-domain.com, add Fw: to subject
+        msg.replace_header('From', 'alerts@your-domain.com')
         subject = msg.get('Subject', '')
         msg.replace_header('Subject', f'Fw: {subject}')
 
         # Send it
         _ses().send_raw_email(
-            Source='alerts@reitsheet.co',
+            Source='alerts@your-domain.com',
             Destinations=[_config['FORWARD_TO']],
             RawMessage={'Data': msg.as_bytes()}
         )

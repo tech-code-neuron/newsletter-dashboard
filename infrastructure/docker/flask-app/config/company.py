@@ -7,6 +7,6 @@ COMPANY_ADDRESS = "3010 Edgeview Ln #312, Charlotte, NC 28209"
 
 # Email sender
 COMPANY_NAME = "The Press Release Pipeline"
-SENDER_EMAIL = "alerts@reitsheet.co"  # For internal/forwarded emails
-NEWSLETTER_EMAIL = "newsletter@reitsheet.co"  # For subscriber emails (unmonitored)
-REPLY_TO_EMAIL = "hello@reitsheet.co"  # Where replies should go
+SENDER_EMAIL = "alerts@your-domain.com"  # For internal/forwarded emails
+NEWSLETTER_EMAIL = "newsletter@your-domain.com"  # For subscriber emails (unmonitored)
+REPLY_TO_EMAIL = "hello@your-domain.com"  # Where replies should go

@@ -31,7 +31,7 @@ MAX_ITEMS_PER_RUN = 20
 MAX_FETCH_ATTEMPTS = 3
 FETCH_TIMEOUT = 10
 MAX_WORDS = 2000
-USER_AGENT = 'TRS-BodyFetcher/1.0 (+https://reitsheet.co)'
+USER_AGENT = 'TRS-BodyFetcher/1.0 (+https://your-domain.com)'
 
 # Time windows (Eastern Time) - only process during these hours
 EASTERN_TZ = ZoneInfo('America/New_York')

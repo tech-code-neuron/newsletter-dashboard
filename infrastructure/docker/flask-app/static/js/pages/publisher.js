@@ -1300,7 +1300,7 @@ function formatDuplicateWarning(duplicates) {
 }
 
 /**
- * Publish newsletter to homepage (reitsheet.co)
+ * Publish newsletter to homepage (your-domain.com)
  * Checks for duplicate articles before publishing
  */
 async function publishToHomepage(event) {
@@ -1373,7 +1373,7 @@ async function publishToHomepage(event) {
             publishBtn.style.background = '#28a745';
 
             // Alert with confirmation
-            alert('✅ PUBLISHED TO HOMEPAGE!\n\nNewsletter is now live at reitsheet.co');
+            alert('✅ PUBLISHED TO HOMEPAGE!\n\nNewsletter is now live at your-domain.com');
 
             // Reset button after 3 seconds
             setTimeout(() => {

@@ -176,8 +176,8 @@ def logout():
     # Flask's default session cookie name is 'session'
     response.delete_cookie('session')
     response.delete_cookie('session', path='/')
-    response.delete_cookie('session', domain='app.reitsheet.co')
-    response.delete_cookie('session', domain='.reitsheet.co')
+    response.delete_cookie('session', domain='app.your-domain.com')
+    response.delete_cookie('session', domain='.your-domain.com')
 
     # Belt and suspenders: also set cookie to expire immediately
     response.set_cookie('session', '', expires=0, path='/')

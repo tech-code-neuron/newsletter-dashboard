@@ -24,7 +24,7 @@ import os
 cloudwatch = boto3.client('cloudwatch')
 
 # Constants - extracted for SOLID compliance
-NAMESPACE = os.environ.get('METRICS_NAMESPACE', 'REITSheet/Companies')
+NAMESPACE = os.environ.get('METRICS_NAMESPACE', 'PressReleasePipeline/Companies')
 METRIC_SUCCESS = 'OperationSuccess'
 METRIC_FAILURE = 'OperationFailure'
 METRIC_DURATION = 'OperationDuration'

@@ -25,15 +25,15 @@
     "api_url": "https://YOUR_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/prod/subscribe"
   },
   "footer": {
-    "tagline": "Never miss a REIT release",
-    "contact_email": "hello@reitsheet.co",
-    "privacy_url": "https://reitsheet.co/privacy.html",
-    "copyright": "Copyright 2026 The REIT Sheet. All rights reserved."
+    "tagline": "Never miss a press release",
+    "contact_email": "hello@your-domain.com",
+    "privacy_url": "https://your-domain.com/privacy.html",
+    "copyright": "Copyright 2026 Press Release Pipeline. All rights reserved."
   },
   "site": {
-    "name": "THE REIT SHEET",
-    "url": "https://reitsheet.co",
-    "logo_url": "https://reitsheet.co/logo.png"
+    "name": "Press Release Pipeline",
+    "url": "https://your-domain.com",
+    "logo_url": "https://your-domain.com/logo.png"
   },
   "newsletter": {
     "logo": {

@@ -57,7 +57,7 @@ REIT_NEWS_TABLE = get_env_var('REIT_NEWS_TABLE')
 COMPANIES_TABLE = get_env_var('COMPANIES_TABLE')
 URL_CACHE_TABLE = get_env_var('URL_CACHE_TABLE', 'reitsheet-url-cache')
 LOG_LEVEL = get_env_var('LOG_LEVEL', 'INFO')
-USER_AGENT = get_env_var('USER_AGENT', 'REITSheet/1.0 (+https://reitsheet.co)')
+USER_AGENT = get_env_var('USER_AGENT', 'PressReleasePipeline/1.0 (+https://your-domain.com)')
 
 
 # ============================================================================

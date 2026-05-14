@@ -2,8 +2,8 @@
 Domain-based routing middleware.
 
 CRITICAL ARCHITECTURE:
-- reitsheet.co = PUBLIC (newsletter, archives, no auth)
-- app.reitsheet.co = ADMIN (dashboard, publisher, requires auth)
+- your-domain.com = PUBLIC (newsletter, archives, no auth)
+- app.your-domain.com = ADMIN (dashboard, publisher, requires auth)
 
 Same Flask app serves both domains. This middleware ensures routes
 are only accessible on the correct domain.
@@ -12,8 +12,8 @@ are only accessible on the correct domain.
 from functools import wraps
 from flask import request, abort, redirect
 
-PUBLIC_DOMAIN = 'reitsheet.co'
-ADMIN_DOMAIN = 'app.reitsheet.co'
+PUBLIC_DOMAIN = 'your-domain.com'
+ADMIN_DOMAIN = 'app.your-domain.com'
 
 
 def get_host():
@@ -22,7 +22,7 @@ def get_host():
 
 
 def is_public_domain():
-    """Check if current request is on public domain (reitsheet.co).
+    """Check if current request is on public domain (your-domain.com).
 
     Also checks X-Forwarded-Host header for CloudFront requests.
     """
@@ -35,7 +35,7 @@ def is_public_domain():
 
 
 def is_admin_domain():
-    """Check if current request is on admin domain (app.reitsheet.co).
+    """Check if current request is on admin domain (app.your-domain.com).
 
     Returns False if X-Forwarded-Host indicates public domain.
     """
@@ -48,11 +48,11 @@ def is_admin_domain():
 
 def public_only(f):
     """
-    Decorator: Route only accessible on reitsheet.co (public domain).
+    Decorator: Route only accessible on your-domain.com (public domain).
 
-    If accessed on app.reitsheet.co:
+    If accessed on app.your-domain.com:
     - Root path (/) redirects to /dashboard (admin landing)
-    - Other paths redirect to reitsheet.co equivalent
+    - Other paths redirect to your-domain.com equivalent
 
     Usage:
         @public_bp.route('/')
@@ -74,9 +74,9 @@ def public_only(f):
 
 def admin_only(f):
     """
-    Decorator: Route only accessible on app.reitsheet.co (admin domain).
+    Decorator: Route only accessible on app.your-domain.com (admin domain).
 
-    If accessed on reitsheet.co, returns 404.
+    If accessed on your-domain.com, returns 404.
 
     Usage:
         @dashboard_bp.route('/dashboard')

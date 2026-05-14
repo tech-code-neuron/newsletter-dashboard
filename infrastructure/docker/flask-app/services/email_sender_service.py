@@ -30,7 +30,7 @@ from config.company import NEWSLETTER_EMAIL, REPLY_TO_EMAIL
 from utils.unsubscribe import generate_unsubscribe_url
 
 SES_CONFIGURATION_SET = os.environ.get('SES_CONFIGURATION_SET', 'reitsheet-newsletter')
-PUBLIC_BASE_URL = os.environ.get('PUBLIC_BASE_URL', 'https://reitsheet.co')
+PUBLIC_BASE_URL = os.environ.get('PUBLIC_BASE_URL', 'https://your-domain.com')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', f'The Press Release Pipeline <{NEWSLETTER_EMAIL}>')
 BATCH_SIZE = int(os.environ.get('SES_BATCH_SIZE', '50'))
 
@@ -273,7 +273,7 @@ class EmailSenderService:
                 'mailto:',
                 'tel:',
                 PUBLIC_BASE_URL + '/track',  # Don't double-wrap
-                'reitsheet.co',           # Don't track own site links
+                'your-domain.com',           # Don't track own site links
             ]
 
             for pattern in skip_patterns:

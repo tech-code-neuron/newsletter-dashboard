@@ -14,10 +14,10 @@ import re
 BRAND = {
     'name_full': 'The Press Release Pipeline',
     'name_short': 'Press Release Pipeline',
-    'logo_alt': 'THE REIT SHEET',
+    'logo_alt': 'Press Release Pipeline',
     'tagline': 'Never miss a REIT release',
-    'domain': 'reitsheet.co',
-    'email_from': 'The Press Release Pipeline <alerts@reitsheet.co>',
+    'domain': 'your-domain.com',
+    'email_from': 'The Press Release Pipeline <alerts@your-domain.com>',
 }
 
 # =============================================================================
@@ -72,8 +72,8 @@ FORBIDDEN_PATTERNS = [
     (r'>Submit<', 'CTA Error: Use "Subscribe" instead of "Submit" for signup buttons'),
 
     # Domain errors
-    (r'reit-sheet\.com', 'Domain Error: Use reitsheet.co (no hyphen, .co not .com)'),
-    (r'reitsheet\.com', 'Domain Error: Use reitsheet.co (.co not .com)'),
+    (r'reit-sheet\.com', 'Domain Error: Use your-domain.com (no hyphen, .co not .com)'),
+    (r'reitsheet\.com', 'Domain Error: Use your-domain.com (.co not .com)'),
 ]
 
 # =============================================================================

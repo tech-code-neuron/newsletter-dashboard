@@ -50,7 +50,7 @@ def find_op_for_company(company_name: str, reit_cik: str = None) -> tuple:
 
     req = urllib.request.Request(
         url,
-        headers={'User-Agent': 'reit-newsletter contact@reitsheet.co'}
+        headers={'User-Agent': 'reit-newsletter contact@your-domain.com'}
     )
 
     try:

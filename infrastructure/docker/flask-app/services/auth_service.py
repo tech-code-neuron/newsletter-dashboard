@@ -74,7 +74,7 @@ class AuthService:
             str: Redirect URI for OAuth callback (AWS only)
         """
         # AWS production only - use ALB DNS or custom domain
-        base_url = os.environ.get('APP_BASE_URL', 'https://app.reitsheet.co')
+        base_url = os.environ.get('APP_BASE_URL', 'https://app.your-domain.com')
         redirect_uri = f"{base_url}/auth/callback"
         logger.info(f"OAuth redirect URI: {redirect_uri}")
         return redirect_uri
@@ -289,7 +289,7 @@ class AuthService:
             str: Full Cognito logout URL
         """
         config = self.get_cognito_config()
-        base_url = os.environ.get('APP_BASE_URL', 'https://app.reitsheet.co')
+        base_url = os.environ.get('APP_BASE_URL', 'https://app.your-domain.com')
         logout_uri = f"{base_url}/logged-out"
 
         params = {

@@ -1,5 +1,5 @@
 system: |
-  You are classifying a REIT press release for a financial newsletter's
+  You are classifying a company press release for a financial newsletter's
   social media pipeline. Respond with JSON only.
 
 user_template: |

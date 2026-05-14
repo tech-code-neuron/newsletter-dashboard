@@ -262,7 +262,7 @@ def process_emails_to_review(service, max_results=50):
     print(f"\n{'='*80}")
     print("NEXT STEPS")
     print(f"{'='*80}\n")
-    print("1. Open the web interface: https://app.reitsheet.co/review")
+    print("1. Open the web interface: https://app.your-domain.com/review")
     print("2. Review the flagged emails")
     print("3. Click 'Add to Press Releases' or 'Delete' for each email")
 
