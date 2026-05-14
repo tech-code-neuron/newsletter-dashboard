@@ -19,6 +19,16 @@ Most sector tracking requires expensive data vendors. But company press releases
 
 ---
 
+## Why I Built This
+
+I work in banking and credit and don't have a Bloomberg or FactSet subscription. I wanted an easy way to track hundreds of companies without paying a massive subscription fee.
+
+This tool works best for public companies — just sign up for their free IR email alerts. But there's also a mechanism to track private companies through the Brave Search API, which scans news sources for company mentions.
+
+If you're an analyst, investor, or just someone who wants to stay informed about a sector without spending $25k/year, this is for you.
+
+---
+
 ## How It Works
 
 ```
