@@ -1,0 +1,262 @@
+{#
+  Filter Component Macros
+  Reusable filter/search components for list pages.
+
+  SOLID Principle: Single Responsibility - each macro handles one filter type.
+  SOLID Principle: DRY - consistent filtering UI across the app.
+#}
+
+
+{# =============================================================================
+   DATE RANGE FILTER
+   Start and end date inputs
+   ============================================================================= #}
+
+{% macro date_range_filter(start_date='', end_date='', start_name='start_date', end_name='end_date', start_label='From', end_label='To') %}
+{#
+  Args:
+    start_date: Current start date value (ISO format)
+    end_date: Current end date value (ISO format)
+    start_name: Form field name for start date
+    end_name: Form field name for end date
+    start_label: Label for start date
+    end_label: Label for end date
+#}
+<div class="filter-group date-range-filter">
+    <div class="date-input-group">
+        <label for="{{ start_name }}">{{ start_label }}</label>
+        <input type="date" id="{{ start_name }}" name="{{ start_name }}" value="{{ start_date }}">
+    </div>
+    <div class="date-input-group">
+        <label for="{{ end_name }}">{{ end_label }}</label>
+        <input type="date" id="{{ end_name }}" name="{{ end_name }}" value="{{ end_date }}">
+    </div>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   SINGLE DATE FILTER
+   Single date input with label
+   ============================================================================= #}
+
+{% macro date_filter(value='', name='date', label='Date', max_date='') %}
+{#
+  Args:
+    value: Current date value (ISO format)
+    name: Form field name
+    label: Label text
+    max_date: Maximum allowed date
+#}
+<div class="filter-group">
+    <label for="{{ name }}">{{ label }}</label>
+    <input type="date"
+           id="{{ name }}"
+           name="{{ name }}"
+           value="{{ value }}"
+           {% if max_date %}max="{{ max_date }}"{% endif %}>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   SEARCH FILTER
+   Text search input with clear button
+   ============================================================================= #}
+
+{% macro search_filter(value='', name='search', placeholder='Search...', show_clear=true) %}
+{#
+  Args:
+    value: Current search value
+    name: Form field name
+    placeholder: Placeholder text
+    show_clear: If true, shows clear button
+#}
+<div class="filter-group search-filter">
+    <div class="search-input-wrapper">
+        <input type="text"
+               id="{{ name }}"
+               name="{{ name }}"
+               value="{{ value }}"
+               placeholder="{{ placeholder }}"
+               class="search-input">
+        {% if show_clear and value %}
+        <button type="button" class="search-clear" aria-label="Clear search">&times;</button>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   SELECT FILTER
+   Dropdown filter
+   ============================================================================= #}
+
+{% macro select_filter(name, options, selected='', label='', allow_all=true, all_text='All') %}
+{#
+  Args:
+    name: Form field name
+    options: List of (value, label) tuples OR dict
+    selected: Currently selected value
+    label: Filter label
+    allow_all: If true, includes "All" option
+    all_text: Text for "All" option
+#}
+<div class="filter-group">
+    {% if label %}
+    <label for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    <select id="{{ name }}" name="{{ name }}" class="filter-select">
+        {% if allow_all %}
+        <option value="">{{ all_text }}</option>
+        {% endif %}
+        {% if options is mapping %}
+            {% for value, text in options.items() %}
+            <option value="{{ value }}" {% if selected == value %}selected{% endif %}>{{ text }}</option>
+            {% endfor %}
+        {% else %}
+            {% for value, text in options %}
+            <option value="{{ value }}" {% if selected == value %}selected{% endif %}>{{ text }}</option>
+            {% endfor %}
+        {% endif %}
+    </select>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   STATUS FILTER
+   Pre-built status dropdown filter
+   ============================================================================= #}
+
+{% macro status_filter(statuses, selected='', name='status', all_text='All Statuses') %}
+{#
+  Args:
+    statuses: Dict of status options from newsletter_status.py
+    selected: Currently selected status
+    name: Form field name
+    all_text: Text for "All" option
+#}
+<div class="filter-group">
+    <select id="{{ name }}" name="{{ name }}" class="filter-select">
+        <option value="">{{ all_text }}</option>
+        {% for key, status in statuses.items()|sort(attribute='1.order') %}
+        <option value="{{ key }}" {% if selected == key %}selected{% endif %}>{{ status.label }}</option>
+        {% endfor %}
+    </select>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   FILTER BAR
+   Container for multiple filters with submit
+   ============================================================================= #}
+
+{% macro filter_bar(action='', method='GET', show_submit=true, submit_text='Filter', show_clear=true, clear_url='') %}
+{#
+  Args:
+    action: Form action URL (empty for current page)
+    method: Form method
+    show_submit: If true, shows submit button
+    submit_text: Text for submit button
+    show_clear: If true, shows clear all link
+    clear_url: URL to clear all filters
+#}
+<form class="filter-bar" {% if action %}action="{{ action }}"{% endif %} method="{{ method }}">
+    <div class="filter-bar-inputs">
+        {{ caller() }}
+    </div>
+    <div class="filter-bar-actions">
+        {% if show_submit %}
+        <button type="submit" class="btn btn-primary btn-small">{{ submit_text }}</button>
+        {% endif %}
+        {% if show_clear and clear_url %}
+        <a href="{{ clear_url }}" class="btn btn-secondary btn-small">Clear</a>
+        {% endif %}
+    </div>
+</form>
+{% endmacro %}
+
+
+{# =============================================================================
+   QUICK FILTERS
+   Inline toggle buttons for common filters
+   ============================================================================= #}
+
+{% macro quick_filters(filters, selected='', name='filter') %}
+{#
+  Args:
+    filters: List of (value, label) tuples
+    selected: Currently selected value
+    name: Form field name
+#}
+<div class="quick-filters">
+    {% for value, label in filters %}
+    <button type="button"
+            class="quick-filter-btn{% if selected == value %} active{% endif %}"
+            data-filter="{{ name }}"
+            data-value="{{ value }}">
+        {{ label }}
+    </button>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   PAGINATION
+   Page navigation for lists
+   ============================================================================= #}
+
+{% macro pagination(page, total_pages, base_url, query_params={}) %}
+{#
+  Args:
+    page: Current page number
+    total_pages: Total number of pages
+    base_url: Base URL for pagination links
+    query_params: Additional query parameters to preserve
+#}
+{% if total_pages > 1 %}
+<nav class="pagination" aria-label="Page navigation">
+    <ul class="pagination-list">
+        {# Previous #}
+        {% if page > 1 %}
+        <li>
+            <a href="{{ base_url }}?page={{ page - 1 }}{% for k, v in query_params.items() %}&{{ k }}={{ v }}{% endfor %}"
+               class="pagination-link pagination-prev" aria-label="Previous page">
+                &laquo; Prev
+            </a>
+        </li>
+        {% endif %}
+
+        {# Page numbers #}
+        {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+            <li>
+                <span class="pagination-link pagination-current" aria-current="page">{{ p }}</span>
+            </li>
+            {% elif p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+            <li>
+                <a href="{{ base_url }}?page={{ p }}{% for k, v in query_params.items() %}&{{ k }}={{ v }}{% endfor %}"
+                   class="pagination-link">{{ p }}</a>
+            </li>
+            {% elif p == page - 3 or p == page + 3 %}
+            <li><span class="pagination-ellipsis">&hellip;</span></li>
+            {% endif %}
+        {% endfor %}
+
+        {# Next #}
+        {% if page < total_pages %}
+        <li>
+            <a href="{{ base_url }}?page={{ page + 1 }}{% for k, v in query_params.items() %}&{{ k }}={{ v }}{% endfor %}"
+               class="pagination-link pagination-next" aria-label="Next page">
+                Next &raquo;
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endmacro %}

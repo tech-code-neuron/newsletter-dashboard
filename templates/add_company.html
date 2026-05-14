@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from 'macros/forms.html' import company_form %}
+
+{% block title %}Add Company{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Add New Company</h2>
+
+            {{ company_form(none, sectors, platform_options, submit_text='Add Company', is_edit=false) }}
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tips</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Required Fields:</h6>
+                    <ul class="small">
+                        <li><strong>Ticker Symbol</strong> - Must be unique</li>
+                        <li><strong>Company Name</strong></li>
+                    </ul>
+
+                    <h6 class="mt-3">Finding RSS Feeds:</h6>
+                    <ol class="small">
+                        <li>Visit the company's IR page</li>
+                        <li>Look for "RSS", "Subscribe", or feed icon</li>
+                        <li>Right-click and copy the feed URL</li>
+                        <li>Test the URL in your browser</li>
+                    </ol>
+
+                    <h6 class="mt-3">Finding Newswire ID:</h6>
+                    <ol class="small">
+                        <li>Visit the company's IR page</li>
+                        <li>Click on any recent press release</li>
+                        <li>Look at the URL for the organization ID</li>
+                        <li>Example URL: <code>/3231625/34254/en/</code></li>
+                        <li>The ID is <code>34254</code></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function toggleCustomProvider() {
+    const select = document.getElementById('newswire_provider');
+    const customDiv = document.getElementById('custom_provider_div');
+
+    if (select.value === 'Other') {
+        customDiv.style.display = 'block';
+    } else {
+        customDiv.style.display = 'none';
+    }
+}
+
+// Make ticker uppercase as user types
+document.addEventListener('DOMContentLoaded', function() {
+    const tickerInput = document.getElementById('ticker');
+    tickerInput.addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+});
+</script>
+{% endblock %}

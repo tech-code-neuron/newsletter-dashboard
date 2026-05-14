@@ -1,0 +1,70 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+.eggs/
+*.egg-info/
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Tests
+tests/
+test_*.py
+*_test.py
+pytest.ini
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+docs/
+*.md
+!requirements.txt
+
+# Local development
+.env
+.env.*
+*.local
+
+# Build artifacts
+*.zip
+*.tar.gz
+dist/
+build/
+
+# Logs and databases (will be created at runtime)
+*.log
+*.db
+logs/
+data/*.db
+
+# Infrastructure (not needed in container)
+infrastructure/
+scripts/
+archive/
+migrations/
+
+# Claude-specific
+.claude/
+.clauderules
+
+# Temporary files
+tmp/
+temp/
+*.tmp

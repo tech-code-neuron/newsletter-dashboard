@@ -1,0 +1,20 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Check Your Email - {{ config.site.name }}{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block signup %}{% endblock %}
+
+{% block content %}
+<div class="public-content">
+    <h1 class="public-title">{{ config.subscription.check_email.heading }}</h1>
+    <p class="public-text">
+        {{ config.subscription.check_email.message }}
+    </p>
+    <p class="public-text-muted">{{ config.subscription.check_email.subtext }}</p>
+    <a href="{{ config.site.url }}" class="public-btn" data-cta="signup_nav">Back to {{ config.site.name }}</a>
+</div>
+{% endblock %}

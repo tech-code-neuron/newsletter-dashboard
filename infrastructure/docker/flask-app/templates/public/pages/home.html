@@ -1,0 +1,108 @@
+{% extends 'public/base.html' %}
+
+{% block title %}{{ config.site.name }} - {{ config.taglines.homepage }}{% endblock %}
+
+{% block meta %}
+<!-- SEO Meta Tags -->
+<meta name="description" content="{{ config.meta.description }}">
+<meta name="keywords" content="{{ config.meta.keywords }}">
+<meta name="author" content="{{ config.site.name }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://{{ config.site.domain }}">
+
+<!-- Open Graph for iMessage, WhatsApp, Slack, Facebook -->
+<meta property="og:title" content="{{ config.site.name }} - {{ config.taglines.homepage }}">
+<meta property="og:description" content="{{ config.site.tagline }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://{{ config.site.domain }}">
+<meta property="og:site_name" content="{{ config.site.name }}">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ config.meta.og_image }}">
+<meta property="og:image:width" content="{{ config.meta.og_image_width }}">
+<meta property="og:image:height" content="{{ config.meta.og_image_height }}">
+<meta property="og:image:alt" content="{{ config.site.name }} logo">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="{{ config.meta.twitter_card }}">
+<meta name="twitter:title" content="{{ config.site.name }} - {{ config.taglines.homepage }}">
+<meta name="twitter:description" content="{{ config.site.tagline }}">
+<meta name="twitter:image" content="{{ config.meta.og_image }}">
+
+<!-- Structured Data for Google -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ config.site.name }}",
+    "url": "https://{{ config.site.domain }}",
+    "description": "{{ config.meta.description }}"
+}
+</script>
+{% endblock %}
+
+{% block header %}
+<div class="header">
+    <a href="{{ config.site.url }}">
+        <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+    </a>
+    <div class="date-display">{{ current_date }}</div>
+</div>
+{% include 'public/components/archive_nav.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Preview text (hidden but shows in inbox) -->
+{% if preview_text %}
+<div class="preview-text">
+    {{ preview_text }}
+</div>
+{% endif %}
+
+<!-- Content Area -->
+<div class="content-area">
+    {# Check if any section has items #}
+    {% set ns = namespace(has_items=false) %}
+    {% for key, _, _ in sections %}
+    {% if section_data[key] %}{% set ns.has_items = true %}{% endif %}
+    {% endfor %}
+
+    {% for key, display_name, _ in sections %}
+    {% set items = section_data[key] %}
+    {% if items %}
+
+    {% if key == 'headline' %}
+    {# Headlines get premium styling #}
+    <div class="headlines-section">
+        <div class="section-header-primary">{{ display_name }}</div>
+        {% for item in items %}
+        <div class="release-section">
+            <a href="{{ item.url }}" class="release-company">{{ item.company_name }}{% if item.is_public != false %} ({{ item.ticker }}){% elif item.lead_sponsor %} (Sponsor - {{ item.lead_sponsor }}){% endif %}</a>
+            <a href="{{ item.url }}" class="release-title">{{ item.title }}{% if item.url|access_indicator %} <span class="paywall-indicator">{{ item.url|access_indicator }}</span>{% endif %}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    {# All other sections get secondary styling #}
+    <div class="section-header-secondary">{{ display_name }}</div>
+    {% for item in items %}
+    <div class="release-item">
+        <a href="{{ item.url }}" class="release-ticker">{% if item.is_public == false %}{{ item.company_name }}{% if item.lead_sponsor %} (Sponsor - {{ item.lead_sponsor }}){% endif %}{% else %}{{ item.ticker }}{% endif %}</a>:
+        <a href="{{ item.url }}" class="release-title-inline">{{ item.title }}{% if item.url|access_indicator %} <span class="paywall-indicator">{{ item.url|access_indicator }}</span>{% endif %}</a>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% endif %}
+    {% endfor %}
+
+    {% if not ns.has_items %}
+    <div class="empty-state">
+        <p class="public-text">{{ config.empty_states.no_releases }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block signup %}
+{% include 'public/components/signup_box.html' %}
+{% endblock %}

@@ -1,0 +1,142 @@
+{#
+  Select Component Macros
+  Reusable select dropdowns for status and section selection.
+
+  SOLID Principle: Single Responsibility - each macro handles one select type.
+  SOLID Principle: Open/Closed - add new options via config, not template changes.
+#}
+
+
+{# =============================================================================
+   STATUS SELECT
+   Dropdown for newsletter item status (ready, needs_review, published, excluded)
+   ============================================================================= #}
+
+{% macro status_select(current_status, url, statuses, is_mobile=false, is_sec=false, auto_submit=false) %}
+{#
+  Args:
+    current_status: Current status value (e.g., 'ready', 'needs_review')
+    url: URL of the item (used as data attribute for JS handlers)
+    statuses: Dict of status options from newsletter_status.py
+    is_mobile: If true, uses mobile-specific class and short labels
+    is_sec: If true, adds SEC filing data attribute
+    auto_submit: If true, adds onchange submit (for mobile forms)
+#}
+<select class="status-select{% if is_mobile %}-mobile{% endif %}"
+        data-url="{{ url }}"
+        {% if is_sec %}data-sec-filing="true"{% endif %}
+        {% if auto_submit %}onchange="this.form.submit()"{% endif %}>
+    {% for key, status in statuses.items()|sort(attribute='1.order') %}
+    <option value="{{ key }}" {% if (current_status or 'ready') == key %}selected{% endif %}>
+        {{ status.label_short if is_mobile else status.label }}
+    </option>
+    {% endfor %}
+</select>
+{% endmacro %}
+
+
+{# =============================================================================
+   SECTION SELECT
+   Dropdown for newsletter section (headline, financing, property, etc.)
+   ============================================================================= #}
+
+{% macro section_select(section_info, url, sections, is_mobile=false, auto_submit=false) %}
+{#
+  Args:
+    section_info: Dict with 'auto', 'override', 'is_overridden' keys
+    url: URL of the item (used as data attribute for JS handlers)
+    sections: Dict of section options from newsletter_status.py
+    is_mobile: If true, uses mobile-specific class
+    auto_submit: If true, adds onchange submit (for mobile forms)
+#}
+{% set auto_section = section_info.get('auto', 'headline') %}
+{% set auto_label = sections.get(auto_section, {}).get('label', 'Headline') %}
+<select class="section-select{% if is_mobile %}-mobile{% endif %}{% if section_info.get('is_overridden') %} overridden{% endif %}"
+        data-url="{{ url }}"
+        {% if auto_submit %}onchange="this.form.submit()"{% endif %}>
+    <option value="auto" {% if not section_info.get('is_overridden') %}selected{% endif %}>
+        Auto ({{ auto_label }})
+    </option>
+    {% for key, section in sections.items()|sort(attribute='1.order') %}
+    <option value="{{ key }}" {% if section_info.get('override') == key %}selected{% endif %}>
+        {{ section.label }}
+    </option>
+    {% endfor %}
+</select>
+{% endmacro %}
+
+
+{# =============================================================================
+   SECTION LOCKED (for SEC filings)
+   Display-only indicator for locked section assignment
+   ============================================================================= #}
+
+{% macro section_locked(section_key, sections) %}
+{#
+  Args:
+    section_key: The locked section key (e.g., 'financing')
+    sections: Dict of section options
+#}
+{% set section = sections.get(section_key, {}) %}
+<span class="section-locked" title="SEC filings are always in {{ section.label }} section">
+    {{ section.label }}
+</span>
+{% endmacro %}
+
+
+{# =============================================================================
+   GENERIC SELECT
+   Reusable select for any list of options
+   ============================================================================= #}
+
+{% macro generic_select(name, options, selected='', id=none, css_class='', required=false, allow_empty=true, empty_text='Select...', data_attrs={}) %}
+{#
+  Args:
+    name: Form field name
+    options: List of (value, label) tuples OR dict with value: label
+    selected: Currently selected value
+    id: HTML id attribute (defaults to name if not provided)
+    css_class: Additional CSS classes
+    required: If true, adds required attribute
+    allow_empty: If true, includes empty option
+    empty_text: Text for empty option
+    data_attrs: Dict of data-* attributes
+#}
+<select name="{{ name }}"
+        id="{{ id or name }}"
+        class="form-select {{ css_class }}"
+        {% if required %}required{% endif %}
+        {% for key, value in data_attrs.items() %}data-{{ key }}="{{ value }}"{% endfor %}>
+    {% if allow_empty %}
+    <option value="">{{ empty_text }}</option>
+    {% endif %}
+    {% if options is mapping %}
+        {% for value, label in options.items() %}
+        <option value="{{ value }}" {% if selected == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    {% else %}
+        {% for value, label in options %}
+        <option value="{{ value }}" {% if selected == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    {% endif %}
+</select>
+{% endmacro %}
+
+
+{# =============================================================================
+   STATUS BADGE
+   Display-only status indicator (not a select)
+   ============================================================================= #}
+
+{% macro status_badge(status_key, statuses, is_mobile=false) %}
+{#
+  Args:
+    status_key: Status key (e.g., 'ready', 'needs_review')
+    statuses: Dict of status options
+    is_mobile: If true, uses short label
+#}
+{% set status = statuses.get(status_key, statuses.get('ready', {})) %}
+<span class="status-badge {{ status.get('css_class', '') }}">
+    {{ status.label_short if is_mobile else status.label }}
+</span>
+{% endmacro %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - {{ config.site.name }}{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Privacy policy for The REIT Sheet newsletter.">
+<meta name="robots" content="index, follow">
+{% endblock %}
+
+{% block signup %}{% endblock %}
+
+{% block content %}
+<div class="public-content-page">
+    <h1>Privacy Policy</h1>
+    <p class="public-last-updated">Last updated: March 27, 2026</p>
+
+    <div class="public-content-card">
+        <h2>Overview</h2>
+        <p>The REIT Sheet ("we", "us", "our") provides a daily email digest of REIT press releases. This policy explains how we handle your information when you subscribe.</p>
+
+        <h2>Information We Collect</h2>
+        <ul>
+            <li><strong>Email address</strong> - Required to send you the newsletter</li>
+            <li><strong>IP address</strong> - Recorded at signup for fraud prevention</li>
+            <li><strong>Signup timestamp</strong> - When you subscribed</li>
+            <li><strong>Engagement data</strong> - Email opens and link clicks (anonymized)</li>
+        </ul>
+
+        <h2>How We Use Your Information</h2>
+        <ul>
+            <li>Send our daily REIT press release digest</li>
+            <li>Process unsubscribe requests</li>
+            <li>Improve newsletter content and delivery</li>
+            <li>Prevent abuse and fraud</li>
+        </ul>
+        <p>We do not sell, rent, or share your email address with third parties for marketing.</p>
+
+        <h2>Email Tracking</h2>
+        <p>Our emails may contain tracking pixels and tracked links to measure engagement. This data is used in aggregate to improve content. You can disable image loading in your email client to prevent open tracking.</p>
+
+        <h2>Data Retention</h2>
+        <p>We retain your data while you remain subscribed. If you unsubscribe, we keep your email in our suppression list to honor your preference. Engagement data is deleted after 2 years.</p>
+
+        <h2>Your Rights</h2>
+        <ul>
+            <li><strong>Unsubscribe</strong> - Every email includes a one-click unsubscribe link</li>
+            <li><strong>Data export</strong> - Request a copy of your personal data</li>
+            <li><strong>Data deletion</strong> - Request permanent deletion of your data</li>
+        </ul>
+        <p>Contact <a href="mailto:privacy@reitsheet.co">privacy@reitsheet.co</a> to exercise these rights.</p>
+
+        <h2>Data Security</h2>
+        <p>We use industry-standard security: encrypted transmission (HTTPS/TLS), secure cloud infrastructure (AWS), and access controls.</p>
+
+        <h2>Third-Party Services</h2>
+        <p>We use Amazon Web Services (AWS) for email delivery and data storage.</p>
+
+        <h2>Changes</h2>
+        <p>Material changes will be communicated via email to active subscribers.</p>
+
+        <div class="public-contact-card">
+            <h2>Contact</h2>
+            <p>
+                <strong>Email:</strong> <a href="mailto:privacy@reitsheet.co">privacy@reitsheet.co</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

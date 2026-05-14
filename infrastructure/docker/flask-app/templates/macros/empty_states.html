@@ -1,0 +1,155 @@
+{#
+  Empty State Macros
+  Reusable empty state components for when there's no data to display.
+
+  SOLID Principle: Single Responsibility - handles all empty state patterns.
+  SOLID Principle: DRY - consistent empty states across the app.
+#}
+
+
+{# =============================================================================
+   EMPTY STATE
+   Base empty state component
+   ============================================================================= #}
+
+{% macro empty_state(message, description='', icon='', action_url='', action_text='') %}
+{#
+  Args:
+    message: Primary message
+    description: Secondary descriptive text
+    icon: Optional icon/emoji
+    action_url: URL for CTA button (optional)
+    action_text: Text for CTA button
+#}
+<div class="empty-state">
+    {% if icon %}
+    <div class="empty-state-icon">{{ icon }}</div>
+    {% endif %}
+    <p class="empty-state-message">{{ message }}</p>
+    {% if description %}
+    <p class="empty-state-description text-muted">{{ description }}</p>
+    {% endif %}
+    {% if action_url and action_text %}
+    <a href="{{ action_url }}" class="btn btn-primary empty-state-action">{{ action_text }}</a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   NO RESULTS
+   Empty state for search/filter with no results
+   ============================================================================= #}
+
+{% macro no_results(search_term='', clear_url='') %}
+{#
+  Args:
+    search_term: The search term that yielded no results
+    clear_url: URL to clear filters/search
+#}
+<div class="empty-state">
+    <div class="empty-state-icon">🔍</div>
+    <p class="empty-state-message">No results found{% if search_term %} for "{{ search_term }}"{% endif %}</p>
+    <p class="empty-state-description text-muted">Try adjusting your search or filters.</p>
+    {% if clear_url %}
+    <a href="{{ clear_url }}" class="btn btn-secondary">Clear Filters</a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   NO DATA
+   Empty state for pages with no data yet
+   ============================================================================= #}
+
+{% macro no_data(entity_name, add_url='', add_text='') %}
+{#
+  Args:
+    entity_name: Name of the entity (e.g., "press releases", "companies")
+    add_url: URL to add new entity
+    add_text: Text for add button
+#}
+<div class="empty-state">
+    <div class="empty-state-icon">📭</div>
+    <p class="empty-state-message">No {{ entity_name }} yet</p>
+    <p class="empty-state-description text-muted">Get started by adding your first {{ entity_name }}.</p>
+    {% if add_url %}
+    <a href="{{ add_url }}" class="btn btn-primary">{{ add_text or ('Add ' + entity_name|title) }}</a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   LOADING STATE
+   Placeholder while content is loading
+   ============================================================================= #}
+
+{% macro loading_state(message='Loading...') %}
+{#
+  Args:
+    message: Loading message
+#}
+<div class="empty-state loading-state">
+    <div class="loading-spinner"></div>
+    <p class="empty-state-message">{{ message }}</p>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   ERROR STATE
+   Empty state for error conditions
+   ============================================================================= #}
+
+{% macro error_state(message='Something went wrong', description='', retry_url='') %}
+{#
+  Args:
+    message: Error message
+    description: Additional details
+    retry_url: URL to retry (optional)
+#}
+<div class="empty-state error-state">
+    <div class="empty-state-icon">⚠️</div>
+    <p class="empty-state-message">{{ message }}</p>
+    {% if description %}
+    <p class="empty-state-description text-muted">{{ description }}</p>
+    {% endif %}
+    {% if retry_url %}
+    <a href="{{ retry_url }}" class="btn btn-primary">Try Again</a>
+    {% endif %}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   PUBLISHER EMPTY STATE
+   Specific empty state for publisher page
+   ============================================================================= #}
+
+{% macro publisher_empty_state() %}
+<div class="empty-state">
+    <p>No press releases ready for this date.</p>
+    <p class="text-muted">Press releases with "Ready" status will appear here.</p>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   DATE EMPTY STATE
+   Empty state when no data for selected date
+   ============================================================================= #}
+
+{% macro date_empty_state(date, entity_name='items') %}
+{#
+  Args:
+    date: The selected date
+    entity_name: What was being searched for
+#}
+<div class="empty-state">
+    <div class="empty-state-icon">📅</div>
+    <p class="empty-state-message">No {{ entity_name }} for {{ date|format_date('%B %d, %Y') if date else 'this date' }}</p>
+    <p class="empty-state-description text-muted">Try selecting a different date.</p>
+</div>
+{% endmacro %}

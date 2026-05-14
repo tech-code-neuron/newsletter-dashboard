@@ -1,0 +1,857 @@
+/**
+ * Public Pages - Shared Styles
+ *
+ * For subscriber-facing status pages (verify, unsubscribe, etc.)
+ * Uses design tokens from variables.css
+ */
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
+.public-page {
+    margin: 0;
+    padding: var(--spacing-md);
+    background: var(--color-bg);
+    font-family: Georgia, "Times New Roman", Times, serif;
+    color: var(--color-text-dark);
+    line-height: var(--line-height-base);
+    min-height: 100vh;
+}
+
+.public-page a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.public-page a:hover {
+    color: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   LAYOUT
+   ============================================================================ */
+
+.public-container {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.public-content {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.public-header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.public-header a {
+    text-decoration: none;
+}
+
+.public-header img {
+    max-width: 100%;
+    width: 400px;
+    height: auto;
+    cursor: pointer;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+.public-title {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--color-text-dark);
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.public-text {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 18px;
+    color: var(--color-text-muted);
+    line-height: var(--line-height-base);
+    margin: 0 0 var(--spacing-xl) 0;
+}
+
+.public-text-sm {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    color: var(--color-text-light);
+    line-height: var(--line-height-base);
+    margin: 0 0 var(--spacing-lg) 0;
+}
+
+/* ============================================================================
+   STATUS ICONS
+   ============================================================================ */
+
+.status-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--border-radius-circle);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.status-icon-success {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    font-size: 32px;
+}
+
+.status-icon-error {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+    font-size: 28px;
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.public-btn {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 14px 32px;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    font-family: var(--font-family-base);
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition-base);
+}
+
+.public-btn:hover {
+    background: var(--color-primary-hover);
+    color: white;
+}
+
+/* ============================================================================
+   INFO BOX
+   ============================================================================ */
+
+.public-info-box {
+    background: var(--color-bg-hover);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    text-align: left;
+}
+
+.public-info-box h3 {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-family: var(--font-family-base);
+    font-size: 13px;
+    color: var(--color-text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.public-info-box ul {
+    margin: 0;
+    padding: 0 0 0 20px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    line-height: 1.8;
+}
+
+.public-contact-box {
+    background: var(--color-bg-hover);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.public-contact-box p {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    color: var(--color-text-muted);
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.public-footer {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-md);
+}
+
+.public-footer-tagline {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+.public-footer-links {
+    margin-top: 12px;
+    font-family: var(--font-family-base);
+    font-size: 12px;
+}
+
+.public-footer-links a {
+    color: var(--color-text-light);
+    text-decoration: none;
+}
+
+.public-footer-links a:hover {
+    color: var(--color-text-muted);
+}
+
+.public-footer-divider {
+    color: var(--color-border);
+    margin: 0 8px;
+}
+
+.public-footer-copyright {
+    margin-top: var(--spacing-sm);
+    font-family: var(--font-family-base);
+    font-size: 11px;
+    color: var(--color-text-light);
+}
+
+/* ============================================================================
+   SIGNUP BOX
+   ============================================================================ */
+
+.signup-box {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    margin-top: var(--spacing-xl);
+    padding: 20px 24px;
+    text-align: center;
+    background: var(--color-bg-white);
+}
+
+.signup-headline {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 17px;
+    color: var(--color-text);
+    margin-bottom: 6px;
+}
+
+.signup-description {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+.signup-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signup-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+}
+
+.signup-submit {
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: background var(--transition-base);
+}
+
+.signup-submit:hover {
+    background: var(--color-primary-hover);
+}
+
+.signup-footer-note {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 11px;
+    color: var(--color-text-light);
+    margin-top: 12px;
+}
+
+/* ============================================================================
+   SIGNUP POPUP (for inline signup triggers)
+   ============================================================================ */
+
+.signup-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.signup-toggle {
+    display: none;
+}
+
+.signup-trigger {
+    color: var(--color-primary);
+    cursor: pointer;
+    border-bottom: 1px dashed var(--color-primary);
+}
+
+.signup-popup {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    background: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md) 20px;
+    width: 280px;
+    display: none;
+    z-index: var(--z-dropdown);
+    text-align: left;
+}
+
+.signup-popup::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--color-border);
+}
+
+.signup-popup::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid var(--color-bg-white);
+}
+
+.signup-toggle:checked ~ .signup-popup {
+    display: block;
+}
+
+.signup-close-btn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 20px;
+    color: var(--color-text-light);
+    cursor: pointer;
+    line-height: 1;
+    background: none;
+    border: none;
+}
+
+.signup-close-btn:hover {
+    color: var(--color-text);
+}
+
+.signup-popup-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.signup-popup-desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin-bottom: var(--spacing-md);
+}
+
+.popup-form input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    border: 1px solid var(--color-border);
+    box-sizing: border-box;
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+}
+
+.popup-form button {
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: background var(--transition-base);
+}
+
+.popup-form button:hover {
+    background: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   CONTENT PAGES (Privacy Policy, Terms, etc.)
+   ============================================================================ */
+
+.public-content-page {
+    padding: 20px 0;
+}
+
+.public-content-page h1 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 28px;
+    color: var(--color-text-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.public-last-updated {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.public-content-card {
+    background: var(--color-bg-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.public-content-card h2 {
+    font-size: 18px;
+    margin: 0 0 12px;
+    color: var(--color-text-dark);
+}
+
+.public-content-card h2:not(:first-of-type) {
+    margin-top: 24px;
+}
+
+.public-content-card p {
+    margin-bottom: 12px;
+    line-height: var(--line-height-base);
+}
+
+.public-content-card ul {
+    padding-left: 24px;
+    margin-bottom: 12px;
+    line-height: var(--line-height-base);
+}
+
+.public-content-card li {
+    margin-bottom: 6px;
+}
+
+.public-content-card a {
+    color: var(--color-primary);
+}
+
+.public-content-card a:hover {
+    color: var(--color-primary-hover);
+}
+
+.public-contact-card {
+    background: var(--color-bg-hover);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-lg);
+    margin-top: 24px;
+}
+
+.public-contact-card h2 {
+    margin: 0 0 12px;
+}
+
+.public-contact-card p {
+    line-height: var(--line-height-base);
+    margin: 0;
+}
+
+/* ============================================================================
+   NEWSLETTER PAGES
+   ============================================================================ */
+
+.newsletter-wrapper {
+    background: var(--color-bg);
+    min-height: 100vh;
+    padding: var(--spacing-md);
+}
+
+.newsletter-container {
+    max-width: 650px;
+    margin: 0 auto;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    color: var(--color-text-dark);
+}
+
+/* Newsletter Header */
+.newsletter-header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.newsletter-header .logo-link {
+    text-decoration: none;
+}
+
+.newsletter-logo {
+    max-width: 100%;
+    width: 400px;
+    height: auto;
+    cursor: pointer;
+}
+
+.newsletter-date {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+}
+
+/* Newsletter Navigation */
+.newsletter-nav {
+    text-align: center;
+    padding: 12px 0;
+    font-family: var(--font-family-base);
+    font-size: 13px;
+}
+
+.newsletter-nav a {
+    color: var(--color-primary);
+    text-decoration: none;
+    margin: 0 12px;
+}
+
+.newsletter-nav a:hover {
+    color: var(--color-primary-hover);
+}
+
+/* Archive Banner */
+.archive-banner {
+    background-color: var(--color-bg);
+    padding: 10px 16px;
+    text-align: center;
+    font-family: var(--font-family-base);
+    font-size: 13px;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.archive-banner a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.archive-banner a:hover {
+    color: var(--color-primary-hover);
+}
+
+/* Archive Navigation (3-column fixed layout) */
+.archive-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-md) 0 var(--spacing-sm) 0;
+}
+
+.archive-nav-left,
+.archive-nav-center,
+.archive-nav-right {
+    flex: 1;
+}
+
+.archive-nav-left {
+    text-align: left;
+}
+
+.archive-nav-center {
+    text-align: center;
+}
+
+.archive-nav-right {
+    text-align: right;
+}
+
+.archive-nav a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-family: var(--font-family-base);
+    font-size: 13px;
+}
+
+.archive-nav a:hover {
+    color: var(--color-primary-hover);
+}
+
+/* Newsletter Content */
+.newsletter-content {
+    padding: 0 var(--spacing-md);
+}
+
+/* Section Headers */
+.section-header {
+    font-family: var(--font-family-base);
+    font-weight: bold;
+    margin-top: 24px;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+}
+
+.section-headlines {
+    font-size: 20px;
+    color: var(--color-text-dark);
+    border-bottom: 3px solid var(--color-primary);
+}
+
+.section-secondary {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* Newsletter Items */
+.newsletter-item {
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.newsletter-item.item-last {
+    border-bottom: none;
+}
+
+/* Headline Items */
+.headline-item {
+    padding: var(--spacing-md) 0;
+}
+
+.headline-item.item-last {
+    padding-bottom: 24px;
+    border-bottom: 3px solid var(--color-primary);
+}
+
+.item-company {
+    margin-bottom: 4px;
+}
+
+.item-company a {
+    font-family: var(--font-family-base);
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.item-company a:hover {
+    color: var(--color-primary-hover);
+}
+
+.item-title {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 16px;
+    color: var(--color-text);
+    text-decoration: none;
+    display: block;
+    margin-top: 5px;
+}
+
+.item-title:hover {
+    color: var(--color-primary);
+}
+
+.headline-title {
+    color: var(--color-text);
+}
+
+/* Secondary Items (condensed format) */
+.secondary-item {
+    padding: var(--spacing-sm) 0;
+}
+
+.item-ticker {
+    font-family: var(--font-family-base);
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.item-ticker:hover {
+    color: var(--color-primary-hover);
+}
+
+.item-title-inline {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.item-title-inline:hover {
+    color: var(--color-text);
+}
+
+/* Quiet Day Message */
+.quiet-day-message {
+    padding: 12px 0;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+/* Signup Section (within newsletter) */
+.signup-section {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    margin-top: var(--spacing-xl);
+    padding: 20px 24px;
+    text-align: center;
+    background: var(--color-bg-white);
+}
+
+.signup-section .signup-headline {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 17px;
+    color: var(--color-text);
+    margin-bottom: 6px;
+}
+
+.signup-section .signup-description {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+.signup-section .signup-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signup-section .signup-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+}
+
+.signup-section .signup-form button {
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: background var(--transition-base);
+}
+
+.signup-section .signup-form button:hover {
+    background: var(--color-primary-hover);
+}
+
+.signup-section .signup-footer {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 11px;
+    color: var(--color-text-light);
+    margin-top: 12px;
+}
+
+/* Newsletter Footer */
+.newsletter-footer {
+    text-align: center;
+    padding: 24px 0;
+    margin-top: var(--spacing-md);
+}
+
+.footer-tagline {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+.footer-links {
+    margin-top: 12px;
+    font-family: var(--font-family-base);
+    font-size: 12px;
+}
+
+.footer-links a {
+    color: var(--color-text-light);
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--color-text-muted);
+}
+
+.footer-links .divider {
+    color: var(--color-border);
+    margin: 0 var(--spacing-sm);
+}
+
+/* Popup header/footer within newsletter */
+.popup-header {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    color: var(--color-text);
+    margin-bottom: 12px;
+    padding-right: var(--spacing-md);
+}
+
+.popup-footer {
+    margin-top: 10px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* Popup form input type text (for text input in popup) */
+.popup-form input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    border: 1px solid var(--color-border);
+    box-sizing: border-box;
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+}

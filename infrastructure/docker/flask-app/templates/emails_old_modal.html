@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}Email Viewer - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/emails.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flex-between mb-md">
+    <h2 class="m-0">Email Viewer</h2>
+    <div class="email-stats">
+        <span class="text-muted">{{ total_count }} emails</span>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card filter-panel">
+    <form method="GET" id="filter-form">
+        <div class="filter-bar">
+            <!-- Date Range Inputs -->
+            <div class="date-range-group">
+                <input type="date"
+                       name="start_date"
+                       id="start-date"
+                       value="{{ filters.start_date|format_date('%Y-%m-%d', '') }}"
+                       max="{{ filters.end_date|format_date('%Y-%m-%d', '') }}">
+                <span class="date-separator">to</span>
+                <input type="date"
+                       name="end_date"
+                       id="end-date"
+                       value="{{ filters.end_date|format_date('%Y-%m-%d', '') }}"
+                       max="{{ filters.end_date|format_date('%Y-%m-%d', '') }}">
+            </div>
+
+            <!-- Search Input -->
+            <div class="search-wrap">
+                <input type="text"
+                       name="search"
+                       id="search-input"
+                       placeholder="Search subject, from, ticker..."
+                       value="{{ filters.search_query or '' }}"
+                       autocomplete="off">
+                {% if filters.search_query %}
+                <a href="{{ url_for('emails.email_list') }}" class="search-clear">✕</a>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary btn-inline">Filter</button>
+
+            <!-- Quick Date Presets -->
+            <div class="date-presets">
+                <button type="button" class="btn btn-secondary btn-small" data-preset="today">Today</button>
+                <button type="button" class="btn btn-secondary btn-small" data-preset="7">Last 7 days</button>
+                <button type="button" class="btn btn-secondary btn-small" data-preset="30">Last 30 days</button>
+                <button type="button" class="btn btn-secondary btn-small" data-preset="all">All time</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Error Message -->
+{% if error %}
+<div class="alert alert-danger">
+    <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
+
+<!-- Email List -->
+<div class="card">
+    {% if emails %}
+    <!-- Desktop Table -->
+    <div class="table-container hide-mobile">
+        <table class="table table-hover table-emails">
+            <thead>
+                <tr>
+                    <th class="col-md">Date</th>
+                    <th class="col-lg">From</th>
+                    <th>Subject</th>
+                    <th class="col-sm">Ticker</th>
+                    <th class="col-xs">Size</th>
+                    <th class="col-md">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for email in emails %}
+                <tr class="email-row" data-email-id="{{ email.id }}">
+                    <td>
+                        {% if email.display_date %}
+                            {{ email.display_date|format_date('%b %d, %Y') }}<br>
+                            <small class="text-muted">{{ email.display_date|format_date('%-I:%M %p') }}</small>
+                        {% else %}
+                            <span class="text-muted">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td class="from-cell">
+                        <div class="from-name">{{ email.from_name or email.from_email }}</div>
+                        <div class="from-domain text-muted">{{ email.from_domain }}</div>
+                    </td>
+                    <td class="subject-cell">
+                        <div class="subject-text">{{ email.subject }}</div>
+                        {% if email.has_attachments %}
+                        <span class="attachment-icon" title="{{ email.attachment_count }} attachment(s)">📎</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if email.ticker %}
+                        <span class="ticker-badge">{{ email.ticker }}</span>
+                        {% else %}
+                        <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted">{{ email.size_kb }} KB</td>
+                    <td class="action-buttons">
+                        <button type="button" class="btn btn-small btn-primary view-email-btn" data-email-id="{{ email.id }}">
+                            View
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mobile Card List -->
+    <div class="mobile-card-list show-mobile">
+        {% for email in emails %}
+        <div class="mobile-card email-card" data-email-id="{{ email.id }}">
+            <div class="mobile-card-header">
+                <div class="email-from">
+                    <strong>{{ email.from_name or email.from_email }}</strong>
+                    <span class="text-muted">{{ email.from_domain }}</span>
+                </div>
+                <div class="email-date text-muted">
+                    {% if email.display_date %}
+                    {{ email.display_date|format_date('%b %d') }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mobile-card-body">
+                <div class="email-subject">{{ email.subject }}</div>
+                {% if email.ticker %}
+                <div class="email-ticker">
+                    <span class="ticker-badge">{{ email.ticker }}</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="mobile-card-footer">
+                <button type="button" class="btn btn-primary btn-small view-email-btn" data-email-id="{{ email.id }}">
+                    View Email
+                </button>
+                <span class="text-muted">{{ email.size_kb }} KB</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if has_more %}
+    <div class="pagination-container">
+        <form method="GET" id="load-more-form">
+            <!-- Preserve filters -->
+            <input type="hidden" name="start_date" value="{{ filters.start_date|format_date('%Y-%m-%d', '') }}">
+            <input type="hidden" name="end_date" value="{{ filters.end_date|format_date('%Y-%m-%d', '') }}">
+            <input type="hidden" name="search" value="{{ filters.search_query or '' }}">
+            <input type="hidden" name="continuation" value="{{ next_token or '' }}">
+            <button type="submit" class="btn btn-secondary">Load More</button>
+        </form>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <p>No emails found for the selected date range.</p>
+        <p class="text-muted">Try adjusting your filters or date range.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Email Viewer Modal -->
+<div class="modal-overlay" id="email-modal">
+    <div class="modal-window email-viewer-modal">
+        <div class="modal-header">
+            <h3 id="modal-subject">Email</h3>
+            <button type="button" class="modal-close" id="modal-close">×</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Loading State -->
+            <div class="loading-state" id="loading-state">
+                <p>Loading email...</p>
+            </div>
+
+            <!-- Email Content (Two Pane Layout) -->
+            <div class="email-viewer-content" id="email-content" style="display: none;">
+                <!-- Left Pane: Metadata -->
+                <div class="email-viewer-left">
+                    <div class="metadata-section">
+                        <div class="metadata-row">
+                            <span class="metadata-label">From:</span>
+                            <span class="metadata-value" id="email-from"></span>
+                        </div>
+                        <div class="metadata-row">
+                            <span class="metadata-label">To:</span>
+                            <span class="metadata-value" id="email-to"></span>
+                        </div>
+                        <div class="metadata-row">
+                            <span class="metadata-label">Date:</span>
+                            <span class="metadata-value" id="email-date"></span>
+                        </div>
+                        <div class="metadata-row">
+                            <span class="metadata-label">Subject:</span>
+                            <span class="metadata-value" id="email-subject"></span>
+                        </div>
+                        {% raw %}
+                        <div class="metadata-row" id="ticker-row" style="display: none;">
+                            <span class="metadata-label">Ticker:</span>
+                            <span class="metadata-value">
+                                <span class="ticker-badge" id="email-ticker"></span>
+                            </span>
+                        </div>
+                        {% endraw %}
+                        <div class="metadata-row">
+                            <span class="metadata-label">Size:</span>
+                            <span class="metadata-value" id="email-size"></span>
+                        </div>
+                        <div class="metadata-row" id="attachments-row" style="display: none;">
+                            <span class="metadata-label">Attachments:</span>
+                            <span class="metadata-value" id="email-attachments"></span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="email-actions">
+                        <a href="#" id="download-btn" class="btn btn-secondary btn-block" target="_blank">
+                            Download Raw Email
+                        </a>
+                    </div>
+
+                    <!-- Headers Accordion -->
+                    <details class="headers-accordion">
+                        <summary>Show All Headers</summary>
+                        <pre class="headers-content" id="email-headers"></pre>
+                    </details>
+                </div>
+
+                <!-- Right Pane: Body -->
+                <div class="email-viewer-right">
+                    <div class="body-tabs">
+                        <button type="button" class="body-tab active" data-tab="html" id="html-tab">HTML</button>
+                        <button type="button" class="body-tab" data-tab="text" id="text-tab">Plain Text</button>
+                    </div>
+
+                    <div class="body-content">
+                        <!-- HTML Body (iframe) -->
+                        <div class="body-pane active" id="html-pane">
+                            <iframe id="html-frame" sandbox="allow-same-origin" frameborder="0"></iframe>
+                        </div>
+
+                        <!-- Text Body -->
+                        <div class="body-pane" id="text-pane">
+                            <pre id="text-content"></pre>
+                        </div>
+
+                        <!-- No Body State -->
+                        <div class="body-pane" id="no-body-pane" style="display: none;">
+                            <div class="empty-state">
+                                <p>No email body available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-state" id="error-state" style="display: none;">
+                <p class="text-danger">Error loading email. Please try again.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ url_for('static', filename='js/pages/emails.js') }}"></script>
+{% endblock %}

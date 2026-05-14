@@ -1,0 +1,24 @@
+<!-- Navigation -->
+<div class="nav">
+    <a href="{{ config.site.url }}">Front Page</a> |
+    {% if prev_date %}
+    <a href="{{ config.site.url }}/news/archive/{{ prev_date }}/">Previous Issue</a> |
+    {% endif %}
+    <span class="signup-wrapper">
+        <input type="checkbox" id="nav-signup-toggle" class="signup-toggle">
+        <label for="nav-signup-toggle" class="signup-trigger" data-cta="signup_nav">{{ config.signup.nav_cta }}</label>
+        <div class="signup-popup">
+            <label for="nav-signup-toggle" class="signup-close-btn">&times;</label>
+            <div class="signup-popup-title">Subscribe to {{ config.site.name }}</div>
+            <div class="signup-popup-desc">{{ config.signup.popup_desc|safe }}</div>
+            <form action="{{ config.signup.api_url }}" method="POST" class="popup-form" data-ajax="true" novalidate>
+                <!-- Honeypot field - hidden from users, filled by bots -->
+                <input type="text" name="website" class="signup-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field empty">
+                <input type="email" name="email" id="nav-email" aria-label="Email address" placeholder="{{ config.signup.placeholder }}" required>
+                <button type="submit" data-cta="signup_nav">Subscribe</button>
+            </form>
+            <div class="signup-footer">{{ config.signup.footer }}</div>
+            <div class="signup-message" style="display: none;"></div>
+        </div>
+    </span>
+</div>

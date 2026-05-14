@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.subscription.verified.title }} | {{ config.brand.title_suffix }}</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+</head>
+<body class="public-page">
+    <div class="public-container">
+        <div class="public-header">
+            <a href="{{ config.site.url }}">
+                <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+            </a>
+        </div>
+
+        <div class="public-content">
+            <div class="status-icon status-icon-success">&#10003;</div>
+            <h1 class="public-title">{{ config.subscription.verified.heading }}</h1>
+            <p class="public-text">{{ config.subscription.verified.message }}</p>
+            <div class="public-info-box">
+                <h3>What to expect</h3>
+                <ul>
+                    <li>One email every weekday morning</li>
+                    <li>Curated REIT press releases</li>
+                    <li>Easy one-click unsubscribe</li>
+                </ul>
+            </div>
+            <a href="{{ config.subscription.verified.cta_url }}" class="public-btn">{{ config.subscription.verified.cta_text }}</a>
+        </div>
+
+        <div class="public-footer">
+            <div class="public-footer-tagline">{{ config.brand.tagline }}</div>
+            <div class="public-footer-links">
+                <a href="{{ config.footer.privacy_url }}">Privacy Policy</a>
+                <span class="public-footer-divider">|</span>
+                <a href="mailto:{{ config.footer.contact_email }}">Contact Us</a>
+            </div>
+            <div class="public-footer-copyright">{{ config.footer.copyright_text }}</div>
+        </div>
+    </div>
+</body>
+</html>

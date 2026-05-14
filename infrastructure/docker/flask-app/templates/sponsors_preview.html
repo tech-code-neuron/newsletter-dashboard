@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Migration Preview - Sponsors - {{ config.site.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .preview-stats {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+        background: var(--bg-secondary);
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+    }
+
+    .info-card {
+        background: #e7f5ff;
+        border-left: 4px solid #0066cc;
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 1.5rem;
+    }
+
+    .info-card h4 {
+        margin: 0 0 0.5rem 0;
+        color: #004085;
+    }
+
+    .info-card p {
+        margin: 0;
+        color: #004085;
+    }
+
+    .info-card code {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 0.125rem 0.375rem;
+        border-radius: 3px;
+        font-size: 0.875rem;
+    }
+
+    .preview-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .preview-table th {
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid var(--border-color);
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .preview-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .preview-table tr:hover {
+        background: var(--bg-hover);
+    }
+
+    .ticker {
+        font-weight: 600;
+        font-family: monospace;
+    }
+
+    .company-name {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+
+    .old-value {
+        color: #dc3545;
+        text-decoration: line-through;
+    }
+
+    .new-value {
+        color: #28a745;
+        font-weight: 500;
+    }
+
+    .arrow {
+        color: var(--text-muted);
+        padding: 0 0.5rem;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        color: var(--primary-color);
+    }
+
+    .success-card {
+        background: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 1.5rem;
+    }
+
+    .success-card h4 {
+        margin: 0;
+        color: #155724;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="preview-header">
+    <div>
+        <a href="{{ url_for('sponsors.sponsors') }}" class="back-link">
+            &larr; Back to Sponsors
+        </a>
+        <h2 style="margin-top: 0.5rem;">Migration Preview</h2>
+    </div>
+</div>
+
+<div class="preview-stats">
+    <div class="stat-card">
+        <div class="stat-value">{{ change_count }}</div>
+        <div class="stat-label">Fields to Update</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ company_count }}</div>
+        <div class="stat-label">Companies Affected</div>
+    </div>
+</div>
+
+{% if changes %}
+<div class="info-card">
+    <h4>How to Run Migration</h4>
+    <p>
+        Run the migration script with dry-run first to verify changes:<br>
+        <code>python3 scripts/migrate_sponsors.py --dry-run</code>
+    </p>
+    <p style="margin-top: 0.5rem;">
+        Then execute the migration (creates backup automatically):<br>
+        <code>python3 scripts/migrate_sponsors.py --execute</code>
+    </p>
+</div>
+
+<table class="preview-table">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Field</th>
+            <th>Current Value</th>
+            <th></th>
+            <th>New Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for change in changes %}
+        <tr>
+            <td>
+                <span class="ticker">{{ change.ticker }}</span>
+                {% if change.company_name %}
+                <br><span class="company-name">{{ change.company_name }}</span>
+                {% endif %}
+            </td>
+            <td>{{ change.field }}</td>
+            <td><span class="old-value">{{ change.old_value }}</span></td>
+            <td class="arrow">&rarr;</td>
+            <td><span class="new-value">{{ change.new_value }}</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<div class="success-card">
+    <h4>All sponsors are canonical - no migration needed!</h4>
+</div>
+{% endif %}
+{% endblock %}

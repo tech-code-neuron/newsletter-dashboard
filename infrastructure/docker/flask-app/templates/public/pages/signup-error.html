@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Something Went Wrong - {{ config.site.name }}{% endblock %}
+
+{% block signup %}{% endblock %}
+
+{% block content %}
+<div class="public-content">
+    <div class="status-icon status-icon-error">!</div>
+    <h1 class="public-title">Something went wrong</h1>
+    <p class="public-text">
+        We couldn't process your signup. Please check your email address and try again.
+    </p>
+    <a href="{{ config.site.url }}" class="public-btn">Try Again</a>
+</div>
+{% endblock %}

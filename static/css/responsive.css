@@ -1,0 +1,737 @@
+/* ============================================================================
+   MOBILE RESPONSIVE STYLES
+   ============================================================================
+
+   Strategy: Mobile-first card layouts (not horizontal scroll tables)
+   - Tables on 375px don't work - convert to cards
+   - Professional financial app appearance (Bloomberg, Robinhood, Fidelity)
+   - 48px minimum touch targets (Material Design)
+   - Zero horizontal scroll
+
+   Version: v7 - Complete mobile UX redesign
+   - Card-based layouts replace tables on mobile
+   - Touch-optimized buttons (48px minimum)
+   - Fixed viewport overflow (no horizontal scroll)
+   - Professional button styling
+   ============================================================================ */
+
+/* ============================================================================
+   PHASE 5: VIEWPORT OVERFLOW FIX
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Hard constraint - nothing escapes viewport */
+    html {
+        max-width: 100vw;
+        overflow-x: clip; /* Better than hidden - prevents scroll but allows layout */
+    }
+
+    body {
+        max-width: 100vw;
+        overflow-x: clip;
+        -webkit-text-size-adjust: 100%; /* Prevent font scaling */
+    }
+
+    /* All direct children must fit */
+    body > * {
+        max-width: 100%;
+    }
+
+    /* Form inputs constrained */
+    input, select, textarea, button {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Tables constrained */
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    /* Prevent any element from causing overflow */
+    .container {
+        max-width: 100%;
+        overflow-x: hidden;
+        padding: 0 var(--spacing-md);
+        margin: var(--spacing-md) auto;
+    }
+}
+
+/* ============================================================================
+   PHASE 6: NAVIGATION - Mobile Hamburger Menu
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Hide checkbox (accessibility: allows keyboard toggle) */
+    .nav-toggle {
+        display: none;
+    }
+
+    /* Hamburger icon styling */
+    .nav-hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        cursor: pointer;
+        padding: var(--spacing-touch-md);
+        position: absolute;
+        top: var(--spacing-touch-md);
+        right: var(--spacing-touch-md);
+        z-index: 1001;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: var(--border-radius-lg);
+    }
+
+    .nav-hamburger span {
+        display: block;
+        width: 24px;
+        height: 3px;
+        background: white;
+        border-radius: var(--border-radius-sm);
+        transition: all 0.3s ease;
+    }
+
+    /* Navigation container */
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--spacing-md);
+        position: relative;
+        min-height: auto;
+    }
+
+    nav h1 {
+        font-size: 1.1rem;
+        margin-bottom: 0;
+        width: calc(100% - 60px); /* Leave space for hamburger */
+        line-height: 1.3;
+    }
+
+    /* Hide navigation items by default */
+    .nav-left ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 0; /* Intentionally 0 */
+        margin-top: var(--spacing-md);
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+    }
+
+    .nav-left ul li {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-left ul li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-left ul li a {
+        display: block;
+        padding: var(--spacing-md) 20px;
+        min-height: 48px; /* Touch target */
+        display: flex;
+        align-items: center;
+        transition: background 0.2s;
+    }
+
+    .nav-left ul li a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        text-decoration: none;
+    }
+
+    /* Show menu when checkbox is checked */
+    .nav-toggle:checked ~ .nav-left ul {
+        display: flex;
+    }
+
+    /* Animate hamburger to X when open */
+    .nav-toggle:checked ~ .nav-hamburger span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .nav-toggle:checked ~ .nav-hamburger span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-toggle:checked ~ .nav-hamburger span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* .nav-left wrapper */
+    nav .nav-left {
+        width: 100%;
+    }
+
+    /* User info: simplify on mobile */
+    nav .nav-right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        display: none; /* Hide by default, show when menu open */
+    }
+
+    .nav-toggle:checked ~ .nav-right {
+        display: flex;
+    }
+
+    .user-info {
+        font-size: 0.85rem;
+    }
+
+    .user-role {
+        display: none; /* Hide role on mobile to save space */
+    }
+}
+
+/* Hide hamburger on desktop */
+@media (min-width: 768px) {
+    .nav-toggle,
+    .nav-hamburger {
+        display: none;
+    }
+}
+
+/* ============================================================================
+   PHASE 4: TOUCH-OPTIMIZED BUTTONS
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Base button styles - 48px minimum (Material Design) */
+    .btn,
+    button:not(.nav-hamburger):not(.modal-close):not(.search-clear),
+    a.btn {
+        min-height: 48px;
+        padding: var(--spacing-touch-md) 20px;
+        font-size: 15px;
+        font-weight: 500;
+        border-radius: var(--border-radius-lg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%; /* Full-width by default on mobile */
+        margin-bottom: var(--spacing-sm);
+        box-sizing: border-box;
+    }
+
+    /* Inline buttons (side-by-side) */
+    .btn-inline,
+    .action-buttons .btn {
+        width: auto;
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    /* Small buttons (still touch-friendly) */
+    .btn-small {
+        min-height: 44px;
+        padding: var(--spacing-touch-sm) var(--spacing-md);
+        font-size: 14px;
+    }
+
+    /* Button groups stack vertically */
+    .btn-group {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        width: 100%;
+    }
+
+    /* Action button pairs (Relevant/Not Relevant) */
+    .action-buttons,
+    .review-decision-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-sm);
+        width: 100%;
+    }
+
+    .action-buttons .btn,
+    .review-decision-buttons button {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Decision buttons specific styling */
+    .decision-button {
+        min-height: 44px;
+        padding: var(--spacing-touch-sm) var(--spacing-touch-md);
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: var(--border-radius-lg);
+    }
+
+    /* Form flex - stack on mobile */
+    .form-flex {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .form-flex .btn {
+        width: 100%;
+    }
+
+    /* Quick actions on dashboard */
+    .form-inline {
+        width: 100%;
+    }
+
+    .form-inline .btn {
+        width: 100%;
+    }
+}
+
+/* ============================================================================
+   PHASE 3: MOBILE CARD LAYOUTS
+   ============================================================================ */
+
+/* Mobile card structure */
+.mobile-card-list {
+    display: none; /* Hidden by default, shown on mobile */
+}
+
+.mobile-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius-xl);
+    margin-bottom: var(--spacing-touch-md);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-touch-md) var(--spacing-md);
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.mobile-card-ticker {
+    display: inline-block;
+    background: #0066cc;
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-touch-sm);
+    border-radius: var(--border-radius-md);
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-family-mono, monospace);
+}
+
+.mobile-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 13px;
+    color: #666;
+}
+
+.mobile-card-body {
+    padding: var(--spacing-md);
+}
+
+.mobile-card-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #212529;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.4;
+}
+
+.mobile-card-preview {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-bottom: var(--spacing-touch-md);
+}
+
+.mobile-card-category {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-touch-sm);
+    background: #e9ecef;
+    border-radius: var(--border-radius-md);
+    font-size: 12px;
+    color: #495057;
+}
+
+.mobile-card-category.breaking {
+    background: #ff6b6b;
+    color: white;
+}
+
+.mobile-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-touch-md) var(--spacing-md);
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.mobile-card-actions .btn,
+.mobile-card-actions button {
+    min-height: 44px;
+    width: 100%;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Single action button (full width) */
+.mobile-card-actions.single-action {
+    grid-template-columns: 1fr;
+}
+
+/* Mobile card links - make anchors behave as blocks */
+.mobile-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.mobile-card-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Status indicators in cards */
+.mobile-card-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 12px;
+}
+
+.mobile-card-status .text-success { color: #28a745; }
+.mobile-card-status .text-danger { color: #dc3545; }
+
+@media (max-width: 767px) {
+    /* Hide tables on mobile, show cards */
+    .table-container,
+    .table-responsive {
+        display: none;
+    }
+
+    .mobile-card-list {
+        display: block;
+    }
+
+    /* For tables that must remain (like simple 2-column tables) */
+    .table-container.keep-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 calc(-1 * var(--spacing-md));
+        padding: 0 var(--spacing-md);
+    }
+
+    .keep-table table {
+        font-size: 14px;
+        min-width: 100%;
+    }
+
+    .keep-table th,
+    .keep-table td {
+        padding: var(--spacing-touch-sm) var(--spacing-sm);
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Hide mobile cards on desktop */
+    .mobile-card-list {
+        display: none !important;
+    }
+}
+
+/* ============================================================================
+   MOBILE FORMS AND FILTERS
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Filter bars stack vertically */
+    .filter-bar {
+        flex-direction: column !important;
+        gap: var(--spacing-touch-md) !important;
+        align-items: stretch !important;
+    }
+
+    .filter-bar > * {
+        width: 100% !important;
+        min-width: 100% !important;
+        flex: none !important;
+    }
+
+    /* Search inputs */
+    .search-wrap {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    /* Select dropdowns */
+    select {
+        width: 100% !important;
+        min-height: 44px;
+        font-size: 16px; /* Prevent iOS zoom */
+    }
+
+    /* Input fields */
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="password"],
+    input[type="date"],
+    textarea {
+        width: 100%;
+        min-height: 44px;
+        font-size: 16px; /* Prevent iOS zoom */
+        padding: var(--spacing-touch-md);
+    }
+
+    /* Filter panel */
+    .filter-panel {
+        padding: var(--spacing-md);
+    }
+
+    /* Card padding adjustment */
+    .card {
+        padding: var(--spacing-md);
+        margin: var(--spacing-touch-md) 0;
+    }
+
+    /* Filter tabs - scrollable horizontal */
+    .filter-tabs,
+    .review-tabs {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: var(--spacing-xs);
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .filter-tabs .tab,
+    .review-tabs .tab,
+    .tab-btn {
+        flex-shrink: 0;
+        padding: var(--spacing-touch-sm) 14px;
+        font-size: 13px;
+        white-space: nowrap;
+        min-height: 40px;
+    }
+}
+
+/* ============================================================================
+   MOBILE STATS AND DASHBOARD
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Stats grid - single column */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-touch-md);
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        padding: var(--spacing-lg); /* 24px */
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    .stat-label {
+        font-size: 14px;
+    }
+
+    /* Page headers */
+    .page-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+    }
+
+    .page-header p {
+        font-size: 14px;
+    }
+
+    /* Flex between - stack on mobile */
+    .flex-between,
+    .flex-between-center {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-touch-md);
+    }
+
+    .flex-between h2,
+    .flex-between-center h2 {
+        margin-bottom: 0;
+    }
+}
+
+/* ============================================================================
+   MOBILE TYPOGRAPHY
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    body {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+
+    .text-sm,
+    .text-small {
+        font-size: 13px;
+    }
+
+    .text-muted {
+        font-size: 13px;
+    }
+}
+
+/* ============================================================================
+   MOBILE MODALS
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    .modal-content,
+    .modal-window {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--spacing-md);
+    }
+
+    .modal-body textarea {
+        min-height: 200px;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+
+/* ============================================================================
+   MOBILE PAGINATION
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    .pagination-controls {
+        margin-top: 20px;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: var(--spacing-touch-md);
+        text-align: center;
+    }
+
+    .pagination a {
+        display: block;
+        padding: var(--spacing-touch-md) 20px;
+        background: #f8f9fa;
+        border-radius: var(--border-radius-lg);
+        text-decoration: none;
+        color: #0066cc;
+        font-weight: 500;
+    }
+
+    .page-info {
+        font-size: 13px;
+        color: #666;
+    }
+}
+
+/* ============================================================================
+   MOBILE UTILITIES
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Hide on mobile */
+    .hide-mobile {
+        display: none !important;
+    }
+
+    /* Show only on mobile */
+    .show-mobile {
+        display: block !important;
+    }
+
+    /* Full width on mobile */
+    .mobile-full-width {
+        width: 100% !important;
+    }
+
+    /* Stack on mobile */
+    .mobile-stack {
+        flex-direction: column !important;
+    }
+
+    /* Grid 2-column override */
+    .grid-2col {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ============================================================================
+   TABLET STYLES (768px - 1023px)
+   ============================================================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+        padding: 0 var(--spacing-lg);
+    }
+
+    nav ul {
+        gap: var(--spacing-md);
+    }
+
+    /* Stats grid: 2 columns on tablet */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
+
+/* ============================================================================
+   DESKTOP - No changes (uses base.css and components.css)
+   ============================================================================ */
+
+@media (min-width: 1024px) {
+    /* Desktop styles handled by base.css - nothing to override */
+}

@@ -1,0 +1,597 @@
+        display: flex;
+        border-bottom: 2px solid #dee2e6;
+        margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+        padding: 0.6rem 1.5rem;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        font-size: 0.95rem;
+        color: #666;
+        background: none;
+        margin-bottom: -2px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .tab-btn:hover { background: #f8f9fa; color: #333; }
+    .tab-btn.active {
+        background: white;
+        border-color: #dee2e6;
+        border-bottom-color: white;
+        color: #0066cc;
+        font-weight: 600;
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+    .count-badge {
+        display: inline-block;
+        background: #0066cc;
+        color: white;
+        padding: 1px 7px;
+        border-radius: 10px;
+        font-size: 0.78rem;
+        margin-left: 5px;
+        font-weight: 600;
+    }
+    .count-badge.muted { background: #6c757d; }
+
+    /* Search */
+    .search-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 260px;
+    }
+    .search-wrap input {
+        width: 100%;
+        padding-right: 2rem;
+        box-sizing: border-box;
+    }
+    .search-clear {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #999;
+        font-size: 1rem;
+        background: none;
+        border: none;
+        padding: 0;
+        display: none;
+        line-height: 1;
+    }
+    .search-clear:hover { color: #333; }
+
+    /* Autocomplete */
+    .ac-dropdown {
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+        z-index: 1000;
+        max-height: 340px;
+        overflow-y: auto;
+        display: none;
+    }
+    .ac-dropdown.open { display: block; }
+    .ac-section {
+        padding: 0.3rem 0.9rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #aaa;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        background: #fafafa;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .ac-item {
+        padding: 0.5rem 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        border-bottom: 1px solid #f5f5f5;
+        font-size: 0.9rem;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover, .ac-item.focused { background: #f0f5ff; }
+    .ac-badge {
+        background: #0066cc;
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 3px;
+        min-width: 40px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+    .ac-name { color: #333; flex: 1; }
+    .ac-name mark { background: #fff3a3; border-radius: 2px; padding: 0 1px; font-style: normal; }
+    .ac-count { color: #999; font-size: 0.8rem; }
+
+    /* Selected company badges */
+    .selected-companies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        min-height: 0;
+        align-items: center;
+    }
+    .selected-companies:not(:empty) {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    .company-badge-filter {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #0066cc;
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+    .company-badge-filter .badge-ticker {
+        font-weight: 700;
+    }
+    .company-badge-filter .badge-name {
+        opacity: 0.9;
+    }
+    .company-badge-filter .badge-remove {
+        cursor: pointer;
+        font-weight: bold;
+        margin-left: 0.2rem;
+        opacity: 0.8;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+    .company-badge-filter .badge-remove:hover {
+        opacity: 1;
+    }
+
+    /* Manual Entry Modal */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+    }
+    .modal-overlay.open { display: block; }
+
+    .modal-window {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        width: 90%;
+        max-width: 700px;
+        max-height: 90vh;
+        overflow: hidden;
+        flex-direction: column;
+    }
+    .modal-window.open {
+        display: flex;
+    }
+
+    .modal-content-wrapper {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .modal-form-section {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .modal-header h3 { margin: 0; }
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        line-height: 1;
+    }
+    .modal-close:hover { color: #333; }
+
+    .modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
+    .modal-body label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .selected-company-display {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+    }
+    .selected-company-display.show { display: flex; }
+    .selected-company-badge {
+        background: #0066cc;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 3px;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+    .selected-company-name {
+        flex: 1;
+        color: #333;
+    }
+    .selected-company-change {
+        color: #0066cc;
+        cursor: pointer;
+        font-size: 0.85rem;
+        text-decoration: underline;
+    }
+    .selected-company-change:hover { color: #004499; }
+
+    .ir-link {
+        display: none;
+        margin-top: -0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: #f0f5ff;
+        border: 1px solid #cce0ff;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+    .ir-link.show { display: block; }
+    .ir-link a {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .ir-link a:hover { text-decoration: underline; }
+    .ir-link small {
+        display: block;
+        color: #666;
+        margin-top: 0.25rem;
+        font-size: 0.8rem;
+    }
+    .modal-body input[type="text"],
+    .modal-body input[type="date"],
+    .modal-body textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        font-family: inherit;
+        font-size: 0.95rem;
+    }
+
+    /* Autocomplete dropdown inside modal */
+    #manual-ac-dropdown {
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.13);
+        z-index: 10000;
+        max-height: 340px;
+        overflow-y: auto;
+        display: none;
+    }
+    #manual-ac-dropdown.open { display: block; }
+    .modal-body textarea {
+        min-height: 300px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        resize: vertical;
+    }
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #dee2e6;
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+    }
+
+    .modal-sticky-actions {
+        position: sticky;
+        top: 0;
+        background: white;
+        border-bottom: 1px solid #dee2e6;
+        padding: 1rem 1.5rem;
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+        z-index: 10;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+/* ============================================================================
+   PRESS RELEASE REVIEW PAGE - Extracted from inline styles (SOLID compliance)
+   ============================================================================ */
+
+/* Relevance Decision Buttons - OPTIMIZED FOR NO-JS SPEED */
+.decision-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.1s ease;  /* Faster transition */
+    margin: 2px;
+    background: #f8f9fa;
+    color: #495057;
+}
+
+.decision-button:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-1px);  /* Subtle lift effect */
+}
+
+/* INSTANT VISUAL FEEDBACK - Shows immediately on click (before server response) */
+.decision-button:active {
+    transform: scale(0.95);  /* Button press effect */
+    opacity: 0.7;
+    transition: all 0.05s ease;  /* Near-instant feedback */
+    /* pointer-events: none removed - was blocking form submission! */
+}
+
+/* Active states */
+.decision-button.active-relevant {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.decision-button.active-relevant:hover {
+    background: #218838;
+    border-color: #218838;
+}
+
+.decision-button.active-not-relevant {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.decision-button.active-not-relevant:hover {
+    background: #c82333;
+    border-color: #c82333;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #495057;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+.tab.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+    font-weight: 600;
+}
+
+/* Content cell with headline and preview */
+.content-cell {
+    max-width: 600px;
+}
+
+.headline {
+    font-weight: 600;
+    font-size: 15px;
+    color: #212529;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.preview-text {
+    font-size: 13px;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+.relevance-buttons {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Clickable rows */
+.pr-row,
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.pr-row:hover,
+.clickable-row:hover {
+    background-color: #f8f9fa;
+}
+
+/* Active/pressed state - blue highlight */
+.pr-row:active,
+.clickable-row:active {
+    background-color: #cce5ff;
+}
+
+/* Mobile card pressed state */
+.mobile-card {
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+}
+
+.mobile-card:active {
+    transform: scale(0.98);
+    background-color: #cce5ff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Badge */
+.badge {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.badge-success {
+    background: #28a745;
+    color: white;
+}
+
+.badge-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+/* Newsletter Status Badges - Uses design tokens */
+.newsletter-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: capitalize;
+}
+
+.newsletter-status-badge.status-ready {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+.newsletter-status-badge.status-needs_review {
+    background: var(--color-warning-bg);
+    color: var(--color-warning-text);
+}
+
+.newsletter-status-badge.status-published {
+    background: var(--color-info-bg);
+    color: var(--color-info-text);
+}
+
+.newsletter-status-badge.status-excluded {
+    background: var(--color-secondary-bg);
+    color: var(--color-secondary);
+}
+
+/* Loading State */
+tr.processing {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Filter panel specific to review page */
+.filter-panel {
+    background: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+}
+
+/* ============================================================================
+   MOBILE STYLES
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Tabs - scrollable on mobile */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+        margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* Filter panel - reduced padding */
+    .filter-panel {
+        padding: 1rem;
+    }
+
+    /* Decision buttons - full width grid */
+    .review-decision-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .decision-button {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    /* Modal adjustments */
+    .modal-window {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .modal-body textarea {
+        min-height: 200px;
+    }
+}

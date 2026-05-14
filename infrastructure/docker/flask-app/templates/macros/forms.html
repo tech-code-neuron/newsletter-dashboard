@@ -1,0 +1,188 @@
+{#
+  Form Field Macros
+  Reusable form components following DRY and SOLID principles
+#}
+
+{# Text input field with label and help text #}
+{% macro text_input(name, label, value='', required=false, help_text='', maxlength=null, extra_class='', extra_attrs='') %}
+<div class="mb-3">
+    <label for="{{ name }}" class="form-label">{{ label }}{% if required %} *{% endif %}</label>
+    <input type="text"
+           class="form-control{% if extra_class %} {{ extra_class }}{% endif %}"
+           id="{{ name }}"
+           name="{{ name }}"
+           value="{{ value }}"
+           {% if required %}required{% endif %}
+           {% if maxlength %}maxlength="{{ maxlength }}"{% endif %}
+           {{ extra_attrs|safe }}>
+    {% if help_text %}
+    <small class="form-text text-muted">{{ help_text }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# URL input field with label and help text #}
+{% macro url_input(name, label, value='', required=false, help_text='') %}
+<div class="mb-3">
+    <label for="{{ name }}" class="form-label">{{ label }}{% if required %} *{% endif %}</label>
+    <input type="url"
+           class="form-control"
+           id="{{ name }}"
+           name="{{ name }}"
+           value="{{ value }}"
+           {% if required %}required{% endif %}>
+    {% if help_text %}
+    <small class="form-text text-muted">{{ help_text }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Select dropdown with options #}
+{% macro select_field(name, label, options, selected='', help_text='', required=false, allow_empty=true, empty_text='Select...') %}
+<div class="mb-3">
+    <label for="{{ name }}" class="form-label">{{ label }}{% if required %} *{% endif %}</label>
+    <select class="form-select" id="{{ name }}" name="{{ name }}" {% if required %}required{% endif %}>
+        {% if allow_empty %}
+        <option value="">{{ empty_text }}</option>
+        {% endif %}
+        {% for option in options %}
+        <option value="{{ option }}" {% if selected == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+    </select>
+    {% if help_text %}
+    <small class="form-text text-muted">{{ help_text }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Select dropdown with option groups #}
+{% macro select_field_grouped(name, label, option_groups, selected='', help_text='', required=false, allow_empty=true, empty_text='Select...') %}
+<div class="mb-3">
+    <label for="{{ name }}" class="form-label">{{ label }}{% if required %} *{% endif %}</label>
+    <select class="form-select" id="{{ name }}" name="{{ name }}" {% if required %}required{% endif %}>
+        {% if allow_empty %}
+        <option value="">{{ empty_text }}</option>
+        {% endif %}
+        {% for group_name, options in option_groups %}
+        <optgroup label="{{ group_name }}">
+            {% for value, label in options %}
+            <option value="{{ value }}" {% if selected == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </optgroup>
+        {% endfor %}
+    </select>
+    {% if help_text %}
+    <small class="form-text text-muted">{{ help_text }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Checkbox field with label #}
+{% macro checkbox_field(name, label, checked=false, help_text='') %}
+<div class="mb-3 form-check">
+    <input type="checkbox"
+           class="form-check-input"
+           id="{{ name }}"
+           name="{{ name }}"
+           {% if checked %}checked{% endif %}>
+    <label class="form-check-label" for="{{ name }}">
+        {{ label }}
+    </label>
+    {% if help_text %}
+    <small class="form-text text-muted d-block">{{ help_text }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Textarea field #}
+{% macro textarea_field(name, label, value='', required=false, help_text='', rows=3) %}
+<div class="mb-3">
+    <label for="{{ name }}" class="form-label">{{ label }}{% if required %} *{% endif %}</label>
+    <textarea class="form-control"
+              id="{{ name }}"
+              name="{{ name }}"
+              rows="{{ rows }}"
+              {% if required %}required{% endif %}>{{ value }}</textarea>
+    {% if help_text %}
+    <small class="form-text text-muted">{{ help_text }}</small>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{# Full company form - used by both add and edit #}
+{% macro company_form(company, sectors, platform_options, submit_text='Save', is_edit=false) %}
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% if not is_edit %}
+    {{ text_input('ticker', 'Ticker Symbol', company.ticker if company else '',
+                  required=true,
+                  help_text='Stock ticker symbol (e.g., AMT, DLR, PLD)',
+                  maxlength=10,
+                  extra_class='form-uppercase') }}
+    {% endif %}
+
+    {{ text_input('name', 'Company Name', company.name if company else '', required=true) }}
+
+    {{ select_field('sector', 'Sector', sectors, company.sector if company else '', allow_empty=true, empty_text='Select Sector') }}
+
+    {{ url_input('ir_url', 'Investor Relations URL', company.ir_url if company else '',
+                 help_text='Main IR website (e.g., https://investors.company.com)') }}
+
+    {{ url_input('press_release_url', 'Press Release Page URL', company.press_release_url if company else '',
+                 help_text='Specific press release page if different from IR URL') }}
+
+    {{ url_input('company_rss_feed_url', 'Company RSS', company.company_rss_feed_url if company else '',
+                 help_text="Company's own RSS/Atom feed (from their IR website)") }}
+
+    {{ url_input('rss_feed_url', 'Wire Service RSS', company.rss_feed_url if company else '',
+                 help_text='Wire service RSS feed (GlobeNewswire, PR Newswire, etc.)') }}
+
+    {{ select_field_grouped('ir_platform', 'IR Platform', platform_options,
+                           company.ir_platform if company else '',
+                           help_text='Which scraper method to use for this company',
+                           allow_empty=true, empty_text='Auto-detect') }}
+
+    {{ select_field('scraper_variant', 'Scraper Variant',
+                   ['gcs', 'gcs_with_dates', 'wordpress_pdf'],
+                   company.scraper_variant if company else '',
+                   help_text='Override the default scraper for special cases (e.g., AMT uses gcs_with_dates)',
+                   allow_empty=true, empty_text='Default (use IR platform scraper)') }}
+
+    <hr class="my-4">
+    <h5>Newswire Configuration</h5>
+    <p class="text-muted">Configure newswire service for scraping press releases</p>
+
+    <div class="mb-3">
+        <label for="newswire_provider" class="form-label">Newswire Provider</label>
+        <select class="form-select" id="newswire_provider" name="newswire_provider" onchange="toggleCustomProvider()">
+            <option value="">Not configured</option>
+            {% set current_provider = company.newswire_provider if company else '' %}
+            <option value="GlobeNewswire" {% if current_provider == 'GlobeNewswire' %}selected{% endif %}>GlobeNewswire</option>
+            <option value="Business Wire" {% if current_provider == 'Business Wire' %}selected{% endif %}>Business Wire</option>
+            <option value="PR Newswire" {% if current_provider == 'PR Newswire' %}selected{% endif %}>PR Newswire</option>
+            <option value="Other" {% if current_provider and current_provider not in ['GlobeNewswire', 'Business Wire', 'PR Newswire'] %}selected{% endif %}>Other (specify below)</option>
+        </select>
+        <small class="form-text text-muted">Which wire service hosts this company's press releases</small>
+    </div>
+
+    <div class="mb-3 hidden" id="custom_provider_div">
+        <label for="custom_provider" class="form-label">Custom Provider Name</label>
+        <input type="text" class="form-control" id="custom_provider" name="custom_provider"
+               value="{% if company and company.newswire_provider and company.newswire_provider not in ['GlobeNewswire', 'Business Wire', 'PR Newswire'] %}{{ company.newswire_provider }}{% endif %}">
+        <small class="form-text text-muted">Enter custom provider name</small>
+    </div>
+
+    {{ text_input('newswire_id', 'Newswire Organization ID', company.newswire_id if company else '',
+                 help_text='Organization ID on the newswire service<br>Example: AAT on GlobeNewswire = <code>34254</code><br>Found in press release URLs like /news-release/2026/02/03/3231625/<strong>34254</strong>/en/...'|safe) }}
+
+    <hr class="my-4">
+
+    {{ checkbox_field('active', 'Active (include in scraping)',
+                     company.active if company else true) }}
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
+        <a href="{% if is_edit and company %}{{ url_for('companies.company_detail', ticker=company.ticker) }}{% else %}{{ url_for('companies.companies') }}{% endif %}" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endmacro %}

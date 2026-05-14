@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Brave Search Review{% endblock %}
+
+{% block extra_css %}
+<style>
+    .review-stats {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .stat-box {
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        background: var(--bg-secondary, #f8f9fa);
+        text-align: center;
+        min-width: 120px;
+    }
+    .stat-box.pending { border-left: 4px solid #ffc107; }
+    .stat-box.approved { border-left: 4px solid #28a745; }
+    .stat-box.rejected { border-left: 4px solid #dc3545; }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        line-height: 1;
+    }
+    .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted, #6c757d);
+        margin-top: 0.25rem;
+    }
+
+    .date-group {
+        margin-bottom: 2rem;
+    }
+    .date-header {
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 0.5rem 0;
+        border-bottom: 2px solid var(--border-color, #dee2e6);
+        margin-bottom: 1rem;
+    }
+
+    .review-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--border-color, #dee2e6);
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        background: var(--bg-primary, #fff);
+    }
+    .review-item:hover {
+        border-color: var(--primary-color, #0d6efd);
+    }
+
+    .item-content {
+        flex: 1;
+    }
+    .item-company {
+        font-weight: 600;
+        color: var(--primary-color, #0d6efd);
+    }
+    .item-title {
+        font-size: 1rem;
+        margin: 0.25rem 0;
+    }
+    .item-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+    .item-title a:hover {
+        text-decoration: underline;
+    }
+    .item-meta {
+        font-size: 0.85rem;
+        color: var(--text-muted, #6c757d);
+    }
+    .confidence-badge {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .confidence-low { background: #fff3cd; color: #856404; }
+    .confidence-medium { background: #d1ecf1; color: #0c5460; }
+
+    .item-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+    .btn-approve {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+    .btn-approve:hover { background: #218838; }
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+    .btn-reject:hover { background: #c82333; }
+
+    .filter-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .filter-tabs a {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--text-secondary, #495057);
+        background: var(--bg-secondary, #f8f9fa);
+    }
+    .filter-tabs a.active {
+        background: var(--primary-color, #0d6efd);
+        color: white;
+    }
+    .filter-tabs a:hover:not(.active) {
+        background: var(--border-color, #dee2e6);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-muted, #6c757d);
+    }
+    .empty-state h3 {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Brave Search Review</h1>
+        <p class="text-muted">Review low-confidence press releases from Brave API searches</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="review-stats">
+        <div class="stat-box pending">
+            <div class="stat-number">{{ pending_count }}</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-box approved">
+            <div class="stat-number">{{ approved_count }}</div>
+            <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-box rejected">
+            <div class="stat-number">{{ rejected_count }}</div>
+            <div class="stat-label">Rejected</div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <a href="{{ url_for('brave_review.brave_review', status='needs_review') }}"
+           class="{% if status_filter == 'needs_review' %}active{% endif %}">
+            Pending Review
+        </a>
+        <a href="{{ url_for('brave_review.brave_review', status='approved') }}"
+           class="{% if status_filter == 'approved' %}active{% endif %}">
+            Approved
+        </a>
+        <a href="{{ url_for('brave_review.brave_review', status='rejected') }}"
+           class="{% if status_filter == 'rejected' %}active{% endif %}">
+            Rejected
+        </a>
+    </div>
+
+    {% if items %}
+        {% for date, date_items in items_by_date.items() %}
+        <div class="date-group">
+            <div class="date-header">{{ date }}</div>
+
+            {% for item in date_items %}
+            <div class="review-item" data-item-id="{{ item.id }}">
+                <div class="item-content">
+                    <div class="item-company">{{ item.company_name }}</div>
+                    <div class="item-title">
+                        <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
+                    </div>
+                    <div class="item-meta">
+                        <span class="confidence-badge {% if item.confidence_score < 50 %}confidence-low{% else %}confidence-medium{% endif %}">
+                            {{ item.confidence_score }}% confidence
+                        </span>
+                        &bull; {{ item.url | truncate(60) }}
+                    </div>
+                </div>
+
+                {% if status_filter == 'needs_review' %}
+                <div class="item-actions">
+                    <form method="POST" action="{{ url_for('brave_review.approve') }}" style="display:inline;">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <button type="submit" class="btn-approve">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('brave_review.reject') }}" style="display:inline;">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <button type="submit" class="btn-reject">Reject</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <h3>No items to review</h3>
+            <p>
+                {% if status_filter == 'needs_review' %}
+                    All low-confidence results have been reviewed.
+                {% elif status_filter == 'approved' %}
+                    No items have been approved yet.
+                {% else %}
+                    No items have been rejected yet.
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

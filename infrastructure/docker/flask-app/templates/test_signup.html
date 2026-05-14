@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Newsletter Signup Test - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/signup.css') }}?v=1">
+{% endblock %}
+
+{% block content %}
+<!-- Signup CTA Banner -->
+<div class="signup-banner">
+    <div class="signup-banner-content">
+        <span class="signup-banner-text">Get REIT news before the market opens</span>
+        <button type="button" class="btn signup-banner-btn" id="open-signup-btn">Subscribe Free</button>
+    </div>
+</div>
+
+<!-- Main Page Content -->
+<div class="test-page-content">
+    <h1>Newsletter Signup Test Page</h1>
+    <p>This is a test page for the newsletter signup feature. Click the "Subscribe Free" button above to test the popup.</p>
+
+    <div class="test-info-card">
+        <h2>Test Checklist</h2>
+        <ul>
+            <li>CTA banner appears at top of page</li>
+            <li>Clicking "Subscribe Free" opens the popup</li>
+            <li>Popup closes when clicking X, Escape, or backdrop</li>
+            <li>Form validates email format</li>
+            <li>Submit button shows loading state</li>
+            <li>Success message appears on successful submission</li>
+            <li>Error message appears on failure</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Signup Popup Overlay -->
+<div class="signup-overlay" id="signup-overlay">
+    <div class="signup-popup">
+        <button type="button" class="signup-popup-close" id="close-signup-btn" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+        <!-- Form State -->
+        <div class="signup-form-container" id="signup-form-container">
+            <h2 class="signup-popup-title">Get REIT News First</h2>
+            <p class="signup-popup-subtitle">Daily insights delivered before market open</p>
+
+            <form class="signup-form" id="signup-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="signup-form-group">
+                    <label for="signup-email" class="visually-hidden">Email address</label>
+                    <input
+                        type="email"
+                        id="signup-email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <button type="submit" class="btn signup-submit-btn" id="signup-submit-btn">
+                    Subscribe Free
+                </button>
+            </form>
+
+            <p class="signup-privacy">No spam. Unsubscribe anytime.</p>
+        </div>
+
+        <!-- Success State -->
+        <div class="signup-success-container" id="signup-success-container" style="display: none;">
+            <div class="signup-success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h2 class="signup-success-title">You're In!</h2>
+            <p class="signup-success-message">Check your email to confirm your subscription.</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="signup-error-message" id="signup-error-message" style="display: none;">
+            <span id="signup-error-text"></span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/utils.js') }}?v=1"></script>
+<script src="{{ url_for('static', filename='js/pages/signup.js') }}?v=1"></script>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+{% from 'macros/badges.html' import platform_badge %}
+{% from 'macros/tables.html' import sortable_header %}
+
+{% block title %}Companies - Press Release Pipeline{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/autocomplete.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/companies.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flex-between-center mb-md">
+    <h2>Companies ({{ active_companies|length }} active, {{ inactive_companies|length }} inactive)</h2>
+    <a href="{{ url_for('companies.add_company') }}" class="btn btn-success">➕ Add Company</a>
+</div>
+
+<div class="card">
+    <form method="GET" class="mb-md" id="company-filter-form">
+        <div class="form-flex" style="position: relative;">
+            <div class="search-wrap" style="flex: 1;">
+                <input type="text" id="company-search-input"
+                       placeholder="Search by ticker or name..."
+                       autocomplete="off" class="mobile-full-width">
+                <button type="button" class="search-clear" id="company-search-clear">✕</button>
+                <div class="ac-dropdown" id="company-ac-dropdown"></div>
+            </div>
+        </div>
+        <div class="selected-companies" id="selected-company-filters" style="margin-top: 0.75rem;"></div>
+        <input type="hidden" name="search" id="company-search-hidden" value="{{ search }}">
+    </form>
+
+    <!-- Active Companies Section -->
+    <h3 class="mb-sm text-success mt-lg">Active Companies ({{ active_companies|length }})</h3>
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                {{ sortable_header('ticker', 'Ticker', sort_by, order, {'search': search}) }}
+                {{ sortable_header('name', 'Name', sort_by, order, {'search': search}) }}
+                <th class="hide-mobile">{{ sortable_header('sector', 'Sector', sort_by, order, {'search': search}) }}</th>
+                <th class="hide-mobile">IR URL</th>
+                <th class="hide-mobile">{{ sortable_header('source', 'Source', sort_by, order, {'search': search}) }}</th>
+                <th class="hide-mobile text-center">Scraped</th>
+                <th class="hide-mobile text-center">Stale (90d)</th>
+                {{ sortable_header('emails', 'Emails', sort_by, order, {'search': search}) }}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in active_companies %}
+            <tr class="clickable-row" data-href="{{ url_for('companies.company_detail', ticker=company.ticker) }}">
+                <td><span class="ticker">{{ company.ticker }}</span></td>
+                <td>{{ company.name }}</td>
+                <td class="hide-mobile">{{ company.sector or '-' }}</td>
+                <td class="hide-mobile">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation()">Link</a>
+                    {% else %}
+                        <span class="text-muted">Not set</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile">
+                    {% if company.ir_platform %}
+                        {{ platform_badge(company.ir_platform, platform_labels) }}
+                    {% elif not company.has_releases %}
+                        <span class="text-muted text-md" title="Not yet scraped">✗</span>
+                    {% else %}
+                        <span class="text-muted">Not set</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.has_releases %}
+                        <span class="text-success" title="Has press releases">✓</span>
+                    {% else %}
+                        <span class="text-danger" title="No press releases">✗</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.is_stale %}
+                        <span class="text-danger" title="No news in last 90 days">✗</span>
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="text-center hide-mobile" onclick="event.stopPropagation()">
+                    <input type="checkbox"
+                           class="email-toggle"
+                           data-ticker="{{ company.ticker }}"
+                           {% if company.emails_activated %}checked{% endif %}
+                           title="Email signup activated">
+                </td>
+                <td class="hide-mobile">
+                    <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-small" onclick="event.stopPropagation()">View</a>
+                    <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-small btn-secondary" onclick="event.stopPropagation()">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Mobile Card List - Active Companies -->
+    <div class="mobile-card-list">
+        {% for company in active_companies %}
+        <div class="mobile-card {% if loop.index % 2 == 0 %}mobile-card-even{% endif %}">
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-header" style="text-decoration: none; color: inherit;">
+                <span class="mobile-card-ticker">{{ company.ticker }}</span>
+                <div class="mobile-card-meta">
+                    {% if company.has_releases %}
+                        <span class="text-success">✓</span>
+                    {% else %}
+                        <span class="text-danger">✗</span>
+                    {% endif %}
+                    <input type="checkbox"
+                           class="email-toggle"
+                           data-ticker="{{ company.ticker }}"
+                           {% if company.emails_activated %}checked{% endif %}
+                           title="Email signup"
+                           onclick="event.stopPropagation();">
+                </div>
+            </a>
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-body" style="display: block; text-decoration: none; color: inherit;">
+                <div class="mobile-card-title">{{ company.name }}</div>
+                <div class="mobile-card-preview">{{ company.sector or 'No sector' }}</div>
+                <div class="mobile-card-urls">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.ir_url|truncate(35) }}</a>
+                    {% endif %}
+                    {% if company.press_release_url %}
+                        <a href="{{ company.press_release_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.press_release_url|truncate(35) }}</a>
+                    {% endif %}
+                </div>
+            </a>
+            <div class="mobile-card-actions">
+                <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">View</a>
+                <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">Edit</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Inactive Companies Section -->
+    {% if inactive_companies %}
+    <h3 class="mb-sm mt-lg text-muted">Inactive Companies ({{ inactive_companies|length }})</h3>
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th class="hide-mobile">Sector</th>
+                <th class="hide-mobile">IR URL</th>
+                <th class="hide-mobile">Source</th>
+                <th class="hide-mobile text-center">Scraped</th>
+                <th class="hide-mobile text-center">Stale (90d)</th>
+                <th class="text-center hide-mobile">Emails</th>
+                <th class="hide-mobile">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in inactive_companies %}
+            <tr class="clickable-row inactive-row" data-href="{{ url_for('companies.company_detail', ticker=company.ticker) }}">
+                <td><span class="ticker">{{ company.ticker }}</span></td>
+                <td>{{ company.name }}</td>
+                <td class="hide-mobile">{{ company.sector or '-' }}</td>
+                <td class="hide-mobile">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation()">Link</a>
+                    {% else %}
+                        <span class="text-muted">Not set</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile">
+                    {{ platform_badge(company.ir_platform, platform_labels) }}
+                </td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.has_releases %}
+                        <span class="text-success" title="Has press releases">✓</span>
+                    {% else %}
+                        <span class="text-danger" title="No press releases">✗</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.is_stale %}
+                        <span class="text-danger" title="No news in last 90 days">✗</span>
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="text-center hide-mobile" onclick="event.stopPropagation()">
+                    <input type="checkbox"
+                           class="email-toggle"
+                           data-ticker="{{ company.ticker }}"
+                           {% if company.emails_activated %}checked{% endif %}
+                           title="Email signup activated">
+                </td>
+                <td class="hide-mobile">
+                    <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-small" onclick="event.stopPropagation()">View</a>
+                    <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-small btn-secondary" onclick="event.stopPropagation()">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Mobile Card List - Inactive Companies -->
+    <div class="mobile-card-list">
+        {% for company in inactive_companies %}
+        <div class="mobile-card {% if loop.index % 2 == 0 %}mobile-card-even{% endif %}" style="opacity: 0.7;">
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-header" style="text-decoration: none; color: inherit;">
+                <span class="mobile-card-ticker" style="background: #6c757d;">{{ company.ticker }}</span>
+                <div class="mobile-card-meta">
+                    <span class="text-muted">Inactive</span>
+                </div>
+            </a>
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-body" style="display: block; text-decoration: none; color: inherit;">
+                <div class="mobile-card-title">{{ company.name }}</div>
+                <div class="mobile-card-preview">{{ company.sector or 'No sector' }}</div>
+                <div class="mobile-card-urls">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.ir_url|truncate(35) }}</a>
+                    {% endif %}
+                    {% if company.press_release_url %}
+                        <a href="{{ company.press_release_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.press_release_url|truncate(35) }}</a>
+                    {% endif %}
+                </div>
+            </a>
+            <div class="mobile-card-actions">
+                <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">View</a>
+                <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">Edit</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/components/autocomplete.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pages/companies.js') }}"></script>
+<script>
+// Initialize autocomplete for companies page
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all companies from the page
+    const allPageCompanies = [
+        {% for company in active_companies + inactive_companies %}
+        { ticker: '{{ company.ticker }}', name: '{{ company.name }}' },
+        {% endfor %}
+    ];
+
+    // Initialize autocomplete
+    const companyAutocomplete = new Autocomplete({
+        inputId: 'company-search-input',
+        dropdownId: 'company-ac-dropdown',
+        clearBtnId: 'company-search-clear',
+        selectedItemsDivId: 'selected-company-filters',
+        dataSource: () => allPageCompanies,
+        searchFields: ['ticker', 'name'],
+        multiSelect: true,
+        placeholder: 'Search by ticker or name...',
+        maxResults: 10,
+        onSelect: (item, value) => {
+            // Filter companies client-side
+            filterCompaniesBySelection();
+        },
+        onChange: (selectedValues) => {
+            // Update filter when selection changes
+            filterCompaniesBySelection();
+        }
+    });
+
+    // Client-side filtering function
+    function filterCompaniesBySelection() {
+        const selected = companyAutocomplete.getSelectedItems();
+        const rows = document.querySelectorAll('tbody tr');
+        const cards = document.querySelectorAll('.mobile-card');
+
+        if (selected.length === 0) {
+            // Show all
+            rows.forEach(row => row.style.display = '');
+            cards.forEach(card => card.style.display = '');
+        } else {
+            // Filter by selected tickers
+            const selectedSet = new Set(selected);
+
+            rows.forEach(row => {
+                const ticker = row.querySelector('.ticker');
+                if (ticker && selectedSet.has(ticker.textContent.trim())) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            cards.forEach(card => {
+                const ticker = card.querySelector('.mobile-card-ticker');
+                if (ticker && selectedSet.has(ticker.textContent.trim())) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    }
+});
+</script>
+{% endblock %}

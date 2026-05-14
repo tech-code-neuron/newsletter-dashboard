@@ -1,0 +1,7 @@
+# SES Event Processor Lambda Dependencies
+# boto3 is provided by AWS Lambda runtime - no need to include
+
+# No external dependencies required
+# The handler uses only:
+#   - boto3 (AWS runtime)
+#   - Standard library (json, hashlib, uuid, datetime, logging, os, time, typing)

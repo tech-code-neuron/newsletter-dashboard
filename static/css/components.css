@@ -1,0 +1,389 @@
+/**
+ * Reusable Components
+ *
+ * SOLID Principle: Each component has single responsibility.
+ * All components use CSS variables for easy theming.
+ */
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
+
+.card {
+    background: var(--color-bg-card);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+    background: var(--color-bg-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.stat-label {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-sm);
+}
+
+/* ============================================================================
+   STATS GRID
+   ============================================================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ============================================================================
+   BUTTONS - Moved to components/buttons.css
+   ============================================================================ */
+/* See: static/css/components/buttons.css for all button styles */
+
+/* ============================================================================
+   BADGES
+   ============================================================================ */
+
+.ticker {
+    display: inline-block;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.category-badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-bg-hover);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+}
+
+.breaking {
+    background-color: var(--color-breaking);
+    color: white;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.status-processing {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning-text);
+}
+
+/* ============================================================================
+   SPINNER (Loading indicator)
+   ============================================================================ */
+
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: var(--border-width-medium) solid var(--color-bg-hover);
+    border-top: var(--border-width-medium) solid var(--color-primary);
+    border-radius: var(--border-radius-circle);
+    animation: spin 1s linear infinite;
+    margin-right: var(--spacing-sm);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   EMPTY STATE
+   ============================================================================ */
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--color-text-muted);
+}
+
+.empty-state svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: var(--spacing-md);
+    opacity: var(--opacity-faint);
+}
+
+/* ============================================================================
+   ACTION BUTTONS (for review emails, etc.)
+   ============================================================================ */
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+/* ============================================================================
+   MODAL
+   ============================================================================ */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: var(--z-modal);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: var(--color-bg-white);
+    margin: 2% auto;
+    padding: 0;
+    border-radius: var(--border-radius-lg);
+    width: 90%;
+    max-width: var(--width-modal);
+    height: var(--height-modal);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: var(--border-width-thin) solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-md);
+    transition: background-color var(--transition-fast);
+}
+
+.modal-close:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.modal-body {
+    flex: 1;
+    overflow: auto;
+    padding: var(--spacing-lg);
+}
+
+.modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: var(--border-width-thin) solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+}
+
+/* ============================================================================
+   TABLE COLUMN WIDTHS (Utility classes)
+   ============================================================================ */
+
+.col-xs {
+    width: var(--width-xs);
+}
+
+.col-sm {
+    width: var(--width-sm);
+}
+
+.col-md {
+    width: var(--width-md);
+}
+
+.col-lg {
+    width: var(--width-lg);
+}
+
+.col-xl {
+    width: var(--width-xl);
+}
+
+.col-2xl {
+    width: var(--width-2xl);
+}
+
+.col-3xl {
+    width: var(--width-3xl);
+}
+
+/* ============================================================================
+   FORM UTILITIES
+   ============================================================================ */
+
+.form-inline {
+    display: inline;
+}
+
+.form-flex {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/* ============================================================================
+   TEXT COLOR UTILITIES
+   ============================================================================ */
+
+.text-success {
+    color: var(--color-success);
+    font-weight: var(--font-weight-semibold);
+}
+
+.text-danger {
+    color: var(--color-danger);
+    font-weight: var(--font-weight-semibold);
+}
+
+.text-primary {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.text-uncategorized {
+    color: var(--color-text-light);
+}
+
+/* ============================================================================
+   SPACING UTILITIES
+   ============================================================================ */
+
+.mb-xs {
+    margin-bottom: var(--spacing-xs);
+}
+
+.mb-sm {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-md {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-lg {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mb-xl {
+    margin-bottom: var(--spacing-xl);
+}
+
+.m-0 {
+    margin: 0;
+}
+
+/* ============================================================================
+   FONT SIZE UTILITIES
+   ============================================================================ */
+
+.text-xs {
+    font-size: var(--font-size-xs);
+}
+
+.text-sm {
+    font-size: var(--font-size-sm);
+}
+
+.text-base {
+    font-size: var(--font-size-base);
+}
+
+.text-md {
+    font-size: var(--font-size-md);
+}
+
+.font-small-table {
+    font-size: 0.88rem;
+}
+
+/* ============================================================================
+   ROW STATES
+   ============================================================================ */
+
+.archived-row,
+.inactive-row {
+    opacity: 0.65;
+}
+
+/* ============================================================================
+   SPACING UTILITIES (additional)
+   ============================================================================ */
+
+.mt-md {
+    margin-top: var(--spacing-md);
+}
+
+.mt-lg {
+    margin-top: var(--spacing-lg);
+}
+
+.mt-xl {
+    margin-top: var(--spacing-xl);
+}
+
+/* ============================================================================
+   FLEX UTILITIES (additional)
+   ============================================================================ */
+
+.flex-between-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ============================================================================
+   FILTER BAR (desktop)
+   ============================================================================ */
+
+.filter-bar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-panel {
+    padding: 1rem 1.5rem;
+}

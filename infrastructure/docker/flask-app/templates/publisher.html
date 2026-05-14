@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}Publisher - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/publisher.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="publisher-container">
+    <!-- Header -->
+    <div class="publisher-header">
+        <h2>Newsletter Publisher</h2>
+        <div class="date-picker-row">
+            <form method="GET" id="date-form">
+                <label for="date-input">Select Date:</label>
+                <input type="date"
+                       id="date-input"
+                       name="date"
+                       value="{{ selected_date.isoformat() }}"
+                       max="{{ max_date.isoformat() }}">
+                <button type="submit" class="btn btn-secondary btn-small">Load</button>
+            </form>
+            <div class="time-window">
+                {{ time_window }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Summary -->
+    <div class="status-summary">
+        <div class="status-item status-ready">
+            <span class="status-count">{{ status_counts.ready }}</span>
+            <span class="status-label">Ready</span>
+        </div>
+        <div class="status-item status-needs-review">
+            <span class="status-count">{{ status_counts.needs_review }}</span>
+            <span class="status-label">Needs Review</span>
+        </div>
+        <div class="status-item status-published">
+            <span class="status-count">{{ status_counts.published }}</span>
+            <span class="status-label">Published</span>
+        </div>
+        <div class="status-item status-excluded">
+            <span class="status-count">{{ status_counts.excluded }}</span>
+            <span class="status-label">Excluded</span>
+        </div>
+        {% if status_counts.sec_filings %}
+        <div class="status-item status-sec">
+            <span class="status-count">{{ status_counts.sec_filings }}</span>
+            <span class="status-label">SEC Filings</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Two Column Layout (Desktop) -->
+    <div class="publisher-layout publisher-desktop-only">
+        <!-- Left: Editor -->
+        <div class="publisher-editor">
+            <div class="editor-header">
+                <h3>Items ({{ releases|length }}{% if status_counts.sec_filings %} incl. {{ status_counts.sec_filings }} SEC{% endif %})</h3>
+                <span class="drag-hint">Drag to reorder ready items</span>
+            </div>
+
+            {% if releases %}
+            <div class="sortable-list" id="sortable-list">
+                {% for release in releases %}
+                {% set is_sec = release.is_sec_filing if release.is_sec_filing is defined else false %}
+                {% set effective_status = 'excluded' if release.previously_published else (release.newsletter_status or 'ready') %}
+                <div class="release-item{% if effective_status != 'ready' %} release-item-{{ effective_status }}{% endif %}{% if release.previously_published %} release-item-previously-published{% endif %}{% if is_sec %} release-item-sec{% endif %}" data-url="{{ release.url }}" data-status="{{ effective_status }}" {% if is_sec %}data-sec-filing="true"{% endif %}>
+                    <div class="drag-handle{% if effective_status != 'ready' %} drag-disabled{% endif %}">
+                        <span class="drag-icon">&#9776;</span>
+                    </div>
+                    <div class="release-content">
+                        <div class="release-ticker">
+                            {% if release.company and release.company.is_public == false %}{{ release.company.name }}{% if release.company.lead_sponsor %} (Sponsor - {{ release.company.lead_sponsor }}){% endif %}{% else %}{{ release.ticker }}{% endif %}
+                            {% if release.previously_published %}
+                            <span class="previously-published-badge" title="Published on {{ release.published_for_date }}. Click to unpublish and re-include">Previously Published</span>
+                            {% endif %}
+                        </div>
+                        <div class="release-title-wrapper">
+                            {% if is_sec %}
+                            <a href="{{ release.sec_url }}" class="release-title" target="_blank" title="View on SEC EDGAR">
+                                {{ release.display_title }}
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('press_releases.edit_press_release_by_url', url=release.url) }}" class="release-title" data-url="{{ release.url }}" title="Click to edit">
+                                {{ release|display_title }}
+                            </a>
+                            <button type="button" class="edit-title-btn" data-url="{{ release.url }}" title="Edit title">
+                                &#9998;
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div class="release-meta">
+                            {% if is_sec %}
+                            {{ release.filing_date_display }} &middot; {{ release.form_type }}
+                            {% else %}
+                            {{ release.published_date|format_date('%b %d, %-I:%M%p') if release.published_date }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="release-actions">
+                        {% set info = section_info.get(release.url, {}) %}
+                        {% if is_sec %}
+                        {# SEC filings - dropdown with Financing as default #}
+                        <select class="section-select{% if release.newsletter_section %} overridden{% endif %}" data-url="{{ release.url }}" data-sec-filing="true" title="Section classification">
+                            <option value="auto" {% if not release.newsletter_section %}selected{% endif %}>Auto (Financing)</option>
+                            {% for key, label, _ in sections %}
+                            <option value="{{ key }}" {% if release.newsletter_section == key %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        {% set auto_section = info.get('auto', 'headline') %}
+                        {% set auto_label = section_labels.get(auto_section, 'Headline') %}
+                        <select class="section-select{% if info.get('is_overridden') %} overridden{% endif %}" data-url="{{ release.url }}" title="Section classification">
+                            <option value="auto" {% if not info.get('is_overridden') %}selected{% endif %}>Auto ({{ auto_label }})</option>
+                            {% for key, label, _ in sections %}
+                            <option value="{{ key }}" {% if info.get('override') == key %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% endif %}
+                        <select class="status-select" data-url="{{ release.url }}" {% if is_sec %}data-sec-filing="true"{% endif %}>
+                            <option value="ready" {% if effective_status == 'ready' %}selected{% endif %}>Ready</option>
+                            <option value="needs_review" {% if effective_status == 'needs_review' %}selected{% endif %}>Needs Review</option>
+                            <option value="excluded" {% if effective_status == 'excluded' %}selected{% endif %}>Excluded</option>
+                        </select>
+                        {% if is_sec %}
+                        <button type="button" class="btn btn-sm btn-danger delete-disclosure-btn" onclick="deleteDisclosure('{{ release.url }}')" title="Delete SEC filing">🗑</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>No press releases ready for this date.</p>
+                <p class="text-muted">Press releases with "Ready" status will appear here.</p>
+            </div>
+            {% endif %}
+
+            <!-- Generate Actions -->
+            <div class="generate-actions">
+                <button type="button" class="btn btn-primary" id="generate-btn" {% if not ready_releases %}disabled{% endif %}>
+                    Generate HTML
+                </button>
+                <button type="button" class="btn btn-success" id="send-email-btn" {% if not ready_releases %}disabled{% endif %}>
+                    📧 Send to Subscribers
+                </button>
+                <button type="button" class="btn btn-secondary" id="publish-homepage-btn" {% if not ready_releases %}disabled{% endif %}>
+                    🌐 Publish to Homepage
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Preview -->
+        <div class="publisher-preview">
+            <div class="preview-header">
+                <h3>Preview</h3>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="btn btn-small btn-secondary" id="style-editor-btn">
+                        Edit Styles
+                    </button>
+                    <button type="button" class="btn btn-small btn-secondary" id="refresh-preview-btn">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="preview-frame-wrapper">
+                <iframe id="preview-frame" src="about:blank"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Layout -->
+    <div class="publisher-mobile-only">
+        <div class="publisher-editor">
+            <div class="editor-header">
+                <h3>Press Releases ({{ releases|length }})</h3>
+            </div>
+
+            {% if releases %}
+            <div class="mobile-card-list">
+                {% for release in releases %}
+                {% set is_sec = release.is_sec_filing if release.is_sec_filing is defined else false %}
+                {% set status = 'excluded' if release.previously_published else (release.newsletter_status or 'ready') %}
+                <div class="publisher-card{% if status != 'ready' %} publisher-card-{{ status }}{% endif %}{% if release.previously_published %} publisher-card-previously-published{% endif %}" data-status="{{ status }}" data-url="{{ release.url }}" {% if is_sec %}data-sec-filing="true"{% endif %}>
+                    <div class="publisher-card-header">
+                        <span class="ticker-badge">{% if release.company and release.company.is_public == false %}{{ release.company.name }}{% if release.company.lead_sponsor %} (Sponsor - {{ release.company.lead_sponsor }}){% endif %}{% elif release.company %}{{ release.company.ticker }}{% else %}{{ release.ticker }}{% endif %}</span>
+                        <div class="publisher-card-header-right">
+                            {% if release.previously_published %}
+                            <span class="status-badge status-badge-previously-published" title="Published on {{ release.published_for_date }}. Click to unpublish and re-include">Previously Published</span>
+                            {% elif status != 'ready' %}
+                            <span class="status-badge status-badge-{{ status }}">{{ status|replace('_', ' ')|title }}</span>
+                            {% endif %}
+                            <span class="release-date">{{ release.published_date|format_date('%b %d') if release.published_date }}</span>
+                        </div>
+                    </div>
+                    <div class="publisher-card-title-row">
+                        <a href="{{ url_for('press_releases.edit_press_release_by_url', url=release.url) }}" class="publisher-card-title" title="Click to view">
+                            {{ release|display_title }}
+                        </a>
+                    </div>
+                    <!-- Mobile Title Edit Form (collapsible) -->
+                    <details class="mobile-title-edit">
+                        <summary class="mobile-title-edit-toggle">Edit Title</summary>
+                        <form method="POST" action="{{ url_for('publisher.update_title_form') }}" class="mobile-title-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="url" value="{{ release.url }}">
+                            <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+                            <input type="text" name="title" id="title-{{ loop.index }}" aria-label="Newsletter title" value="{{ release|display_title }}" class="mobile-title-input" placeholder="Enter newsletter title...">
+                            <button type="submit" class="btn btn-small btn-primary">Save</button>
+                        </form>
+                    </details>
+                    <div class="publisher-card-actions">
+                        <!-- Section select -->
+                        {% set info = section_info.get(release.url, {}) %}
+                        {% set auto_section = info.get('auto', 'headline') %}
+                        {% set auto_label = section_labels.get(auto_section, 'Headline') %}
+                        <form method="POST" action="{{ url_for('publisher.update_section_form') }}" class="section-form-mobile">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="url" value="{{ release.url }}">
+                            <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+                            <select name="section" data-url="{{ release.url }}" class="section-select-mobile{% if info.get('is_overridden') %} overridden{% endif %}">
+                                <option value="auto" {% if not info.get('is_overridden') %}selected{% endif %}>Auto ({{ auto_label }})</option>
+                                {% for key, label, _ in sections %}
+                                <option value="{{ key }}" {% if info.get('override') == key %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <!-- Status select -->
+                        <form method="POST" action="{{ url_for('publisher.update_status_form') }}" class="status-form-mobile">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="url" value="{{ release.url }}">
+                            <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+                            <select name="status" data-url="{{ release.url }}" class="status-select-mobile" {% if is_sec %}data-sec-filing="true"{% endif %}>
+                                <option value="ready" {% if status == 'ready' %}selected{% endif %}>Ready</option>
+                                <option value="needs_review" {% if status == 'needs_review' %}selected{% endif %}>Needs Review</option>
+                                <option value="excluded" {% if status == 'excluded' %}selected{% endif %}>Excluded</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>No press releases for this date.</p>
+            </div>
+            {% endif %}
+
+            <!-- Generate Actions (Mobile) -->
+            <div class="generate-actions">
+                <button type="button" class="btn btn-primary" id="generate-btn-mobile" {% if not ready_releases %}disabled{% endif %}>
+                    Generate HTML
+                </button>
+                <button type="button" class="btn btn-success" id="send-email-btn-mobile" {% if not ready_releases %}disabled{% endif %}>
+                    📧 Send to Subscribers
+                </button>
+                <button type="button" class="btn btn-secondary" id="publish-homepage-btn-mobile" {% if not ready_releases %}disabled{% endif %}>
+                    🌐 Publish to Homepage
+                </button>
+            </div>
+        </div>
+
+        <!-- Collapsible Preview (Mobile) -->
+        <details class="preview-section-mobile">
+            <summary class="preview-toggle">Preview Newsletter</summary>
+            <div class="mobile-preview-controls">
+                <button type="button" class="btn btn-small btn-secondary" id="fullscreen-preview-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                    Full Screen
+                </button>
+                <button type="button" class="btn btn-small btn-secondary" id="new-window-preview-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+                    </svg>
+                    Open in New Window
+                </button>
+            </div>
+            <div class="preview-frame-wrapper">
+                <iframe id="preview-frame-mobile" src="about:blank"></iframe>
+            </div>
+        </details>
+    </div>
+
+    <!-- Generated HTML Modal -->
+    <div class="modal-overlay" id="html-modal-overlay"></div>
+    <div class="modal-window" id="html-modal">
+        <div class="modal-header">
+            <h3>Generated HTML</h3>
+            <button type="button" class="modal-close" id="html-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="success-message" id="success-message"></p>
+            <textarea id="html-output" readonly></textarea>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" id="copy-html-btn">
+                    Copy to Clipboard
+                </button>
+                <button type="button" class="btn btn-secondary" id="close-modal-btn">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Title Edit Modal -->
+    <div class="modal-overlay" id="title-modal-overlay"></div>
+    <div class="modal-window modal-small" id="title-modal">
+        <div class="modal-header">
+            <h3>Edit Newsletter Title</h3>
+            <button type="button" class="modal-close" id="title-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted">Override the title displayed in the newsletter. Leave empty to use the original title.</p>
+            <input type="text" id="title-input" placeholder="Enter newsletter title...">
+            <input type="hidden" id="title-edit-url">
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" id="save-title-btn">Save</button>
+                <button type="button" class="btn btn-secondary" id="cancel-title-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Preview Modal (Mobile) -->
+    <div class="fullscreen-preview-modal" id="fullscreen-preview-modal">
+        <div class="fullscreen-preview-header">
+            <h3>Newsletter Preview</h3>
+            <button type="button" class="fullscreen-close-btn" id="fullscreen-close-btn">×</button>
+        </div>
+        <div class="fullscreen-preview-body">
+            <iframe id="fullscreen-preview-frame" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <!-- Style Editor Modal -->
+    <div class="modal-overlay" id="style-modal-overlay"></div>
+    <div class="modal-window" id="style-modal">
+        <div class="modal-header">
+            <h3>Newsletter Style Editor</h3>
+            <button type="button" class="modal-close" id="style-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="style-editor-container" id="style-editor"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" id="save-styles-btn">Save Styles</button>
+                <button type="button" class="btn btn-secondary" id="cancel-styles-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- SortableJS for drag-drop -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="{{ url_for('static', filename='js/pages/publisher.js') }}"></script>
+<script>
+    // Initialize publisher with current date
+    document.addEventListener('DOMContentLoaded', function() {
+        initPublisher('{{ selected_date.isoformat() }}');
+    });
+</script>
+{% endblock %}

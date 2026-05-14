@@ -1,0 +1,65 @@
+{#
+  Table Component Macros
+  Reusable table components following DRY and SOLID principles
+#}
+
+{# Sortable table header - generates a clickable column header with sort indicators #}
+{% macro sortable_header(field, label, current_sort, current_order, url_params={}) %}
+<th>
+    <a href="?sort={{ field }}&order={% if current_sort == field and current_order == 'asc' %}desc{% else %}asc{% endif %}{% for key, value in url_params.items() %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}"
+       class="inherit-color no-decoration cursor-pointer">
+        {{ label }} {% if current_sort == field %}{{ '▼' if current_order == 'desc' else '▲' }}{% endif %}
+    </a>
+</th>
+{% endmacro %}
+
+{# Table wrapper with consistent styling #}
+{% macro table_wrapper(id='', class='') %}
+<table{% if id %} id="{{ id }}"{% endif %}{% if class %} class="{{ class }}"{% endif %}>
+    {{ caller() }}
+</table>
+{% endmacro %}
+
+{# Empty state message for tables with no data #}
+{% macro empty_table_row(colspan, message='No data available') %}
+<tr>
+    <td colspan="{{ colspan }}" style="text-align: center; padding: 2rem; color: #999;">
+        {{ message }}
+    </td>
+</tr>
+{% endmacro %}
+
+{# Action buttons cell - common pattern for edit/delete/view actions #}
+{% macro action_buttons(edit_url='', delete_url='', view_url='', custom_actions=[]) %}
+<td class="action-buttons">
+    {% if view_url %}
+    <a href="{{ view_url }}" class="btn-action btn-view" title="View">View</a>
+    {% endif %}
+    {% if edit_url %}
+    <a href="{{ edit_url }}" class="btn-action btn-edit" title="Edit">Edit</a>
+    {% endif %}
+    {% if delete_url %}
+    <a href="{{ delete_url }}" class="btn-action btn-delete" title="Delete" onclick="return confirm('Are you sure?')">Delete</a>
+    {% endif %}
+    {% for action in custom_actions %}
+    <a href="{{ action.url }}" class="btn-action {{ action.class|default('btn-custom') }}" title="{{ action.title|default('') }}" {% if action.onclick %}onclick="{{ action.onclick }}"{% endif %}>{{ action.label }}</a>
+    {% endfor %}
+</td>
+{% endmacro %}
+
+{# Pagination controls #}
+{% macro pagination(current_page, total_pages, url_params={}) %}
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if current_page > 1 %}
+    <a href="?page={{ current_page - 1 }}{% for key, value in url_params.items() %}&{{ key }}={{ value }}{% endfor %}" class="page-link">&laquo; Previous</a>
+    {% endif %}
+
+    <span class="page-info">Page {{ current_page }} of {{ total_pages }}</span>
+
+    {% if current_page < total_pages %}
+    <a href="?page={{ current_page + 1 }}{% for key, value in url_params.items() %}&{{ key }}={{ value }}{% endfor %}" class="page-link">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endmacro %}

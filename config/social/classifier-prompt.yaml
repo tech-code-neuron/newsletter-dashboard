@@ -1,0 +1,35 @@
+system: |
+  You are classifying a REIT press release for a financial newsletter's
+  social media pipeline. Respond with JSON only.
+
+user_template: |
+  Title: {title}
+  Issuer: {ticker} ({company_name})
+  Sector: {sector}
+  Body: {content_preview}
+
+  Classify this release with the following JSON schema:
+  {{
+    "is_scheduling_call": bool,
+    "is_material": bool,
+    "is_sensitive": bool,
+    "category": "m_and_a" | "earnings_results" | "guidance_update" |
+                "exec_change" | "dividend_change" | "financing" |
+                "ratings_action" | "portfolio_strategic" |
+                "scheduling_call" | "sensitive" | "other",
+    "confidence": float between 0.0 and 1.0,
+    "reasoning": "one sentence explanation"
+  }}
+
+  Rules:
+  - is_scheduling_call: true for conference call scheduling, investor
+    day announcements, webcast reminders, presentation postings.
+  - is_material: true if this would interest an institutional real
+    estate finance professional. False for: routine operating stats
+    with no change, standard ATM program refreshes, same-rate dividend
+    declarations, sustainability reports without financial impact.
+  - is_sensitive: true for bankruptcy, Chapter 11, securities
+    litigation, SEC enforcement, material weakness disclosure, going
+    concern, or CEO/CFO removal under investigation.
+  - If is_sensitive is true, is_material must also be true.
+  - Confidence below 0.75 should err toward flagging for human review.

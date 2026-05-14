@@ -1,0 +1,361 @@
+/**
+ * Newsletter Signup Styles
+ *
+ * Components:
+ * - CTA Banner (fixed at top)
+ * - Popup Overlay (centered modal)
+ * - Form states (default, loading, success, error)
+ */
+
+/* ============================================================================
+   CTA BANNER - Fixed at top of content
+   ============================================================================ */
+
+.signup-banner {
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin: calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-md)) var(--spacing-lg) calc(-1 * var(--spacing-md));
+    width: calc(100% + 2 * var(--spacing-md));
+}
+
+.signup-banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    max-width: var(--width-container);
+    margin: 0 auto;
+}
+
+.signup-banner-text {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+}
+
+.signup-banner-btn {
+    background-color: white;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.signup-banner-btn:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   POPUP OVERLAY
+   ============================================================================ */
+
+.signup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: var(--z-modal-backdrop);
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-md);
+}
+
+.signup-overlay.active {
+    display: flex;
+}
+
+/* ============================================================================
+   POPUP CARD
+   ============================================================================ */
+
+.signup-popup {
+    background-color: var(--color-bg-white);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-xl);
+    max-width: 400px;
+    width: 100%;
+    padding: var(--spacing-xl);
+    position: relative;
+    animation: popup-enter 0.2s ease-out;
+}
+
+@keyframes popup-enter {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.signup-popup-close {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-circle);
+    transition: all var(--transition-fast);
+}
+
+.signup-popup-close:hover {
+    background-color: var(--color-bg-hover);
+    color: var(--color-text);
+}
+
+/* ============================================================================
+   FORM CONTAINER
+   ============================================================================ */
+
+.signup-form-container {
+    text-align: center;
+}
+
+.signup-popup-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-dark);
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+.signup-popup-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    margin: 0 0 var(--spacing-lg) 0;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.signup-form-group {
+    width: 100%;
+}
+
+.signup-form-group input {
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    transition: border-color var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.signup-form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.signup-form-group input::placeholder {
+    color: var(--color-text-light);
+}
+
+.signup-submit-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    position: relative;
+}
+
+.signup-submit-btn:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+}
+
+.signup-submit-btn:disabled {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+}
+
+/* Loading state */
+.signup-submit-btn.loading {
+    color: transparent;
+}
+
+.signup-submit-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius-circle);
+    border-top-color: white;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.signup-privacy {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-light);
+    margin: var(--spacing-md) 0 0 0;
+}
+
+/* ============================================================================
+   SUCCESS STATE
+   ============================================================================ */
+
+.signup-success-container {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+}
+
+.signup-success-icon {
+    color: var(--color-success);
+    margin-bottom: var(--spacing-md);
+}
+
+.signup-success-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-dark);
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+.signup-success-message {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+/* ============================================================================
+   ERROR STATE
+   ============================================================================ */
+
+.signup-error-message {
+    background-color: var(--color-danger-bg);
+    color: var(--color-danger-text);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+/* ============================================================================
+   TEST PAGE CONTENT
+   ============================================================================ */
+
+.test-page-content {
+    padding: var(--spacing-lg) 0;
+}
+
+.test-page-content h1 {
+    margin-bottom: var(--spacing-md);
+}
+
+.test-info-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.test-info-card h2 {
+    margin: 0 0 var(--spacing-md) 0;
+    font-size: var(--font-size-md);
+}
+
+.test-info-card ul {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+}
+
+.test-info-card li {
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-muted);
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ============================================================================
+   MOBILE RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    .signup-banner {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .signup-banner-content {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .signup-banner-text {
+        font-size: var(--font-size-base);
+    }
+
+    .signup-banner-btn {
+        width: 100%;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .signup-popup {
+        padding: var(--spacing-lg);
+        margin: var(--spacing-md);
+        max-width: calc(100% - 2 * var(--spacing-md));
+    }
+
+    .signup-popup-title {
+        font-size: var(--font-size-md);
+    }
+
+    .signup-form-group input {
+        padding: var(--spacing-md);
+        font-size: 16px; /* Prevent iOS zoom */
+    }
+
+    .signup-submit-btn {
+        min-height: 48px;
+    }
+}

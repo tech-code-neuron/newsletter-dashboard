@@ -1,0 +1,115 @@
+{% extends 'public/base.html' %}
+
+{% block title %}{{ current_date }} | {{ config.site.name }} Archive{% endblock %}
+
+{% block meta %}
+<!-- SEO Meta Tags -->
+<meta name="description" content="Newsletter archive for {{ current_date }} - {{ config.meta.description }}">
+<meta name="keywords" content="{{ config.meta.keywords }}">
+<meta name="author" content="{{ config.site.name }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://{{ config.site.domain }}/news/archive/{{ edition.date }}/">
+
+<!-- Open Graph for iMessage, WhatsApp, Slack, Facebook -->
+<meta property="og:title" content="{{ current_date }} | {{ config.site.name }} Archive">
+<meta property="og:description" content="REIT newsletter archive for {{ current_date }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://{{ config.site.domain }}/archive/{{ edition.date }}/">
+<meta property="og:site_name" content="{{ config.site.name }}">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ config.meta.og_image }}">
+<meta property="og:image:width" content="{{ config.meta.og_image_width }}">
+<meta property="og:image:height" content="{{ config.meta.og_image_height }}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="{{ config.meta.twitter_card }}">
+<meta name="twitter:title" content="{{ current_date }} | {{ config.site.name }} Archive">
+<meta name="twitter:description" content="REIT newsletter archive for {{ current_date }}">
+<meta name="twitter:image" content="{{ config.meta.og_image }}">
+{% endblock %}
+
+{% block header %}
+<div class="header">
+    <a href="{{ config.site.url }}">
+        <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+    </a>
+    <div class="date-display">{{ current_date }}</div>
+</div>
+
+{# Archive Navigation #}
+{% include 'public/components/archive_nav.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Archive Banner -->
+<div class="archive-banner">
+    You are viewing an archived edition from {{ current_date }}.
+    <a href="{{ config.site.url }}">View today's issue</a>
+</div>
+
+<!-- Preview text (hidden but shows in inbox) -->
+{% if preview_text %}
+<div class="preview-text">
+    {{ preview_text }}
+</div>
+{% endif %}
+
+<!-- Content Area -->
+<div class="content-area">
+    {# Check if any section has items #}
+    {% set ns = namespace(has_items=false) %}
+    {% for key, _, _ in sections %}
+    {% if section_data[key] %}{% set ns.has_items = true %}{% endif %}
+    {% endfor %}
+
+    {% for key, display_name, _ in sections %}
+    {% set items = section_data[key] %}
+    {% if items %}
+
+    {% if key == 'headline' %}
+    {# Headlines get premium styling #}
+    <div class="headlines-section">
+        <div class="section-header-primary">{{ display_name }}</div>
+        {% for item in items %}
+        <div class="release-section">
+            <a href="{{ item.url }}" class="release-company">{{ item.company_name }}{% if item.is_public != false %} ({{ item.ticker }}){% elif item.lead_sponsor %} (Sponsor - {{ item.lead_sponsor }}){% endif %}</a>
+            <a href="{{ item.url }}" class="release-title">{{ item.title }}</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    {# All other sections get secondary styling #}
+    <div class="section-header-secondary">{{ display_name }}</div>
+    {% for item in items %}
+    <div class="release-item">
+        <a href="{{ item.url }}" class="release-ticker">{% if item.is_public == false %}{{ item.company_name }}{% if item.lead_sponsor %} (Sponsor - {{ item.lead_sponsor }}){% endif %}{% else %}{{ item.ticker }}{% endif %}</a>:
+        <a href="{{ item.url }}" class="release-title-inline">{{ item.title }}</a>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% endif %}
+    {% endfor %}
+
+    {% if not ns.has_items %}
+    <div class="empty-state">
+        <p class="public-text">No press releases for this date.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Archive Bottom Navigation -->
+<div class="archive-bottom-nav">
+    {% if prev_date %}
+    <a href="/news/archive/{{ prev_date }}/" class="nav-link">Previous Issue</a>
+    {% endif %}
+    <a href="{{ config.site.url }}" class="nav-link">Latest Issue</a>
+    {% if next_date %}
+    <a href="{% if next_date == latest_date %}{{ config.site.url }}{% else %}/news/archive/{{ next_date }}/{% endif %}" class="nav-link">Next Issue</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block signup %}
+{% include 'public/components/signup_box.html' %}
+{% endblock %}

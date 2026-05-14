@@ -1,0 +1,5 @@
+# All dependencies are OPTIONAL - scraper has try/except fallbacks for each layer
+# requests==2.31.0        # Optional: used by cloudscraper
+# beautifulsoup4==4.12.3  # Optional: content extraction fallback exists
+# cloudscraper==1.2.71    # Optional: layer_cloudscraper has fallback
+# curl_cffi==0.6.2        # Optional: layer_curl_cffi has fallback

@@ -1,0 +1,115 @@
+/**
+ * Edit Press Release Page Styles
+ *
+ * Page-specific styles for the press release edit form.
+ */
+
+/* ============================================================================
+   COMPANY DISPLAY
+   ============================================================================ */
+
+.company-display {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--color-bg-hover);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.company-badge {
+    background: var(--color-primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: var(--border-radius-sm);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+}
+
+.company-name {
+    flex: 1;
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+}
+
+.ir-link-small {
+    font-size: var(--font-size-sm);
+}
+
+.ir-link-small a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.ir-link-small a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================================
+   WORD COUNT DISPLAY
+   ============================================================================ */
+
+.word-count-display {
+    text-align: right;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
+}
+
+/* ============================================================================
+   RELEVANCE SECTION - Extracted from inline styles (SOLID compliance)
+   ============================================================================ */
+
+.relevance-section {
+    background: var(--color-bg-hover);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.relevance-section h3 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+}
+
+.large-badge {
+    font-size: var(--font-size-md);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    margin-right: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.badge-success {
+    background: var(--color-success);
+    color: var(--color-bg-white);
+}
+
+.badge-secondary {
+    background: var(--color-secondary);
+    color: var(--color-bg-white);
+}
+
+.current-decision {
+    display: flex;
+    align-items: center;
+}
+
+.decision-buttons {
+    margin-top: 15px;
+}
+
+.big-button-detail {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+}
+
+/* Button styles moved to components/buttons.css */

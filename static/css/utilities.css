@@ -1,0 +1,134 @@
+/**
+ * CSS Utility Classes
+ * Common reusable utility classes following DRY principles
+ * Reduces need for inline styles throughout templates
+ */
+
+/* ========================================
+   DISPLAY & LAYOUT
+   ======================================== */
+
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-between { display: flex; justify-content: space-between; }
+.flex-center { display: flex; align-items: center; }
+.flex-between-center { display: flex; justify-content: space-between; align-items: center; }
+.flex-gap-sm { gap: 0.5rem; }
+.flex-gap-md { gap: 0.75rem; }
+.flex-gap-lg { gap: 1rem; }
+.inline-flex { display: inline-flex; }
+
+/* ========================================
+   TEXT ALIGNMENT
+   ======================================== */
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* ========================================
+   SPACING - MARGIN
+   ======================================== */
+
+/* Margin All */
+.m-0 { margin: 0; }
+.m-sm { margin: 0.5rem; }
+.m-md { margin: 1rem; }
+.m-lg { margin: 1.5rem; }
+
+/* Margin Top */
+.mt-0 { margin-top: 0; }
+.mt-sm { margin-top: 0.5rem; }
+.mt-md { margin-top: 1rem; }
+.mt-lg { margin-top: 1.5rem; }
+.mt-xl { margin-top: 2rem; }
+
+/* Margin Bottom */
+.mb-0 { margin-bottom: 0; }
+.mb-sm { margin-bottom: 0.5rem; }
+.mb-md { margin-bottom: 1rem; }
+.mb-lg { margin-bottom: 1.5rem; }
+.mb-xl { margin-bottom: 2rem; }
+
+/* Margin Left/Right */
+.ml-sm { margin-left: 0.5rem; }
+.mr-sm { margin-right: 0.5rem; }
+
+/* ========================================
+   SPACING - PADDING
+   ======================================== */
+
+/* Padding All */
+.p-0 { padding: 0; }
+.p-sm { padding: 0.5rem; }
+.p-md { padding: 1rem; }
+.p-lg { padding: 1.5rem; }
+.p-xl { padding: 2rem; }
+
+/* ========================================
+   WIDTH & HEIGHT
+   ======================================== */
+
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+
+/* Specific widths */
+.w-80 { width: 80px; }
+.w-100 { width: 100px; }
+.w-200 { width: 200px; }
+
+/* ========================================
+   COLORS & BACKGROUNDS
+   ======================================== */
+
+.text-muted { color: #999; }
+.text-success { color: #28a745; }
+.text-danger { color: #dc3545; }
+.text-warning { color: #ffc107; }
+.text-info { color: #17a2b8; }
+
+.bg-white { background-color: #fff; }
+.bg-light { background-color: #f8f9fa; }
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+.font-sm { font-size: 0.82rem; }
+.font-md { font-size: 1rem; }
+.font-lg { font-size: 1.2em; }
+.font-bold { font-weight: 600; }
+
+/* ========================================
+   BORDERS
+   ======================================== */
+
+.border-radius-sm { border-radius: 3px; }
+.border-radius-md { border-radius: 4px; }
+.border-radius-lg { border-radius: 8px; }
+
+/* ========================================
+   CURSOR & INTERACTION
+   ======================================== */
+
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+/* ========================================
+   OPACITY
+   ======================================== */
+
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+
+/* ========================================
+   MISC
+   ======================================== */
+
+.no-decoration { text-decoration: none; }
+.inherit-color { color: inherit; }
+.overflow-hidden { overflow: hidden; }
+.min-width-260 { min-width: 260px; }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.subscription.verify_error.title }} | {{ config.brand.title_suffix }}</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+</head>
+<body class="public-page">
+    <div class="public-container">
+        <div class="public-header">
+            <a href="{{ config.site.url }}">
+                <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+            </a>
+        </div>
+
+        <div class="public-content">
+            <div class="status-icon status-icon-error">&#10005;</div>
+            <h1 class="public-title">{{ config.subscription.verify_error.heading }}</h1>
+            <p class="public-text">{{ message or config.subscription.verify_error.message }}</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, msg in messages %}
+                        <p class="flash-message flash-{{ category }}">{{ msg }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <a href="{{ config.subscription.verify_error.cta_url }}" class="public-btn">{{ config.subscription.verify_error.cta_text }}</a>
+
+            <div class="resend-section">
+                <p class="resend-hint">Or request a new verification email:</p>
+                <form action="{{ url_for('subscribe.resend_verification') }}" method="POST" class="resend-form">
+                    <input type="email" name="email" id="resend-email" placeholder="Your email address" required class="resend-input" aria-label="Email address for verification resend">
+                    <button type="submit" class="public-btn-secondary">Resend</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="public-footer">
+            <div class="public-footer-tagline">{{ config.brand.tagline }}</div>
+            <div class="public-footer-links">
+                <a href="{{ config.footer.privacy_url }}">Privacy Policy</a>
+                <span class="public-footer-divider">|</span>
+                <a href="mailto:{{ config.footer.contact_email }}">Contact Us</a>
+            </div>
+            <div class="public-footer-copyright">{{ config.footer.copyright_text }}</div>
+        </div>
+    </div>
+</body>
+</html>

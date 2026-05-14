@@ -1,0 +1,217 @@
+{#
+  Card Component Macros
+  Reusable card patterns for mobile and desktop layouts.
+
+  SOLID Principle: Single Responsibility - each macro handles one card type.
+  SOLID Principle: DRY - eliminates duplicate card markup across templates.
+#}
+
+
+{# =============================================================================
+   MOBILE CARD
+   Base mobile card component
+   ============================================================================= #}
+
+{% macro mobile_card(extra_class='', data_attrs={}) %}
+{#
+  Args:
+    extra_class: Additional CSS classes
+    data_attrs: Dict of data-* attributes
+#}
+<div class="mobile-card {{ extra_class }}"
+     {% for key, value in data_attrs.items() %}data-{{ key }}="{{ value }}"{% endfor %}>
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   MOBILE CARD HEADER
+   Header section with title and optional meta
+   ============================================================================= #}
+
+{% macro mobile_card_header(title, meta='', badge='', badge_class='') %}
+{#
+  Args:
+    title: Main header text
+    meta: Secondary text (date, count, etc.)
+    badge: Badge text (optional)
+    badge_class: Badge CSS class
+#}
+<div class="mobile-card-header">
+    <span class="mobile-card-title">{{ title }}</span>
+    <div class="mobile-card-header-right">
+        {% if badge %}
+        <span class="mobile-card-badge {{ badge_class }}">{{ badge }}</span>
+        {% endif %}
+        {% if meta %}
+        <span class="mobile-card-meta">{{ meta }}</span>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   MOBILE CARD BODY
+   Main content area
+   ============================================================================= #}
+
+{% macro mobile_card_body() %}
+<div class="mobile-card-body">
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   MOBILE CARD ACTIONS
+   Action buttons/controls footer
+   ============================================================================= #}
+
+{% macro mobile_card_actions() %}
+<div class="mobile-card-actions">
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   STAT CARD
+   Card displaying a statistic with label
+   ============================================================================= #}
+
+{% macro stat_card(value, label, css_class='', icon='') %}
+{#
+  Args:
+    value: Numeric value to display
+    label: Description label
+    css_class: Status/variant class (e.g., 'status-ready')
+    icon: Optional icon
+#}
+<div class="status-item {{ css_class }}">
+    {% if icon %}<span class="status-icon">{{ icon }}</span>{% endif %}
+    <span class="status-count">{{ value }}</span>
+    <span class="status-label">{{ label }}</span>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   PUBLISHER CARD
+   Card for publisher page items (press releases)
+   ============================================================================= #}
+
+{% macro publisher_card(release, status, section_info, sections, statuses, selected_date, is_previously_published=false) %}
+{#
+  Args:
+    release: Press release object
+    status: Current status string
+    section_info: Section info dict
+    sections: All sections config
+    statuses: All statuses config
+    selected_date: Currently selected date
+    is_previously_published: If true, shows previously published badge
+#}
+{% from 'macros/selects.html' import section_select, status_select %}
+
+<div class="publisher-card{% if status != 'ready' %} publisher-card-{{ status }}{% endif %}{% if is_previously_published %} publisher-card-previously-published{% endif %}"
+     data-status="{{ status }}"
+     data-url="{{ release.url }}">
+    <div class="publisher-card-header">
+        <span class="ticker-badge">{{ release.company.ticker if release.company else release.ticker }}</span>
+        <div class="publisher-card-header-right">
+            {% if is_previously_published %}
+            <span class="status-badge status-badge-previously-published" title="Click to unpublish">Previously Published</span>
+            {% elif status != 'ready' %}
+            <span class="status-badge status-badge-{{ status }}">{{ status|replace('_', ' ')|title }}</span>
+            {% endif %}
+            <span class="release-date">{{ release.published_date|format_date('%b %d') if release.published_date }}</span>
+        </div>
+    </div>
+    <div class="publisher-card-title-row">
+        <a href="{{ url_for('press_releases.edit_press_release_by_url', url=release.url) }}"
+           class="publisher-card-title" title="Click to view">
+            {{ release|display_title }}
+        </a>
+    </div>
+    <div class="publisher-card-actions">
+        <!-- Section select -->
+        <form method="POST" action="{{ url_for('publisher.update_section_form') }}" class="section-form-mobile">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="url" value="{{ release.url }}">
+            <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+            {{ section_select(section_info, release.url, sections, is_mobile=true, auto_submit=true) }}
+        </form>
+        <!-- Status select -->
+        <form method="POST" action="{{ url_for('publisher.update_status_form') }}" class="status-form-mobile">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="url" value="{{ release.url }}">
+            <input type="hidden" name="date" value="{{ selected_date.isoformat() }}">
+            {{ status_select(status, release.url, statuses, is_mobile=true, auto_submit=true) }}
+        </form>
+    </div>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   COMPANY CARD (Mobile)
+   Card for company list mobile view
+   ============================================================================= #}
+
+{% macro company_card(company) %}
+{#
+  Args:
+    company: Company object with ticker, name, sector, etc.
+#}
+<div class="mobile-card">
+    <div class="mobile-card-header">
+        <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-ticker">
+            {{ company.ticker }}
+        </a>
+        <div class="mobile-card-header-right">
+            {% if company.has_releases %}
+            <span class="text-success" title="Has press releases">✓</span>
+            {% else %}
+            <span class="text-danger" title="No press releases">✗</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="mobile-card-body">
+        <div class="mobile-card-name">{{ company.name }}</div>
+        {% if company.sector %}
+        <div class="mobile-card-sector">{{ company.sector }}</div>
+        {% endif %}
+    </div>
+    <div class="mobile-card-actions">
+        <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-small">View</a>
+        <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-small btn-secondary">Edit</a>
+    </div>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   EMAIL CARD (Mobile)
+   Card for email list mobile view
+   ============================================================================= #}
+
+{% macro email_card(email) %}
+{#
+  Args:
+    email: Email object with subject, sender, date, etc.
+#}
+<div class="mobile-card">
+    <div class="mobile-card-header">
+        <span class="mobile-card-sender">{{ email.sender_name or email.sender }}</span>
+        <span class="mobile-card-date">{{ email.received_at|format_date('%b %d') }}</span>
+    </div>
+    <div class="mobile-card-body">
+        <div class="mobile-card-subject">{{ email.subject }}</div>
+    </div>
+    <div class="mobile-card-actions">
+        <a href="{{ url_for('emails.view_email', message_id=email.message_id) }}" class="btn btn-small">View</a>
+    </div>
+</div>
+{% endmacro %}

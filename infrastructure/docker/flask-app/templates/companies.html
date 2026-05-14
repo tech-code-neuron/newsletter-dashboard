@@ -1,0 +1,611 @@
+{% extends "base.html" %}
+{% from 'macros/badges.html' import platform_badge %}
+{% from 'macros/tables.html' import sortable_header %}
+
+{% block title %}Companies - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/autocomplete.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/companies.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flex-between-center mb-md">
+    <h2>Companies ({{ active_companies|length }} active, {{ inactive_companies|length }} inactive)</h2>
+    <a href="{{ url_for('companies.add_company') }}" class="btn btn-success">➕ Add Company</a>
+</div>
+
+<div class="card">
+    <form method="GET" class="mb-md" id="company-filter-form">
+        <div class="form-flex" style="position: relative;">
+            <div class="search-wrap" style="flex: 1;">
+                <input type="text" id="company-search-input"
+                       placeholder="Search ticker, name, sector, sponsor, or 'private'..."
+                       autocomplete="off" class="mobile-full-width">
+                <button type="button" class="search-clear" id="company-search-clear">✕</button>
+                <div class="ac-dropdown" id="company-ac-dropdown"></div>
+            </div>
+        </div>
+        <div class="selected-companies" id="selected-company-filters" style="margin-top: 0.75rem;"></div>
+        <input type="hidden" name="search" id="company-search-hidden" value="{{ search }}">
+    </form>
+
+    <!-- Active Companies Section -->
+    <h3 class="mb-sm text-success mt-lg">Active Companies ({{ active_companies|length }})</h3>
+    <!-- Active Companies Pagination (Top) -->
+    <div class="pagination" id="active-pagination-top" style="display: none; margin-bottom: 1rem;">
+        <button class="btn btn-small btn-outline pagination-prev" onclick="changePage(-1, 'active')">&laquo; Prev</button>
+        <span class="page-info">Page <span id="active-current-page-top">1</span> of <span id="active-total-pages-top">1</span></span>
+        <button class="btn btn-small btn-outline pagination-next" onclick="changePage(1, 'active')">Next &raquo;</button>
+    </div>
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                {{ sortable_header('ticker', 'Ticker', sort_by, order, {'search': search}) }}
+                {{ sortable_header('name', 'Name', sort_by, order, {'search': search}) }}
+                <th class="hide-mobile">Sector</th>
+                <th class="hide-mobile">IR URL</th>
+                <th class="hide-mobile">Sponsor</th>
+                <th class="hide-mobile text-center">Scraped</th>
+                <th class="hide-mobile text-center">Stale (90d)</th>
+                <th class="hide-mobile">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in active_companies %}
+            <tr class="clickable-row" data-ticker="{{ company.ticker }}" data-href="{{ url_for('companies.company_detail', ticker=company.ticker) }}">
+                <td><span class="ticker">{{ company.ticker }}</span></td>
+                <td>{{ company.name }}</td>
+                <td class="hide-mobile">{{ company.sector or '-' }}</td>
+                <td class="hide-mobile">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation()">Link</a>
+                    {% else %}
+                        <span class="text-muted">Not set</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile">{{ company.lead_sponsor or '-' }}</td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.has_releases %}
+                        <span class="text-success" title="Has press releases">✓</span>
+                    {% else %}
+                        <span class="text-danger" title="No press releases">✗</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.is_stale %}
+                        <span class="text-danger" title="No news in last 90 days">✗</span>
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile actions-cell">
+                    <div class="btn-group">
+                        <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-small" onclick="event.stopPropagation()">View</a>
+                        <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-small btn-secondary" onclick="event.stopPropagation()">Edit</a>
+                        <form action="{{ url_for('companies.delete_company', ticker=company.ticker) }}" method="post" style="display:inline" onsubmit="return confirm('Delete {{ company.name }} ({{ company.ticker }})? This cannot be undone.')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-small btn-danger" onclick="event.stopPropagation()">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Active Companies Pagination -->
+    <div class="pagination" id="active-pagination" style="display: none;">
+        <button class="btn btn-small btn-outline pagination-prev" onclick="changePage(-1, 'active')">&laquo; Prev</button>
+        <span class="page-info">Page <span id="active-current-page">1</span> of <span id="active-total-pages">1</span></span>
+        <button class="btn btn-small btn-outline pagination-next" onclick="changePage(1, 'active')">Next &raquo;</button>
+    </div>
+
+    <!-- Mobile Card List - Active Companies -->
+    <div class="mobile-card-list">
+        {% for company in active_companies %}
+        <div class="mobile-card {% if loop.index % 2 == 0 %}mobile-card-even{% endif %}" data-ticker="{{ company.ticker }}">
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-header link-unstyled">
+                <span class="mobile-card-ticker">{{ company.ticker }}</span>
+                <div class="mobile-card-meta">
+                    {% if company.has_releases %}
+                        <span class="text-success">✓</span>
+                    {% else %}
+                        <span class="text-danger">✗</span>
+                    {% endif %}
+                </div>
+            </a>
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-body link-unstyled">
+                <div class="mobile-card-title">{{ company.name }}</div>
+                <div class="mobile-card-preview">{{ company.sector or 'No sector' }}</div>
+                <div class="mobile-card-urls">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.ir_url|truncate(35) }}</a>
+                    {% endif %}
+                    {% if company.press_release_url %}
+                        <a href="{{ company.press_release_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.press_release_url|truncate(35) }}</a>
+                    {% endif %}
+                </div>
+            </a>
+            <div class="mobile-card-actions">
+                <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">View</a>
+                <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">Edit</a>
+                <form action="{{ url_for('companies.delete_company', ticker=company.ticker) }}" method="post" style="display:inline" onsubmit="return confirm('Delete {{ company.name }} ({{ company.ticker }})?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Inactive Companies Section -->
+    {% if inactive_companies %}
+    <h3 class="mb-sm mt-lg text-muted">Inactive Companies ({{ inactive_companies|length }})</h3>
+    <!-- Inactive Companies Pagination (Top) -->
+    <div class="pagination" id="inactive-pagination-top" style="display: none; margin-bottom: 1rem;">
+        <button class="btn btn-small btn-outline pagination-prev" onclick="changePage(-1, 'inactive')">&laquo; Prev</button>
+        <span class="page-info">Page <span id="inactive-current-page-top">1</span> of <span id="inactive-total-pages-top">1</span></span>
+        <button class="btn btn-small btn-outline pagination-next" onclick="changePage(1, 'inactive')">Next &raquo;</button>
+    </div>
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th class="hide-mobile">Sector</th>
+                <th class="hide-mobile">IR URL</th>
+                <th class="hide-mobile">Sponsor</th>
+                <th class="hide-mobile text-center">Scraped</th>
+                <th class="hide-mobile text-center">Stale (90d)</th>
+                <th class="hide-mobile">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for company in inactive_companies %}
+            <tr class="clickable-row inactive-row" data-ticker="{{ company.ticker }}" data-href="{{ url_for('companies.company_detail', ticker=company.ticker) }}">
+                <td><span class="ticker">{{ company.ticker }}</span></td>
+                <td>{{ company.name }}</td>
+                <td class="hide-mobile">{{ company.sector or '-' }}</td>
+                <td class="hide-mobile">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation()">Link</a>
+                    {% else %}
+                        <span class="text-muted">Not set</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile">{{ company.lead_sponsor or '-' }}</td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.has_releases %}
+                        <span class="text-success" title="Has press releases">✓</span>
+                    {% else %}
+                        <span class="text-danger" title="No press releases">✗</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile text-center text-md">
+                    {% if company.is_stale %}
+                        <span class="text-danger" title="No news in last 90 days">✗</span>
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </td>
+                <td class="hide-mobile actions-cell">
+                    <div class="btn-group">
+                        <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-small" onclick="event.stopPropagation()">View</a>
+                        <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-small btn-secondary" onclick="event.stopPropagation()">Edit</a>
+                        <form action="{{ url_for('companies.delete_company', ticker=company.ticker) }}" method="post" style="display:inline" onsubmit="return confirm('Delete {{ company.name }} ({{ company.ticker }})? This cannot be undone.')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-small btn-danger" onclick="event.stopPropagation()">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Inactive Companies Pagination -->
+    <div class="pagination" id="inactive-pagination" style="display: none;">
+        <button class="btn btn-small btn-outline pagination-prev" onclick="changePage(-1, 'inactive')">&laquo; Prev</button>
+        <span class="page-info">Page <span id="inactive-current-page">1</span> of <span id="inactive-total-pages">1</span></span>
+        <button class="btn btn-small btn-outline pagination-next" onclick="changePage(1, 'inactive')">Next &raquo;</button>
+    </div>
+
+    <!-- Mobile Card List - Inactive Companies -->
+    <div class="mobile-card-list">
+        {% for company in inactive_companies %}
+        <div class="mobile-card {% if loop.index % 2 == 0 %}mobile-card-even{% endif %} inactive-card" data-ticker="{{ company.ticker }}">
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-header link-unstyled">
+                <span class="mobile-card-ticker mobile-card-ticker-inactive">{{ company.ticker }}</span>
+                <div class="mobile-card-meta">
+                    <span class="text-muted">Inactive</span>
+                </div>
+            </a>
+            <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="mobile-card-body link-unstyled">
+                <div class="mobile-card-title">{{ company.name }}</div>
+                <div class="mobile-card-preview">{{ company.sector or 'No sector' }}</div>
+                <div class="mobile-card-urls">
+                    {% if company.ir_url %}
+                        <a href="{{ company.ir_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.ir_url|truncate(35) }}</a>
+                    {% endif %}
+                    {% if company.press_release_url %}
+                        <a href="{{ company.press_release_url }}" target="_blank" onclick="event.stopPropagation();" class="mobile-url-link">{{ company.press_release_url|truncate(35) }}</a>
+                    {% endif %}
+                </div>
+            </a>
+            <div class="mobile-card-actions">
+                <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">View</a>
+                <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn btn-xs btn-light-gray">Edit</a>
+                <form action="{{ url_for('companies.delete_company', ticker=company.ticker) }}" method="post" style="display:inline" onsubmit="return confirm('Delete {{ company.name }} ({{ company.ticker }})?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Context Menu for Active/Inactive Toggle -->
+<div id="company-context-menu" class="context-menu">
+    <div class="context-menu-item" id="context-menu-active-text">Set Inactive</div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/components/autocomplete.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pages/companies.js') }}"></script>
+<script>
+// Initialize autocomplete for companies page with filter support
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all companies with extended attributes
+    const allPageCompanies = [
+        {% for company in active_companies + inactive_companies %}
+        {
+            ticker: '{{ company.ticker }}',
+            name: '{{ company.name|e }}',
+            sector: '{{ company.sector|default("", true)|e }}',
+            is_public: {{ 'true' if company.is_public else 'false' }},
+            lead_sponsor: '{{ company.lead_sponsor|default("", true)|e }}',
+            type: 'company'
+        },
+        {% endfor %}
+    ];
+
+    // Build unique sectors and sponsors for filter suggestions
+    const sectors = [...new Set(allPageCompanies.map(c => c.sector).filter(Boolean))].sort();
+    const sponsors = [...new Set(allPageCompanies.map(c => c.lead_sponsor).filter(Boolean))].sort();
+
+    // Create filter items (synthetic entries that act as filters)
+    const filterItems = [
+        { ticker: '🔒', name: 'Private Companies', type: 'filter', filterType: 'is_public', filterValue: false },
+        { ticker: '📈', name: 'Public Companies', type: 'filter', filterType: 'is_public', filterValue: true },
+        ...sectors.map(s => ({ ticker: '📁', name: s, type: 'filter', filterType: 'sector', filterValue: s })),
+        ...sponsors.map(s => ({ ticker: '🏢', name: s, type: 'filter', filterType: 'lead_sponsor', filterValue: s }))
+    ];
+
+    // Combine companies + filters for autocomplete data source
+    const allItems = [...filterItems, ...allPageCompanies];
+
+    // Track active filters separately
+    let activeFilters = []; // { filterType, filterValue, displayName }
+    let selectedTickers = new Set();
+
+    // Pagination state
+    let activeCurrentPage = 1;
+    let inactiveCurrentPage = 1;
+    const PAGE_SIZE = 100;
+    let matchingTickerSet = new Set();
+
+    // Initialize autocomplete
+    const companyAutocomplete = new Autocomplete({
+        inputId: 'company-search-input',
+        dropdownId: 'company-ac-dropdown',
+        clearBtnId: 'company-search-clear',
+        selectedItemsDivId: 'selected-company-filters',
+        dataSource: () => allItems,
+        searchFields: ['ticker', 'name', 'sector', 'lead_sponsor'],
+        multiSelect: true,
+        placeholder: 'Search by ticker, name, sector, sponsor, or "private"...',
+        maxResults: 12,
+        formatDisplay: (item, query) => {
+            const text = item.name || item.ticker;
+            const highlighted = highlightText(text, query);
+            if (item.type === 'filter') {
+                return `<span class="filter-suggestion">${highlighted}</span>`;
+            }
+            return highlighted;
+        },
+        getBadge: (item) => item.ticker,
+        getValue: (item) => {
+            if (item.type === 'filter') {
+                return `filter:${item.filterType}:${item.filterValue}`;
+            }
+            return item.ticker;
+        },
+        onSelect: (item, value) => {
+            if (item.type === 'filter') {
+                // Add to active filters
+                activeFilters.push({
+                    filterType: item.filterType,
+                    filterValue: item.filterValue,
+                    displayName: item.name,
+                    badge: item.ticker
+                });
+            } else {
+                selectedTickers.add(item.ticker);
+            }
+            applyFilters();
+        },
+        onChange: (selectedValues) => {
+            // Rebuild filters and tickers from selected values
+            activeFilters = [];
+            selectedTickers = new Set();
+
+            selectedValues.forEach(val => {
+                if (val.startsWith('filter:')) {
+                    const parts = val.split(':');
+                    const filterType = parts[1];
+                    const filterValue = parts.slice(2).join(':'); // Handle values with colons
+                    const item = filterItems.find(f =>
+                        f.filterType === filterType &&
+                        String(f.filterValue) === filterValue
+                    );
+                    if (item) {
+                        activeFilters.push({
+                            filterType: item.filterType,
+                            filterValue: item.filterValue,
+                            displayName: item.name,
+                            badge: item.ticker
+                        });
+                    }
+                } else {
+                    selectedTickers.add(val);
+                }
+            });
+
+            applyFilters();
+        }
+    });
+
+    // Override renderSelectedItems to style filter badges differently
+    const originalRenderSelectedItems = companyAutocomplete.renderSelectedItems.bind(companyAutocomplete);
+    companyAutocomplete.renderSelectedItems = function() {
+        originalRenderSelectedItems();
+
+        // Add filter-badge class to filter items
+        const badgeDiv = document.getElementById('selected-company-filters');
+        if (badgeDiv) {
+            badgeDiv.querySelectorAll('.company-badge-filter').forEach(badge => {
+                const removeBtn = badge.querySelector('.badge-remove');
+                if (removeBtn && removeBtn.dataset.value && removeBtn.dataset.value.startsWith('filter:')) {
+                    badge.classList.add('filter-badge');
+                }
+            });
+        }
+    };
+
+    function highlightText(text, query) {
+        if (!query) return escapeHtml(text);
+        const escaped = escapeHtml(text);
+        const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+        return escaped.replace(regex, '<mark>$1</mark>');
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = String(text);
+        return div.innerHTML;
+    }
+
+    function escapeRegex(text) {
+        return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Apply cumulative filters with pagination
+    function applyFilters() {
+        const rows = document.querySelectorAll('tbody tr');
+        const cards = document.querySelectorAll('.mobile-card');
+
+        // Reset to page 1 on any filter change
+        activeCurrentPage = 1;
+        inactiveCurrentPage = 1;
+
+        // No filters = ALL companies match
+        if (activeFilters.length === 0 && selectedTickers.size === 0) {
+            matchingTickerSet = new Set(allPageCompanies.map(c => c.ticker));
+        } else {
+            // Build a set of matching tickers based on filters
+            let matchingCompanies = allPageCompanies;
+
+            // Apply each filter cumulatively (AND logic)
+            activeFilters.forEach(filter => {
+                matchingCompanies = matchingCompanies.filter(company => {
+                    if (filter.filterType === 'is_public') {
+                        return company.is_public === filter.filterValue;
+                    } else if (filter.filterType === 'sector') {
+                        return company.sector === filter.filterValue;
+                    } else if (filter.filterType === 'lead_sponsor') {
+                        return company.lead_sponsor === filter.filterValue;
+                    }
+                    return true;
+                });
+            });
+
+            // If specific tickers selected, intersect with those
+            if (selectedTickers.size > 0) {
+                matchingCompanies = matchingCompanies.filter(c => selectedTickers.has(c.ticker));
+            }
+
+            matchingTickerSet = new Set(matchingCompanies.map(c => c.ticker));
+        }
+
+        // Apply filter visibility to rows (then pagination will further filter)
+        rows.forEach(row => {
+            const tickerEl = row.querySelector('.ticker');
+            if (tickerEl && matchingTickerSet.has(tickerEl.textContent.trim())) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Apply to mobile cards
+        cards.forEach(card => {
+            const tickerEl = card.querySelector('.mobile-card-ticker');
+            if (tickerEl && matchingTickerSet.has(tickerEl.textContent.trim())) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Apply pagination (after filter, before updateCounts)
+        paginateSection('active');
+        paginateSection('inactive');
+
+        updateCounts();
+    }
+
+    // Paginate a section (active or inactive)
+    function paginateSection(section) {
+        const isActive = section === 'active';
+        const currentPage = isActive ? activeCurrentPage : inactiveCurrentPage;
+
+        // Get table rows for this section
+        const tables = document.querySelectorAll('.table-container table');
+        const table = isActive ? tables[0] : tables[1];
+        if (!table) return;
+
+        const allRows = Array.from(table.querySelectorAll('tbody tr'));
+
+        // Collect filtered (matching) rows
+        const filteredRows = allRows.filter(row => {
+            const ticker = row.querySelector('.ticker')?.textContent.trim();
+            return matchingTickerSet.has(ticker);
+        });
+
+        // Apply pagination to filtered rows
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const end = start + PAGE_SIZE;
+        const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE) || 1;
+
+        filteredRows.forEach((row, index) => {
+            row.style.display = (index >= start && index < end) ? '' : 'none';
+        });
+
+        // Paginate mobile cards too
+        const cardLists = document.querySelectorAll('.mobile-card-list');
+        const cardList = isActive ? cardLists[0] : cardLists[1];
+        if (cardList) {
+            const allCards = Array.from(cardList.querySelectorAll('.mobile-card'));
+            const filteredCards = allCards.filter(card => {
+                const ticker = card.querySelector('.mobile-card-ticker')?.textContent.trim();
+                return matchingTickerSet.has(ticker);
+            });
+            filteredCards.forEach((card, index) => {
+                card.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+        }
+
+        // Update pagination controls
+        updatePaginationUI(section, currentPage, totalPages, filteredRows.length);
+    }
+
+    // Change page for a section
+    function changePage(delta, section) {
+        const isActive = section === 'active';
+        const tables = document.querySelectorAll('.table-container table');
+        const table = isActive ? tables[0] : tables[1];
+        if (!table) return;
+
+        // Count filtered rows to calculate total pages
+        const allRows = Array.from(table.querySelectorAll('tbody tr'));
+        const filteredCount = allRows.filter(row => {
+            const ticker = row.querySelector('.ticker')?.textContent.trim();
+            return matchingTickerSet.has(ticker);
+        }).length;
+
+        const totalPages = Math.ceil(filteredCount / PAGE_SIZE) || 1;
+
+        // Update page number
+        if (isActive) {
+            activeCurrentPage = Math.max(1, Math.min(activeCurrentPage + delta, totalPages));
+        } else {
+            inactiveCurrentPage = Math.max(1, Math.min(inactiveCurrentPage + delta, totalPages));
+        }
+
+        // Re-apply pagination (not full filter, just pagination)
+        paginateSection(section);
+        updateCounts();
+    }
+    window.changePage = changePage;  // Expose to global scope for onclick handlers
+
+    // Update pagination UI controls (both top and bottom)
+    function updatePaginationUI(section, currentPage, totalPages, totalFiltered) {
+        // Update both top and bottom pagination controls
+        ['', '-top'].forEach(suffix => {
+            const paginationDiv = document.getElementById(`${section}-pagination${suffix}`);
+            if (!paginationDiv) return;
+
+            // Show/hide based on whether pagination is needed
+            paginationDiv.style.display = totalFiltered > PAGE_SIZE ? '' : 'none';
+
+            const currentPageEl = document.getElementById(`${section}-current-page${suffix}`);
+            const totalPagesEl = document.getElementById(`${section}-total-pages${suffix}`);
+            if (currentPageEl) currentPageEl.textContent = currentPage;
+            if (totalPagesEl) totalPagesEl.textContent = totalPages;
+
+            const prevBtn = paginationDiv.querySelector('.pagination-prev');
+            const nextBtn = paginationDiv.querySelector('.pagination-next');
+
+            if (prevBtn) prevBtn.disabled = currentPage === 1;
+            if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+        });
+    }
+
+    // Update visible counts in headers
+    function updateCounts() {
+        const tables = document.querySelectorAll('.table-container table');
+        const activeTable = tables[0];
+        const inactiveTable = tables[1];
+
+        const activeVisible = activeTable ?
+            activeTable.querySelectorAll('tbody tr:not([style*="display: none"])').length : 0;
+        const inactiveVisible = inactiveTable ?
+            inactiveTable.querySelectorAll('tbody tr:not([style*="display: none"])').length : 0;
+
+        // Update active header
+        const activeHeader = document.querySelector('h3.text-success');
+        if (activeHeader) {
+            const totalActive = {{ active_companies|length }};
+            if (activeFilters.length > 0 || selectedTickers.size > 0) {
+                activeHeader.textContent = `Active Companies (${activeVisible} of ${totalActive} shown)`;
+            } else {
+                activeHeader.textContent = `Active Companies (${totalActive})`;
+            }
+        }
+
+        // Update inactive header
+        const inactiveHeader = document.querySelector('h3.text-muted');
+        if (inactiveHeader) {
+            const totalInactive = {{ inactive_companies|length }};
+            if (activeFilters.length > 0 || selectedTickers.size > 0) {
+                inactiveHeader.textContent = `Inactive Companies (${inactiveVisible} of ${totalInactive} shown)`;
+            } else {
+                inactiveHeader.textContent = `Inactive Companies (${totalInactive})`;
+            }
+        }
+    }
+
+    // Apply initial pagination on load
+    applyFilters();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,212 @@
+/**
+ * Design Tokens - CSS Variables
+ *
+ * AUTO-GENERATED - DO NOT EDIT DIRECTLY
+ * Generated from: config/design-tokens.json
+ * Generated at: 2026-03-28 11:36:59
+ *
+ * To modify these values, edit config/design-tokens.json
+ * then run: python3 scripts/build_design_tokens.py
+ */
+
+:root {
+
+    /* ========================================================================
+       COLORS - Brand & UI
+       ======================================================================== */
+
+    --color-primary: #0066cc;  /* Brand blue */
+    --color-primary-hover: #0052a3;  /* Brand blue hover state */
+    --color-primary-light: #e8f0fe;  /* Brand blue light background */
+    --color-success: #28a745;  /* Success state */
+    --color-success-hover: #218838;
+    --color-success-bg: #d4edda;
+    --color-success-border: #c3e6cb;
+    --color-success-text: #155724;
+    --color-danger: #dc3545;  /* Danger/error state */
+    --color-danger-hover: #c82333;
+    --color-danger-bg: #f8d7da;
+    --color-danger-border: #f5c6cb;
+    --color-danger-text: #721c24;
+    --color-warning: #ffc107;  /* Warning state */
+    --color-warning-hover: #e0a800;
+    --color-warning-bg: #fff3cd;
+    --color-warning-bg-hover: #ffe0b2;
+    --color-warning-border: #ffeaa7;
+    --color-warning-text: #856404;
+    --color-warning-dark: #bf360c;
+    --color-info: #17a2b8;  /* Info state */
+    --color-info-hover: #138496;
+    --color-info-bg: #d1ecf1;
+    --color-info-border: #bee5eb;
+    --color-info-text: #0c5460;
+    --color-secondary: #6c757d;  /* Secondary/neutral */
+    --color-secondary-hover: #545b62;
+    --color-secondary-bg: #e2e3e5;
+    --color-secondary-text: #6c757d;
+    --color-sec-purple: #6f42c1;  /* SEC filings purple theme */
+    --color-sec-bg: #e8dcf5;
+    --color-sec-border: #d8c8e8;
+    --color-breaking: #ff6b6b;  /* Breaking news indicator */
+    --color-text: #333333;  /* Primary text */
+    --color-text-dark: #1a1a1a;  /* Dark text/headings */
+    --color-text-muted: #666666;  /* Muted/secondary text */
+    --color-text-light: #999999;  /* Light text */
+    --color-text-tertiary: #aaaaaa;  /* Tertiary text */
+    --color-bg: #f5f5f5;  /* Page background */
+    --color-bg-white: #ffffff;  /* White background */
+    --color-bg-card: #ffffff;  /* Card background */
+    --color-bg-hover: #f8f9fa;  /* Hover background */
+    --color-bg-hover-alt: #f0f8ff;  /* Alternative hover background */
+    --color-bg-subtle: #e9ecef;  /* Subtle background */
+    --color-bg-section: #fafafa;  /* Section background */
+    --color-border: #dee2e6;  /* Default border */
+    --color-border-light: #ced4da;  /* Light border */
+    --color-border-dark: #0066cc;  /* Dark/accent border */
+
+    /* ========================================================================
+       SPACING - Consistent rhythm
+       ======================================================================== */
+
+    --spacing-xs: 0.25rem;  /* 4px */
+    --spacing-sm: 0.5rem;  /* 8px */
+    --spacing-md: 1rem;  /* 16px */
+    --spacing-lg: 1.5rem;  /* 24px */
+    --spacing-xl: 2rem;  /* 32px */
+    --spacing-2xl: 3rem;  /* 48px */
+
+    /* ========================================================================
+       SPACING - Mobile (tighter for smaller screens)
+       ======================================================================== */
+
+    --spacing-mobile-sm: 0.5rem;  /* 8px */
+    --spacing-mobile-md: 1rem;  /* 16px */
+    --spacing-mobile-lg: 1.5rem;  /* 24px */
+
+    /* ========================================================================
+       SPACING - Touch targets
+       ======================================================================== */
+
+    --touch-target-min: 44px;  /* Minimum touch target size */
+    --touch-target-small: 40px;  /* Small touch targets */
+    --spacing-touch-sm: 10px;  /* Padding for small touch targets */
+    --spacing-touch-md: 12px;  /* Padding for regular touch targets */
+
+    /* ========================================================================
+       TYPOGRAPHY - Font sizing
+       ======================================================================== */
+
+    --font-family-body: Georgia, 'Times New Roman', Times, serif;  /* Body/content font */
+    --font-family-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;  /* UI/heading font */
+    --font-family-mono: monospace;  /* Monospace font */
+    --font-size-xs: 0.75rem;  /* 12px */
+    --font-size-sm: 0.85rem;  /* 13.6px */
+    --font-size-base: 1rem;  /* 16px */
+    --font-size-md: 1.125rem;  /* 18px */
+    --font-size-lg: 1.5rem;  /* 24px */
+    --font-size-xl: 2rem;  /* 32px */
+    --font-size-2xl: 2.5rem;  /* 40px */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --line-height-base: 1.6;
+
+    /* ========================================================================
+       TYPOGRAPHY - Mobile (optimized for smaller screens)
+       ======================================================================== */
+
+    --font-size-mobile-xs: 0.75rem;  /* 12px */
+    --font-size-mobile-sm: 0.8125rem;  /* 13px */
+    --font-size-mobile-base: 0.875rem;  /* 14px */
+    --font-size-mobile-md: 1rem;  /* 16px */
+    --font-size-mobile-lg: 1.25rem;  /* 20px */
+    --font-size-mobile-xl: 1.75rem;  /* 28px */
+
+    /* ========================================================================
+       SIZING - Dimensions
+       ======================================================================== */
+
+    --width-xs: 40px;  /* Extra small column */
+    --width-sm: 70px;  /* Small column */
+    --width-md: 80px;  /* Medium column */
+    --width-lg: 90px;  /* Large column */
+    --width-xl: 120px;  /* Extra large column */
+    --width-2xl: 130px;
+    --width-3xl: 150px;
+    --width-container: 1200px;  /* Max container width */
+    --width-form-narrow: 600px;  /* Narrow form width */
+    --width-screenshot-preview: 600px;
+    --width-modal: 1000px;  /* Modal width */
+    --height-modal: 90vh;
+    --height-screenshot-preview: 80vh;
+
+    /* ========================================================================
+       BORDERS - Radius and widths
+       ======================================================================== */
+
+    --border-radius-sm: 3px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
+    --border-radius-xl: 12px;
+    --border-radius-circle: 50%;
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
+
+    /* ========================================================================
+       SHADOWS - Depth
+       ======================================================================== */
+
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 4px 40px rgba(0, 0, 0, 0.5);
+    --shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.1);
+
+    /* ========================================================================
+       Z-INDEX - Layering
+       ======================================================================== */
+
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 1000;
+    --z-modal: 2000;
+    --z-popover: 3000;
+    --z-tooltip: 4000;
+
+    /* ========================================================================
+       TRANSITIONS - Animation timing
+       ======================================================================== */
+
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+
+    /* ========================================================================
+       OPACITY - Transparency levels
+       ======================================================================== */
+
+    --opacity-disabled: 0.5;
+    --opacity-muted: 0.7;
+    --opacity-hover: 0.9;
+    --opacity-faint: 0.3;
+
+    /* ========================================================================
+       RESPONSIVE BREAKPOINTS
+       ======================================================================== */
+
+    --breakpoint-tablet: 768px;  /* Tablet and up */
+    --breakpoint-desktop: 1024px;  /* Desktop and up */
+    --breakpoint-large: 1440px;  /* Large desktop and up */
+
+    /* ========================================================================
+       ALIASES - Short names for convenience
+       ======================================================================== */
+
+    --radius-sm: var(--border-radius-sm);
+    --radius-md: var(--border-radius-md);
+    --radius-lg: var(--border-radius-lg);
+    --radius-xl: var(--border-radius-xl);
+}

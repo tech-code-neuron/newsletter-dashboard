@@ -1,0 +1,20 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Unsubscribed - {{ config.site.name }}{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block signup %}{% endblock %}
+
+{% block content %}
+<div class="public-content">
+    <h1 class="public-title">{{ config.subscription.unsubscribed.heading }}</h1>
+    <p class="public-text">
+        {{ config.subscription.unsubscribed.message }}
+    </p>
+    <p class="public-text-muted">{{ config.subscription.unsubscribed.subtext }}</p>
+    <a href="{{ config.subscription.unsubscribed.cta_url }}" class="public-btn" data-cta="signup_nav">{{ config.subscription.unsubscribed.cta_text }}</a>
+</div>
+{% endblock %}

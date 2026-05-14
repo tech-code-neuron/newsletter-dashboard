@@ -1,0 +1,130 @@
+/**
+ * Companies Page Styles
+ *
+ * Page-specific styles for the companies listing page.
+ */
+
+/* ============================================================================
+   EMAIL TOGGLE CHECKBOX
+   ============================================================================ */
+
+.email-toggle {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transform: scale(1.5);
+    accent-color: var(--color-success);
+    transition: transform var(--transition-fast);
+}
+
+.email-toggle:hover {
+    transform: scale(1.7);
+}
+
+/* ============================================================================
+   HIGHLIGHT ROW (for scroll-to functionality)
+   ============================================================================ */
+
+.highlight-row {
+    background-color: var(--color-warning-bg);
+}
+
+/* ============================================================================
+   MOBILE CARD ENHANCEMENTS
+   ============================================================================ */
+
+/* Alternating row colors for easier navigation */
+.mobile-card-even {
+    background-color: var(--color-bg-hover);
+}
+
+/* Bigger ticker box on companies page */
+.mobile-card-ticker {
+    padding: 6px 14px;
+    font-size: 15px;
+    font-weight: var(--font-weight-bold);
+}
+
+/* URL links in mobile cards */
+.mobile-card-urls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.mobile-url-link {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    text-decoration: none;
+    padding: var(--spacing-xs) var(--spacing-xs);
+    background: var(--color-bg-hover);
+    border-radius: var(--border-radius-sm);
+    border: var(--border-width-thin) solid var(--color-border);
+    transition: var(--transition-base);
+    word-break: break-all;
+    line-height: 1.3;
+}
+
+.mobile-url-link:hover {
+    background: var(--color-bg);
+    border-color: var(--color-border-light);
+    text-decoration: none;
+}
+
+/* ============================================================================
+   INACTIVE COMPANIES
+   ============================================================================ */
+
+.inactive-card {
+    opacity: var(--opacity-muted);
+}
+
+.mobile-card-ticker-inactive {
+    background: var(--color-secondary);
+}
+
+/* ============================================================================
+   UNSTYLED LINK (for card header/body wrapping)
+   ============================================================================ */
+
+.link-unstyled {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ============================================================================
+   MOBILE CARD ACTIONS
+   ============================================================================ */
+
+.mobile-card-actions form .btn {
+    flex: 1;
+}
+
+/* ============================================================================
+   CONTEXT MENU
+   ============================================================================ */
+
+.context-menu {
+    position: fixed;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 120px;
+    display: none;
+}
+
+.context-menu-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+}
+
+.context-menu-item:hover {
+    background: var(--color-bg-hover);
+}
+
+/* Button styles moved to components/buttons.css */

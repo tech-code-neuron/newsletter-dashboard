@@ -1,0 +1,21 @@
+<!-- Signup Section -->
+<div id="signup" class="signup-box">
+    <div class="signup-headline">
+        {{ config.signup.headline }}
+    </div>
+    <div class="signup-description">
+        {{ config.signup.description }}
+    </div>
+    <form action="/api/subscribe" method="POST" class="signup-form" data-ajax="true" novalidate>
+        <!-- Honeypot field - hidden from users, filled by bots -->
+        <input type="text" name="website" id="website-honeypot" class="signup-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field empty">
+        <input type="email" name="email" id="signup-email" aria-label="Email address" placeholder="{{ config.signup.placeholder }}" required class="signup-input">
+        <button type="submit" class="signup-button" data-cta="signup_nav">
+            {{ config.signup.button_text }}
+        </button>
+    </form>
+    <div class="signup-footer">
+        {{ config.signup.footer }}
+    </div>
+    <div class="signup-message" style="display: none;"></div>
+</div>

@@ -1,0 +1,25 @@
+# terraform.tfvars.example
+# Copy this file to terraform.tfvars and fill in your values
+# terraform.tfvars is gitignored for security
+
+# ============================================================================
+# REQUIRED VARIABLES (No Defaults)
+# ============================================================================
+
+# SSH Access - Restrict to your public IP only
+# Find your IP: curl ifconfig.me
+admin_ssh_cidr = "YOUR_PUBLIC_IP/32"  # Example: "203.0.113.45/32"
+
+# URL Testing Dashboard Password
+# Generate with: openssl rand -base64 24
+url_testing_password = "GENERATE_SECURE_RANDOM_PASSWORD_HERE"
+
+# ============================================================================
+# OPTIONAL OVERRIDES (Have Defaults in variables.tf)
+# ============================================================================
+
+# Uncomment to override defaults:
+# project_name = "reitsheet"
+# aws_region = "us-east-1"
+# log_retention_days = 7
+# flask_ec2_instance_type = "t3.micro"

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Settings - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/contact.css') }}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <div class="settings-header">
+        <h1>Contact Form Settings</h1>
+        <a href="{{ url_for('contact.contact') }}" class="btn btn-secondary" target="_blank">Preview Form</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('contact.contact_settings') }}" class="settings-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="settings-section">
+            <h2>Email Delivery</h2>
+            <div class="form-group">
+                <label for="recipient_email">Send submissions to</label>
+                <input type="email" id="recipient_email" name="recipient_email"
+                       value="{{ config.recipient_email }}"
+                       placeholder="alerts@reitsheet.co" required>
+                <span class="help-text">Contact form submissions will be sent to this address</span>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Page Copy</h2>
+            <div class="form-group">
+                <label for="headline">Headline</label>
+                <input type="text" id="headline" name="headline"
+                       value="{{ config.headline }}"
+                       placeholder="Say Hello">
+            </div>
+            <div class="form-group">
+                <label for="tagline">Tagline</label>
+                <input type="text" id="tagline" name="tagline"
+                       value="{{ config.tagline }}"
+                       placeholder="Questions, feedback, or just want to chat REITs? We're listening.">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>Placeholder Text</h2>
+            <div class="form-group">
+                <label for="name_placeholder">Name placeholder</label>
+                <input type="text" id="name_placeholder" name="name_placeholder"
+                       value="{{ config.name_placeholder }}"
+                       placeholder="Warren Buffett">
+            </div>
+            <div class="form-group">
+                <label for="email_placeholder">Email placeholder</label>
+                <input type="text" id="email_placeholder" name="email_placeholder"
+                       value="{{ config.email_placeholder }}"
+                       placeholder="warren@berkshire.com">
+            </div>
+            <div class="form-group">
+                <label for="message_placeholder">Message placeholder</label>
+                <input type="text" id="message_placeholder" name="message_placeholder"
+                       value="{{ config.message_placeholder }}"
+                       placeholder="I've been meaning to tell you...">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

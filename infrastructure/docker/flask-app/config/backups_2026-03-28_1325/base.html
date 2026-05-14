@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ config.site.name }}{% endblock %}</title>
+    {% block meta %}
+    <meta name="robots" content="noindex">
+    {% endblock %}
+    {% if static_build %}
+    {# Static build: inline critical CSS or link to combined stylesheet #}
+    <link rel="stylesheet" href="public-styles.css">
+    {% else %}
+    {# Flask app: use url_for #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+    {% endif %}
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        {% block header %}{% include 'public/components/header.html' %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block signup %}{% include 'public/components/signup_box.html' %}{% endblock %}
+        {% block footer %}{% include 'public/components/footer.html' %}{% endblock %}
+    </div>
+    {% block extra_scripts %}{% endblock %}
+    {% if not static_build %}
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+    {% endif %}
+</body>
+</html>

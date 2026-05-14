@@ -1,0 +1,103 @@
+{% extends 'public/base.html' %}
+
+{% block title %}{{ config.site.name }} - Never Miss a REIT Release{% endblock %}
+
+{% block meta %}
+<!-- SEO Meta Tags -->
+<meta name="description" content="{{ config.meta.description }}">
+<meta name="keywords" content="{{ config.meta.keywords }}">
+<meta name="author" content="{{ config.site.name }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://{{ config.site.domain }}">
+
+<!-- Open Graph for iMessage, WhatsApp, Slack, Facebook -->
+<meta property="og:title" content="{{ config.site.name }} - Never Miss a REIT Release">
+<meta property="og:description" content="{{ config.site.tagline }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://{{ config.site.domain }}">
+<meta property="og:site_name" content="{{ config.site.name }}">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ config.meta.og_image }}">
+<meta property="og:image:width" content="{{ config.meta.og_image_width }}">
+<meta property="og:image:height" content="{{ config.meta.og_image_height }}">
+<meta property="og:image:alt" content="{{ config.site.name }} logo">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="{{ config.meta.twitter_card }}">
+<meta name="twitter:title" content="{{ config.site.name }} - Never Miss a REIT Release">
+<meta name="twitter:description" content="{{ config.site.tagline }}">
+<meta name="twitter:image" content="{{ config.meta.og_image }}">
+
+<!-- Structured Data for Google -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ config.site.name }}",
+    "url": "https://{{ config.site.domain }}",
+    "description": "{{ config.meta.description }}"
+}
+</script>
+{% endblock %}
+
+{% block header %}
+<div class="header">
+    <a href="{{ config.site.url }}">
+        <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+    </a>
+    <div class="date-display">{{ current_date }}</div>
+</div>
+{% include 'public/components/nav.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Preview text (hidden but shows in inbox) -->
+{% if preview_text %}
+<div class="preview-text">
+    {{ preview_text }}
+</div>
+{% endif %}
+
+<!-- Content Area -->
+<div class="content-area">
+    {% if headlines %}
+    <div class="section-header-primary">Headlines</div>
+    {% for item in headlines %}
+    <div class="release-section">
+        <a href="{{ item.url }}" class="release-company" target="_blank">{{ item.company }} ({{ item.ticker }})</a>
+        <a href="{{ item.url }}" class="release-title" target="_blank">{{ item.title }}</a>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if earnings_releases %}
+    <div class="section-header-secondary">Earnings Releases</div>
+    {% for item in earnings_releases %}
+    <div class="release-item">
+        <a href="{{ item.url }}" class="release-ticker" target="_blank">{{ item.ticker }}</a>:
+        <a href="{{ item.url }}" class="release-title-inline" target="_blank">{{ item.title }}</a>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if other_announcements %}
+    <div class="section-header-secondary">Other Announcements</div>
+    {% for item in other_announcements %}
+    <div class="release-item">
+        <a href="{{ item.url }}" class="release-ticker" target="_blank">{{ item.ticker }}</a>:
+        <a href="{{ item.url }}" class="release-title-inline" target="_blank">{{ item.title }}</a>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if not headlines and not earnings_releases and not other_announcements %}
+    <div class="empty-state">
+        <p class="public-text">No press releases for today. Check back tomorrow!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block signup %}
+{% include 'public/components/signup_box.html' %}
+{% endblock %}

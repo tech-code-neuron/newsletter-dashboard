@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Press Release Pipeline{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/pages/index.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Dashboard</h2>
+
+<div class="stats-grid">
+    <a href="{{ url_for('companies.companies') }}" class="stat-card link-clean">
+        <div class="stat-value">{{ total_companies }}</div>
+        <div class="stat-label">Active Companies</div>
+    </a>
+    <a href="{{ url_for('press_releases.press_releases') }}" class="stat-card link-clean">
+        <div class="stat-value">{{ total_releases }}</div>
+        <div class="stat-label">Total Press Releases</div>
+    </a>
+    <a href="{{ url_for('press_releases.press_releases') }}" class="stat-card link-clean">
+        <div class="stat-value">{{ uncategorized }}</div>
+        <div class="stat-label">Uncategorized</div>
+    </a>
+</div>
+
+<div class="card">
+    <h2>Quick Actions</h2>
+    <div class="form-flex">
+        <form method="POST" action="{{ url_for('actions.action_scrape') }}" class="form-inline">
+            <button type="submit" class="btn btn-success">🔍 Run Scraper</button>
+        </form>
+        <form method="POST" action="{{ url_for('actions.action_categorize') }}" class="form-inline">
+            <button type="submit" class="btn btn-success">🏷️ Categorize Releases</button>
+        </form>
+        <form method="POST" action="{{ url_for('actions.action_generate_newsletter') }}" class="form-inline">
+            <button type="submit" class="btn btn-success">📧 Generate Newsletters</button>
+        </form>
+    </div>
+</div>
+
+{% set exc = feed_exceptions|length %}
+<div class="card" id="feed-health-card">
+    <div class="flex-between mb-1">
+        <h2 class="mb-0 no-border-bottom">Feed Health</h2>
+        <span class="text-muted text-sm">{{ rss_total }} companies with RSS feeds</span>
+    </div>
+
+    {% if exc == 0 %}
+        <p class="text-success m-0">✓ All RSS feeds ingested in the last 30 days</p>
+    {% else %}
+        <p class="text-danger mb-sm">
+            ⚠️ {{ exc }} RSS feed exception{{ 's' if exc != 1 }} in the last 30 days
+        </p>
+        <div class="table-container">
+        <table class="font-small-table">
+            <thead>
+                <tr>
+                    <th class="col-md">Ticker</th>
+                    <th>Company</th>
+                    <th class="col-xl hide-mobile">Last Ingested</th>
+                    <th class="col-md">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in feed_exceptions %}
+                <tr class="clickable-row" data-href="{{ url_for('companies.company_detail', ticker=c.ticker) }}">
+                    <td><span class="ticker">{{ c.ticker }}</span></td>
+                    <td class="text-muted">{{ c.name }}</td>
+                    <td class="text-muted text-sm hide-mobile">{{ c.last_scraped }}</td>
+                    <td><a href="{{ url_for('companies.company_detail', ticker=c.ticker) }}" class="btn btn-small btn-secondary" onclick="event.stopPropagation()">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="flex-between mb-1">
+        <h2 class="mb-0 no-border-bottom">Recent Press Releases</h2>
+        <a href="{{ url_for('press_releases.press_releases') }}" class="btn btn-small btn-secondary">View All →</a>
+    </div>
+    {% if recent_releases %}
+    <form method="POST" action="{{ url_for('actions.action_delete_releases') }}" id="delete-form">
+        <div class="mb-md">
+            <button type="submit" class="btn btn-danger" id="delete-selected" disabled>Archive Selected</button>
+        </div>
+        <div class="table-container">
+        <table class="table-press-releases">
+            <thead>
+                <tr>
+                    <th class="col-xs hide-mobile"><input type="checkbox" id="select-all-releases"></th>
+                    <th class="col-lg">Ticker</th>
+                    <th>Title</th>
+                    <th class="col-2xl hide-mobile">Category</th>
+                    <th class="col-xl hide-mobile">Date</th>
+                    <th class="col-sm hide-mobile">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for release in recent_releases %}
+                <tr class="clickable-row" data-href="{{ release.get_detail_url() or url_for('press_releases.edit_press_release', release_id=release.id) }}">
+                    <td class="hide-mobile"><input type="checkbox" class="release-checkbox" value="{{ release.id }}" onclick="event.stopPropagation()"></td>
+                    <td><span class="ticker">{{ release.company.ticker }}</span></td>
+                    <td>
+                        {% if release.url %}
+                            <a href="{{ release.url }}" target="_blank" class="text-primary" onclick="event.stopPropagation()">
+                                {{ release.title[:80] }}{% if release.title|length > 80 %}...{% endif %}
+                            </a>
+                        {% else %}
+                            {{ release.title[:80] }}{% if release.title|length > 80 %}...{% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="hide-mobile">
+                        {% if release.category %}
+                            <span class="category-badge {% if release.is_breaking %}breaking{% endif %}">{{ release.category }}</span>
+                        {% else %}
+                            <span class="category-badge text-uncategorized">Uncategorized</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted text-sm hide-mobile">{{ release.published_date|format_date if release.published_date else 'No date' }}</td>
+                    <td class="hide-mobile"><a href="{{ release.get_detail_url() or url_for('press_releases.edit_press_release', release_id=release.id) }}" class="btn btn-small" onclick="event.stopPropagation()">Edit</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <!-- Mobile Card List -->
+        <div class="mobile-card-list">
+            {% for release in recent_releases %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    <span class="mobile-card-ticker">{{ release.company.ticker }}</span>
+                    <div class="mobile-card-meta">
+                        <span>{{ release.published_date|format_date('%b %d') if release.published_date else '' }}</span>
+                        {% if release.category %}
+                            <span class="mobile-card-category {% if release.is_breaking %}breaking{% endif %}">{{ release.category }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <a href="{{ release.get_detail_url() or url_for('press_releases.edit_press_release', release_id=release.id) }}" class="mobile-card-body" style="display: block; text-decoration: none; color: inherit;">
+                    <div class="mobile-card-title">{{ release.title[:60] }}{% if release.title|length > 60 %}...{% endif %}</div>
+                </a>
+                <div class="mobile-card-actions single-action">
+                    <a href="{{ release.get_detail_url() or url_for('press_releases.edit_press_release', release_id=release.id) }}" class="btn btn-small">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+    {% else %}
+        <p class="text-muted">No press releases yet. Run the scraper to get started!</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Recent Newsletters</h2>
+    {% if recent_newsletters %}
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th class="hide-mobile">Date</th>
+                <th class="hide-mobile">Status</th>
+                <th class="hide-mobile col-md">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for newsletter in recent_newsletters %}
+            <tr>
+                <td>{{ newsletter.newsletter_type|title }}</td>
+                <td class="text-muted text-sm hide-mobile">{{ newsletter.date|format_date }}</td>
+                <td class="hide-mobile">
+                    <span class="category-badge {% if newsletter.status == 'ready' %}breaking{% endif %}">
+                        {{ newsletter.status|title }}
+                    </span>
+                </td>
+                <td class="hide-mobile"><a href="{{ url_for('newsletters.view_newsletter', newsletter_id=newsletter.id) }}" class="btn btn-small" target="_blank">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- Mobile Card List -->
+    <div class="mobile-card-list">
+        {% for newsletter in recent_newsletters %}
+        <div class="mobile-card">
+            <div class="mobile-card-header">
+                <span class="mobile-card-ticker" style="background: {% if newsletter.status == 'ready' %}#28a745{% else %}#6c757d{% endif %};">
+                    {{ newsletter.newsletter_type|title }}
+                </span>
+                <div class="mobile-card-meta">
+                    {{ newsletter.date|format_date('%b %d') }}
+                </div>
+            </div>
+            <div class="mobile-card-actions single-action">
+                <a href="{{ url_for('newsletters.view_newsletter', newsletter_id=newsletter.id) }}" class="btn btn-small" target="_blank">View Newsletter</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="text-muted">No newsletters yet. Generate your first newsletter!</p>
+    {% endif %}
+</div>
+
+{% endblock %}

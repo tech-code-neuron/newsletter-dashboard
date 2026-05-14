@@ -1,0 +1,1049 @@
+/**
+ * Public Pages - Shared Styles
+ *
+ * Design System for all public-facing pages (check-email, subscribed, etc.)
+ * Single source of truth - change here to update all pages.
+ *
+ * Uses design tokens from variables.css (generated from design-tokens.json)
+ * @design-tokens: variables.css
+ * @protected: pre-commit-check-32
+ */
+
+@import 'variables.css';
+
+/*
+ * Variable Mapping (for reference):
+ * --font-body → --font-family-body
+ * --font-ui → --font-family-ui
+ * --color-text-secondary → --color-text-muted
+ * --color-card → --color-bg-card
+ */
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: var(--spacing-md);
+    background: var(--color-bg);
+    font-family: var(--font-family-body);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   LAYOUT
+   ============================================================================ */
+
+.container {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.content {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.header a {
+    text-decoration: none;
+}
+
+.header img {
+    max-width: 100%;
+    width: 400px;
+    height: auto;
+    cursor: pointer;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+.page-title {
+    font-family: var(--font-family-body);
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--color-text);
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.body-text {
+    font-family: var(--font-family-body);
+    font-size: 18px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-xl) 0;
+}
+
+.body-text-sm {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-lg) 0;
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.btn-primary {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 12px 32px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-ui);
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+    color: white;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.footer {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-md);
+}
+
+.footer-tagline {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+.footer-links {
+    margin-top: 12px;
+    font-family: var(--font-family-ui);
+    font-size: 12px;
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--color-text-muted);
+}
+
+.footer-divider {
+    color: #ccc;
+    margin: 0 8px;
+}
+
+/* ============================================================================
+   CARDS (for email-style layouts)
+   ============================================================================ */
+
+.card {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: var(--spacing-xl) 40px var(--spacing-lg);
+    background: var(--color-bg);
+    text-align: center;
+}
+
+.card-body {
+    padding: 40px;
+}
+
+.card-footer {
+    padding: var(--spacing-lg) 40px;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+/* ============================================================================
+   PRIVACY PAGE SPECIFIC
+   ============================================================================ */
+
+.page-subtitle {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--spacing-xl) 0;
+}
+
+.content-card {
+    background: var(--color-bg-card);
+    padding: var(--spacing-xl) 40px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-family: var(--font-family-body);
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0 0 12px 0;
+}
+
+.section-title:not(:first-child) {
+    margin-top: var(--spacing-lg);
+}
+
+.section-text {
+    font-family: var(--font-family-body);
+    font-size: 16px;
+    color: var(--color-text);
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+.section-list {
+    padding-left: var(--spacing-lg);
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+}
+
+.section-list li {
+    margin-bottom: 6px;
+}
+
+.contact-box {
+    background: #fafafa;
+    padding: var(--spacing-md);
+    border-radius: 6px;
+    margin-top: var(--spacing-lg);
+}
+
+.contact-box .section-title {
+    margin-top: 0;
+}
+
+.contact-box p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   PUBLIC PAGES (verify, unsubscribe, etc.)
+   Flask templates use .public-* classes for consistency
+   ============================================================================ */
+
+.public-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.public-container {
+    max-width: 500px;
+    width: 100%;
+    padding: var(--spacing-md);
+}
+
+.public-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.public-header img {
+    max-width: 280px;
+    height: auto;
+}
+
+.public-content {
+    text-align: center;
+    background: var(--color-bg-card);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: var(--spacing-lg);
+}
+
+.public-title {
+    font-family: var(--font-family-body);
+    font-size: 24px;
+    font-weight: normal;
+    color: var(--color-text);
+    margin: var(--spacing-md) 0;
+}
+
+.public-text {
+    font-family: var(--font-family-body);
+    font-size: 16px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.public-text-sm {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--spacing-lg) 0;
+}
+
+.public-btn {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 12px 32px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-ui);
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: var(--spacing-md);
+}
+
+.public-btn:hover {
+    background: var(--color-primary-hover);
+    color: white;
+}
+
+.public-info-box {
+    background: #f8f9fa;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    text-align: left;
+}
+
+.public-info-box h3 {
+    font-family: var(--font-family-body);
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--color-text);
+}
+
+.public-info-box ul {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.public-contact-box {
+    background: #f8f9fa;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.public-contact-box p {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+.public-contact-box a {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Status Icons */
+.status-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.status-icon-success {
+    color: #28a745;
+}
+
+.status-icon-error {
+    color: #dc3545;
+}
+
+/* Public Footer */
+.public-footer {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+}
+
+.public-footer-tagline {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+.public-footer-links {
+    font-family: var(--font-family-ui);
+    font-size: 12px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.public-footer-links a {
+    color: var(--color-text-muted);
+}
+
+.public-footer-divider {
+    color: #ccc;
+    margin: 0 var(--spacing-sm);
+}
+
+.public-footer-copyright {
+    font-family: var(--font-family-ui);
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+/* ============================================================================
+   SIGNUP POPUP (used on privacy page)
+   ============================================================================ */
+
+.signup-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.signup-toggle {
+    display: none;
+}
+
+.signup-trigger {
+    color: var(--color-primary);
+    cursor: pointer;
+    border-bottom: 1px dashed var(--color-primary);
+}
+
+.signup-popup {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: var(--spacing-md) 20px;
+    width: 280px;
+    display: none;
+    z-index: 100;
+    text-align: left;
+}
+
+.signup-popup::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--color-border);
+}
+
+.signup-popup::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid var(--color-bg-card);
+}
+
+.signup-toggle:checked ~ .signup-popup {
+    display: block;
+}
+
+.signup-close-btn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 20px;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.signup-close-btn:hover {
+    color: var(--color-text);
+}
+
+.signup-popup-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.signup-popup-desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin-bottom: var(--spacing-md);
+}
+
+.popup-form input[name="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: var(--font-family-body);
+    border: 1px solid var(--color-border);
+    box-sizing: border-box;
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+}
+
+.popup-form button {
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: var(--font-family-body);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
+
+.popup-form button:hover {
+    background: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   HOMEPAGE - Navigation
+   ============================================================================ */
+
+.nav {
+    text-align: center;
+    padding: 12px 0;
+    font-family: var(--font-family-ui);
+    font-size: 13px;
+}
+
+.nav a {
+    color: var(--color-primary);
+    text-decoration: none;
+    margin: 0 12px;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================================
+   HOMEPAGE - Date Display
+   ============================================================================ */
+
+.date-display {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-text);
+    margin-top: 4px;
+}
+
+/* ============================================================================
+   HOMEPAGE - Section Headers
+   ============================================================================ */
+
+.headlines-section {
+    border-bottom: 3px solid var(--color-primary);
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.section-header-primary {
+    font-family: var(--font-family-ui);
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 3px solid var(--color-primary);
+}
+
+.section-header-secondary {
+    font-family: var(--font-family-ui);
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-lg);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* ============================================================================
+   HOMEPAGE - Press Release Items
+   ============================================================================ */
+
+.release-section {
+    padding: var(--spacing-md) 0 var(--spacing-md) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.release-section:last-child {
+    border-bottom: none;
+}
+
+.release-item {
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--color-border-light, #f0f0f0);
+}
+
+.release-item:last-child {
+    border-bottom: none;
+}
+
+.release-ticker {
+    font-family: var(--font-family-ui);
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.release-ticker:hover {
+    text-decoration: underline;
+}
+
+.release-title {
+    font-family: var(--font-family-body);
+    font-size: 16px;
+    color: var(--color-text);
+    text-decoration: none;
+    display: block;
+    margin-top: 5px;
+}
+
+.release-title:hover {
+    color: var(--color-primary);
+}
+
+.release-title-inline {
+    font-family: var(--font-family-body);
+    font-size: 13px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.release-title-inline:hover {
+    color: var(--color-primary);
+}
+
+.paywall-indicator {
+    text-decoration: underline;
+    font-size: 13px;  /* Match non-headline size, even in headlines */
+}
+
+.release-company {
+    font-family: var(--font-family-ui);
+    font-size: 9px;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* ============================================================================
+   HOMEPAGE - Signup Box
+   ============================================================================ */
+
+.signup-box {
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    margin-top: var(--spacing-xl);
+    padding: 20px var(--spacing-lg);
+    text-align: center;
+    background: var(--color-bg-card);
+}
+
+.signup-headline {
+    font-family: var(--font-family-body);
+    font-size: 17px;
+    color: var(--color-text);
+    margin-bottom: 6px;
+}
+
+.signup-description {
+    font-family: var(--font-family-body);
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+.signup-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signup-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: var(--font-family-body);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.signup-button {
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: var(--font-family-body);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
+
+.signup-button:hover {
+    background: var(--color-primary-hover);
+}
+
+.signup-footer {
+    font-family: var(--font-family-body);
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin-top: 12px;
+}
+
+/* Honeypot field - hidden from humans, visible to bots */
+.signup-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+/* Success/error message after AJAX submission */
+.signup-message {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-md);
+}
+
+.signup-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.signup-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ============================================================================
+   HOMEPAGE - Content Area
+   ============================================================================ */
+
+.content-area {
+    padding: 0 var(--spacing-md);
+}
+
+/* Hidden preview text for email clients */
+.preview-text {
+    display: none;
+    max-height: 0;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   ARCHIVE - Banner & Navigation
+   ============================================================================ */
+
+.archive-banner {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 12px 16px;
+    text-align: center;
+    font-family: var(--font-family-ui);
+    font-size: 13px;
+    margin-bottom: var(--spacing-md);
+}
+
+.archive-banner a {
+    color: white;
+    text-decoration: underline;
+    margin-left: 8px;
+}
+
+.archive-banner a:hover {
+    opacity: 0.9;
+}
+
+.archive-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-md);
+    font-family: var(--font-family-ui);
+    font-size: 13px;
+}
+
+.archive-nav-left,
+.archive-nav-center,
+.archive-nav-right {
+    flex: 1;
+}
+
+.archive-nav-left {
+    text-align: left;
+}
+
+.archive-nav-center {
+    text-align: center;
+}
+
+.archive-nav-right {
+    text-align: right;
+}
+
+.archive-nav a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.archive-nav a:hover {
+    text-decoration: underline;
+}
+
+.archive-bottom-nav {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-family-ui);
+    font-size: 13px;
+}
+
+.archive-bottom-nav .nav-link {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.archive-bottom-nav .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================================
+   MOBILE RESPONSIVE - Signup Popup
+   ============================================================================ */
+
+@media (max-width: 480px) {
+    .archive-nav-right .signup-popup {
+        left: auto;
+        right: 0;
+        transform: none;
+    }
+    .archive-nav-right .signup-popup::before,
+    .archive-nav-right .signup-popup::after {
+        left: auto;
+        right: 20px;
+        transform: none;
+    }
+}
+
+/* ============================================================================
+   VERTICAL SIGNUP FORM (standalone subscribe page)
+   ============================================================================ */
+
+.signup-form-vertical {
+    max-width: 320px;
+    margin: 0 auto var(--spacing-md);
+}
+
+.signup-form-vertical .signup-input {
+    width: 100%;
+    margin-bottom: var(--spacing-sm);
+}
+
+.signup-form-vertical .signup-button {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-sm);
+}
+
+.field-errors {
+    color: var(--color-danger);
+    font-size: 13px;
+    margin-top: var(--spacing-xs);
+    text-align: left;
+}
+
+.flash-messages {
+    margin-bottom: var(--spacing-md);
+}
+
+.flash {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-xs);
+    font-size: 14px;
+}
+
+.flash.error {
+    background: var(--color-danger-bg);
+    color: var(--color-danger-text);
+}
+
+.flash.success {
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+}
+
+/* ============================================================================
+   LOADING STATES
+   ============================================================================ */
+
+.signup-button:disabled,
+.popup-form button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* ============================================================================
+   RESEND VERIFICATION FORM (verify_error page)
+   ============================================================================ */
+
+.resend-section {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.resend-hint {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.resend-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.resend-input {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: var(--font-family-body);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.public-btn-secondary {
+    display: inline-block;
+    background: var(--color-bg-card);
+    color: var(--color-primary);
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-ui);
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid var(--color-primary);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.public-btn-secondary:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Flash messages for resend form */
+.flash-message {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin: var(--spacing-md) 0;
+}
+
+.flash-success {
+    background: var(--color-success-bg, #d4edda);
+    color: var(--color-success-text, #155724);
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background: var(--color-danger-bg, #f8d7da);
+    color: var(--color-danger-text, #721c24);
+    border: 1px solid #f5c6cb;
+}

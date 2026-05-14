@@ -1,0 +1,191 @@
+/* ============================================================================
+   MOBILE CARD LAYOUTS
+   Replace tables with cards on mobile for better UX
+   ============================================================================ */
+
+/* Base mobile card styles (always available) */
+.mobile-card-list {
+    display: none; /* Hidden by default, shown on mobile */
+}
+
+.mobile-card {
+    background: var(--color-bg-card);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    transition: var(--transition-fast);
+}
+
+.mobile-card:hover {
+    border-color: var(--color-border-light);
+    box-shadow: var(--shadow-sm);
+}
+
+.mobile-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.mobile-card-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.mobile-card-ticker,
+.mobile-card-title {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.mobile-card-ticker:hover,
+.mobile-card-title:hover {
+    text-decoration: underline;
+}
+
+.mobile-card-body {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mobile-card-name {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+}
+
+.mobile-card-sector,
+.mobile-card-meta {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.mobile-card-date {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+}
+
+.mobile-card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: var(--border-width-thin) solid var(--color-border);
+    flex-wrap: wrap;
+}
+
+/* Status indicators in cards */
+.mobile-card-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+}
+
+.mobile-card-status .text-success { color: var(--color-success); }
+.mobile-card-status .text-danger { color: var(--color-danger); }
+.mobile-card-status .text-warning { color: var(--color-warning); }
+
+/* Badge in card header */
+.mobile-card-badge {
+    font-size: var(--font-size-xs);
+    padding: 2px 6px;
+    border-radius: var(--border-radius-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+@media (max-width: 767px) {
+    /* Hide tables on mobile, show cards */
+    .table-container,
+    .table-responsive {
+        display: none;
+    }
+
+    .mobile-card-list {
+        display: block;
+    }
+
+    /* For tables that must remain */
+    .table-container.keep-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 calc(-1 * var(--spacing-md));
+        padding: 0 var(--spacing-md);
+    }
+
+    .keep-table table {
+        font-size: var(--font-size-sm);
+        min-width: 100%;
+    }
+
+    .keep-table th,
+    .keep-table td {
+        padding: var(--spacing-touch-sm) var(--spacing-sm);
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Hide mobile cards on desktop */
+    .mobile-card-list {
+        display: none;
+    }
+}
+
+/* Publisher cards (special styling) */
+.publisher-card {
+    background: var(--color-bg-card);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.publisher-card-excluded {
+    background: var(--color-bg);
+    opacity: 0.7;
+}
+
+.publisher-card-needs_review {
+    border-left: 3px solid var(--color-warning);
+}
+
+.publisher-card-published,
+.publisher-card-previously-published {
+    background: var(--color-bg);
+    opacity: 0.6;
+}
+
+.publisher-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.publisher-card-title {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}
+
+.publisher-card-title:hover {
+    color: var(--color-primary);
+}
+
+.publisher-card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: var(--border-width-thin) solid var(--color-border);
+}
+
+.ticker-badge {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+}

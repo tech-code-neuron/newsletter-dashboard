@@ -1,0 +1,108 @@
+# Virtual environment
+venv/
+env/
+
+# Database backups (keep local only)
+data/backups/
+data/*.backup.*
+
+# Keep main database tracked, but ignore generated files
+data/newsletters/
+data/*.json
+data/*.html
+
+# Test data and email dumps (large files, not needed in repo)
+data/s3-emails/
+data/test-emails/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment/secrets
+.env
+*.env
+config.py
+
+# AWS Credentials & Keys
+*.csv
+*accessKeys*
+*credentials*.json
+gmail-token.pickle
+gmail-credentials.json
+
+# OS files
+.DS_Store
+
+# Logs (entire logs directory - local only)
+logs/
+*.log
+
+# Debug artifacts and backups
+aat_debug.html
+app.py.backup
+
+# Archive folder (old files and screenshots)
+archive/*.png
+archive/*.jpg
+archive/Screenshot*
+
+# Temporary diagnostic and test files
+test_*.py
+diagnose_*.py
+check_*.py
+audit_*.py
+discover_*.py
+extract_*.py
+deep_*.py
+*_snapshot.html
+needs_custom_scraper.txt
+
+# Infrastructure
+# Lambda deployment artifacts
+infrastructure/lambdas/*.zip
+infrastructure/lambdas/*/*.zip
+infrastructure/lambdas/*/archive/
+infrastructure/lambdas/*/package/
+infrastructure/lambdas/*/.deploy.lock
+infrastructure/lambdas/*/.deploy.state
+
+infrastructure/terraform/.terraform/
+infrastructure/terraform/.terraform.lock.hcl
+infrastructure/terraform/terraform.tfstate
+infrastructure/terraform/terraform.tfstate.backup
+*.csv
+*accessKeys*
+*credentials*.json
+*.pickle
+
+# Terraform secrets and state
+infrastructure/terraform/terraform.tfvars
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+*.tfplan
+.terraform.tfstate.lock*.info
+
+# AWS backups
+aws-backup-*/
+aws-backup-*.tar.gz
+server-backup-*.tar.gz
+lambdas-backup-*.tar.gz
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Misc build artifacts and media
+*.mp3
+*.eml
+backup_reit_news_*.json
+*-deployment.zip
+.claude/
+
+# Backup directories with sensitive data
+backup-before-shutdown/
+aws-backup/

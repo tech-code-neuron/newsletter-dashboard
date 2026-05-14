@@ -1,0 +1,21 @@
+/* ============================================================================
+   RESPONSIVE STYLES INDEX
+
+   Imports all responsive CSS modules.
+   This file replaces the monolithic responsive.css (917 lines → 6 focused files)
+
+   Load order matters:
+   1. Viewport - Base constraints
+   2. Navigation - Hamburger menu
+   3. Buttons - Touch targets
+   4. Cards - Mobile layouts
+   5. Forms - Form controls
+   6. Utilities - Visibility helpers
+   ============================================================================ */
+
+@import url('./_viewport.css');
+@import url('./_navigation.css');
+@import url('./_buttons.css');
+@import url('./_cards.css');
+@import url('./_forms.css');
+@import url('./_utilities.css');

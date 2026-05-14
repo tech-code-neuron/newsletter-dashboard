@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Review Emails - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/review.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flex-between mb-lg">
+    <h2 class="mb-0 no-border-bottom">Review Emails ({{ review_emails|length }})</h2>
+    <div class="form-flex">
+        <div class="btn-group">
+            <button onclick="scanInbox('24h')" class="btn btn-success btn-small">Last 24h</button>
+            <button onclick="scanInbox('7d')" class="btn btn-success btn-small">Last 7d</button>
+            <button onclick="scanInbox('all')" class="btn btn-success btn-small">All Time</button>
+        </div>
+        <button onclick="abortScan()" class="btn btn-danger btn-small" id="abortBtn" style="display: none;">Abort</button>
+        <button onclick="location.reload()" class="btn btn-secondary btn-small">Refresh</button>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div id="progressContainer" class="card" style="display: none;">
+    <div class="flex-between mb-sm">
+        <span id="progressStatus">Scanning...</span>
+        <span id="progressTime">Estimating...</span>
+    </div>
+    <div class="progress-bar-bg">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+    <div class="progress-stats">
+        <span id="progressStats">0/0 emails processed</span>
+        <span style="margin-left: 1rem;">New: <strong id="progressNew">0</strong></span>
+        <span style="margin-left: 1rem;">Existing: <strong id="progressExisting">0</strong></span>
+    </div>
+</div>
+
+<div class="card">
+    {% if review_emails %}
+        <p class="text-muted mb-md">
+            Emails flagged for manual review. These don't match subscription or press release patterns.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Date</th>
+                    <th style="width: 25%;">From</th>
+                    <th style="width: 40%;">Subject</th>
+                    <th style="width: 20%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for email in review_emails %}
+                <tr class="email-row clickable-email-row" id="email-{{ email.id }}" data-status="{{ email.status }}">
+                    <td onclick="showEmailModal({{ email.id }})">
+                        {{ email.date|format_date or 'Unknown' }}
+                    </td>
+                    <td onclick="showEmailModal({{ email.id }})">
+                        <div style="font-weight: 500;">{{ email.from_domain }}</div>
+                        <div class="text-sm text-muted">{{ email.from_email }}</div>
+                    </td>
+                    <td onclick="showEmailModal({{ email.id }})">
+                        <div style="font-weight: 500; margin-bottom: 0.25rem;">{{ email.subject }}</div>
+                        <div class="text-sm text-muted">{{ email.classification_reason }}</div>
+
+                        <!-- Screenshot preview on hover -->
+                        {% if email.screenshot_path %}
+                        <div class="screenshot-preview">
+                            <img src="{{ url_for('static', filename=email.screenshot_path) }}" alt="Email preview">
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td onclick="event.stopPropagation()">
+                        <div class="action-buttons">
+                            <button
+                                onclick="addToPressReleases({{ email.id }}); event.stopPropagation();"
+                                class="btn btn-success btn-small add-btn"
+                                {% if email.status != 'pending' %}disabled{% endif %}>
+                                Add as Release
+                            </button>
+                            <button
+                                onclick="deleteEmail({{ email.id }}); event.stopPropagation();"
+                                class="btn btn-danger btn-small delete-btn"
+                                {% if email.status != 'pending' %}disabled{% endif %}>
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3>No emails to review</h3>
+            <p class="mb-sm">All emails have been classified automatically.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Email Preview Modal -->
+<div id="emailModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalSubject" class="m-0">Email Preview</h3>
+            <button class="modal-close" onclick="closeEmailModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Safe screenshot display - static image, no tracking -->
+            <img id="emailScreenshot" src="" alt="Email preview" onclick="toggleZoom(this)">
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background-color: #f8f9fa;">
+    <h3 class="mb-sm">How Review Works</h3>
+    <ul style="margin-left: 1.5rem; line-height: 1.8;">
+        <li><strong>Hover preview:</strong> Hover over any email to see a screenshot preview (safe - no tracking)</li>
+        <li><strong>Click to view:</strong> Click anywhere on the row to see enlarged screenshot (click image to zoom)</li>
+        <li><strong>Add as Release:</strong> Extracts URL and scrapes content in the background. Continues working while it processes.</li>
+        <li><strong>Delete:</strong> Removes email from Gmail inbox and this review list.</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/pages/review.js') }}"></script>
+{% endblock %}

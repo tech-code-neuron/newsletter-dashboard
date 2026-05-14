@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe | {{ config.brand.title_suffix }}</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+</head>
+<body class="public-page">
+    <div class="public-container">
+        <div class="public-header">
+            <a href="{{ config.site.url }}">
+                <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+            </a>
+        </div>
+
+        <div class="public-content">
+            <h1 class="public-title">{{ config.signup.headline }}</h1>
+            <p class="public-text">{{ config.signup.description }}</p>
+
+            <div class="public-info-box">
+                <h3>What you'll get</h3>
+                <ul>
+                    <li>Curated press releases from 200+ REITs</li>
+                    <li>One email per weekday, no spam</li>
+                    <li>Unsubscribe anytime with one click</li>
+                </ul>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('subscribe.subscribe_page') }}" class="signup-form-vertical" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.email(id="email", placeholder=config.signup.placeholder, autocomplete="email", class="signup-input" + (" error" if form.email.errors else "")) }}
+                    {% if form.email.errors %}
+                        <div class="field-errors">
+                            {% for error in form.email.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="signup-button">{{ config.signup.button_text }}</button>
+            </form>
+
+            <p class="public-text-sm">{{ config.signup.footer }}</p>
+        </div>
+
+        <div class="public-footer">
+            <div class="public-footer-tagline">{{ config.brand.tagline }}</div>
+            <div class="public-footer-links">
+                <a href="{{ config.footer.privacy_url }}">Privacy Policy</a>
+                <span class="public-footer-divider">|</span>
+                <a href="mailto:{{ config.footer.contact_email }}">Contact Us</a>
+            </div>
+            <div class="public-footer-copyright">{{ config.footer.copyright_text }}</div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+</body>
+</html>

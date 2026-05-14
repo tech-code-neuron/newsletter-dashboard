@@ -1,0 +1,36 @@
+"""
+Social Media Pipeline Constants
+===============================
+Status values and constants for the social media posting pipeline.
+
+Usage:
+    from shared.social_constants import SOCIAL_STATUS_PENDING, SOCIAL_STATUS_BODY_NEEDED
+"""
+
+SOCIAL_STATUS_PENDING = 'pending'
+SOCIAL_STATUS_X_QUEUED = 'x_queued'
+SOCIAL_STATUS_X_POSTED = 'x_posted'
+SOCIAL_STATUS_IG_QUEUED = 'ig_queued'
+SOCIAL_STATUS_IG_POSTED = 'ig_posted'
+SOCIAL_STATUS_BOTH_POSTED = 'both_posted'
+SOCIAL_STATUS_SKIPPED_USER = 'skipped_by_user'
+SOCIAL_STATUS_SKIPPED_AUTO = 'skipped_auto'
+SOCIAL_STATUS_EXPIRED = 'expired'
+SOCIAL_STATUS_FAILED = 'failed'
+SOCIAL_STATUS_BODY_NEEDED = 'body_needed'
+SOCIAL_STATUS_BODY_UNAVAILABLE = 'body_unavailable'
+
+ALL_SOCIAL_STATUSES = [
+    SOCIAL_STATUS_PENDING,
+    SOCIAL_STATUS_X_QUEUED,
+    SOCIAL_STATUS_X_POSTED,
+    SOCIAL_STATUS_IG_QUEUED,
+    SOCIAL_STATUS_IG_POSTED,
+    SOCIAL_STATUS_BOTH_POSTED,
+    SOCIAL_STATUS_SKIPPED_USER,
+    SOCIAL_STATUS_SKIPPED_AUTO,
+    SOCIAL_STATUS_EXPIRED,
+    SOCIAL_STATUS_FAILED,
+    SOCIAL_STATUS_BODY_NEEDED,
+    SOCIAL_STATUS_BODY_UNAVAILABLE,
+]

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Subscription | {{ config.brand.title_suffix }}</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public.css') }}">
+</head>
+<body class="public-page">
+    <div class="public-container">
+        <div class="public-header">
+            <a href="{{ config.site.url }}">
+                <img src="{{ config.site.logo_url }}" alt="{{ config.brand.logo_alt }}">
+            </a>
+        </div>
+
+        <div class="public-content">
+            <div class="status-icon status-icon-success">&#9993;</div>
+            <h1 class="public-title">Confirm Your Subscription</h1>
+            <p class="public-text">Click the button below to verify your email and start receiving {{ config.brand.name }}.</p>
+            <form method="POST" action="{{ url_for('subscribe.verify', token=token) }}">
+                <button type="submit" class="public-btn">Activate My Subscription</button>
+            </form>
+        </div>
+
+        <div class="public-footer">
+            <div class="public-footer-tagline">{{ config.brand.tagline }}</div>
+            <div class="public-footer-links">
+                <a href="{{ config.footer.privacy_url }}">Privacy Policy</a>
+                <span class="public-footer-divider">|</span>
+                <a href="mailto:{{ config.footer.contact_email }}">Contact Us</a>
+            </div>
+            <div class="public-footer-copyright">{{ config.footer.copyright_text }}</div>
+        </div>
+    </div>
+</body>
+</html>

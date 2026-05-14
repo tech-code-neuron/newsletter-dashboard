@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}{{ disclosure.ticker }} - {{ disclosure.display_title|truncate(50) }} - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/disclosures.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="disclosure-detail-container">
+    <!-- Header -->
+    <div class="detail-header">
+        <a href="{{ url_for('disclosures.disclosure_list') }}" class="back-link">&larr; Back to Public Offerings</a>
+        <div class="company-meta">
+            <span class="ticker-badge large">{{ disclosure.ticker }}</span>
+            <span class="company-name">{{ disclosure.issuer_name }}</span>
+            <span class="form-badge">{{ disclosure.form_type }}</span>
+            <span class="filing-date">{{ disclosure.filing_date_display }}</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="detail-content">
+        <!-- Title with Edit Button (Desktop) -->
+        <div class="title-row">
+            <h1 class="detail-title" id="disclosure-title">{{ disclosure.display_title }}</h1>
+            <button type="button" class="edit-title-btn desktop-only" id="edit-title-btn" title="Edit title">
+                &#9998;
+            </button>
+        </div>
+
+        <!-- Mobile Title Edit (collapsible) -->
+        <details class="mobile-title-edit mobile-only">
+            <summary class="mobile-title-edit-toggle">Edit Title</summary>
+            <form method="POST" action="{{ url_for('disclosures.update_disclosure_title_form') }}" class="mobile-title-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="filing_url" value="{{ disclosure.filing_url }}">
+                <input type="text" name="title" id="disclosure-title" aria-label="Display title" value="{{ disclosure.ai_summary_title or '' }}"
+                       class="mobile-title-input" placeholder="Enter display title...">
+                <button type="submit" class="btn btn-small btn-primary">Save</button>
+            </form>
+        </details>
+
+        <!-- Offering Details -->
+        <div class="offering-details">
+            <div class="detail-row">
+                <span class="detail-label">Security Type:</span>
+                <span class="detail-value">{{ disclosure.security_type or '-' }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Amount:</span>
+                <span class="detail-value">{{ disclosure.principal_display or '-' }}</span>
+            </div>
+            {% if disclosure.coupon_rate %}
+            <div class="detail-row">
+                <span class="detail-label">Coupon Rate:</span>
+                <span class="detail-value">{{ disclosure.coupon_display }}</span>
+            </div>
+            {% endif %}
+            {% if disclosure.maturity_date %}
+            <div class="detail-row">
+                <span class="detail-label">Maturity:</span>
+                <span class="detail-value">{{ disclosure.maturity_display }}</span>
+            </div>
+            {% endif %}
+            {% if disclosure.use_of_proceeds %}
+            <div class="detail-row">
+                <span class="detail-label">Use of Proceeds:</span>
+                <span class="detail-value">{{ disclosure.use_of_proceeds }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-summary">
+            {{ disclosure.display_summary }}
+        </div>
+
+        <!-- SEC Document Link -->
+        <div class="detail-actions">
+            <a href="{{ disclosure.sec_url }}" target="_blank" class="btn btn-primary">
+                View SEC Document &rarr;
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Title Edit Modal (Desktop) -->
+<div class="modal-overlay" id="title-modal-overlay"></div>
+<div class="modal-window modal-small" id="title-modal">
+    <div class="modal-header">
+        <h3>Edit Display Title</h3>
+        <button type="button" class="modal-close" id="title-modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+        <p class="text-muted">Override the AI-generated title. Leave empty to use the default title.</p>
+        <input type="text" id="title-input" value="{{ disclosure.ai_summary_title or '' }}" placeholder="Enter display title...">
+        <input type="hidden" id="title-edit-filing-url" value="{{ disclosure.filing_url }}">
+        <div class="modal-actions">
+            <button type="button" class="btn btn-primary" id="save-title-btn">Save</button>
+            <button type="button" class="btn btn-secondary" id="cancel-title-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/pages/disclosure-detail.js') }}"></script>
+{% endblock %}

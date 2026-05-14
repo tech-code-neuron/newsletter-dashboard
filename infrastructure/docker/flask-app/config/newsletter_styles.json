@@ -1,0 +1,55 @@
+{
+  "logo": {
+    "fontFamily": "Arial, sans-serif",
+    "fontSize": "24px",
+    "fontWeight": "bold",
+    "fontStyle": "normal",
+    "textDecoration": "none",
+    "color": "#0066cc",
+    "letterSpacing": "8px",
+    "textTransform": "uppercase"
+  },
+  "date": {
+    "fontFamily": "Georgia, serif",
+    "fontSize": "14px",
+    "fontWeight": "normal",
+    "fontStyle": "italic",
+    "textDecoration": "none",
+    "color": "#666"
+  },
+  "company": {
+    "fontFamily": "Arial, sans-serif",
+    "fontSize": "9px",
+    "fontWeight": "bold",
+    "fontStyle": "normal",
+    "textDecoration": "none",
+    "color": "#0066cc",
+    "textTransform": "uppercase",
+    "letterSpacing": "0.5px"
+  },
+  "title": {
+    "fontFamily": "Georgia, serif",
+    "fontSize": "16px",
+    "fontWeight": "normal",
+    "fontStyle": "normal",
+    "textDecoration": "none",
+    "color": "#333",
+    "lineHeight": "1.45"
+  },
+  "source": {
+    "fontFamily": "Georgia, serif",
+    "fontSize": "11px",
+    "fontWeight": "normal",
+    "fontStyle": "normal",
+    "textDecoration": "none",
+    "color": "#999"
+  },
+  "footer": {
+    "fontFamily": "Georgia, serif",
+    "fontSize": "12px",
+    "fontWeight": "normal",
+    "fontStyle": "normal",
+    "textDecoration": "none",
+    "color": "#999"
+  }
+}

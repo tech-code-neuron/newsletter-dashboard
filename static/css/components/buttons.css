@@ -1,0 +1,323 @@
+/* ============================================================================
+   BUTTON COMPONENT - Complete Button System
+   ============================================================================
+
+   Consolidated from:
+   - components.css (base buttons)
+   - responsive.css (mobile touch-optimized)
+   - pages/companies.css (.btn-xs, .btn-light-gray)
+   - pages/edit-press-release.css (relevance buttons)
+   - pages/review.css (.btn-group)
+
+   Single source of truth for all button styles.
+   ============================================================================ */
+
+/* ============================================================================
+   BASE BUTTON STYLES
+   ============================================================================ */
+
+.btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    transition: background-color var(--transition-fast);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.btn:hover {
+    background-color: var(--color-primary-hover);
+    text-decoration: none;
+}
+
+.btn:disabled,
+.btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ============================================================================
+   BUTTON VARIANTS - Semantic Colors
+   ============================================================================ */
+
+/* Primary button (default - already styled above) */
+
+/* Secondary button */
+.btn-secondary {
+    background-color: var(--color-secondary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary-hover);
+}
+
+/* Success button */
+.btn-success {
+    background-color: var(--color-success);
+}
+
+.btn-success:hover {
+    background-color: var(--color-success-hover);
+}
+
+/* Danger button */
+.btn-danger {
+    background-color: var(--color-danger);
+}
+
+.btn-danger:hover {
+    background-color: var(--color-danger-hover);
+}
+
+/* Warning button */
+.btn-warning {
+    background-color: var(--color-warning);
+    color: var(--color-warning-text);
+}
+
+.btn-warning:hover {
+    background-color: var(--color-warning-hover);
+}
+
+/* Info button */
+.btn-info {
+    background-color: var(--color-info);
+}
+
+.btn-info:hover {
+    background-color: var(--color-info-hover);
+}
+
+/* Light gray button */
+.btn-light-gray {
+    background: #e9ecef;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.btn-light-gray:hover {
+    background: #dee2e6;
+    color: #212529;
+}
+
+/* ============================================================================
+   BUTTON SIZES
+   ============================================================================ */
+
+/* Small button */
+.btn-small {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+}
+
+/* Extra small button */
+.btn-xs {
+    padding: 3px 8px;
+    font-size: 10px;
+    border-radius: var(--border-radius-sm);
+}
+
+/* Large button */
+.btn-large {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-md);
+}
+
+/* ============================================================================
+   RELEVANCE DECISION BUTTONS (Press Release Review)
+   ============================================================================ */
+
+.btn-relevant-detail {
+    background: var(--color-success);
+    color: white;
+}
+
+.btn-relevant-detail:hover {
+    background: var(--color-success-hover);
+}
+
+.btn-not-relevant-detail {
+    background: var(--color-secondary);
+    color: white;
+}
+
+.btn-not-relevant-detail:hover {
+    background: var(--color-secondary-hover);
+}
+
+.btn-undo-detail {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-warning);
+    color: #212529;
+    border: none;
+    border-radius: var(--border-radius-md);
+}
+
+.btn-undo-detail:hover {
+    background: var(--color-warning-hover);
+}
+
+/* ============================================================================
+   BUTTON GROUPS (Side-by-side buttons)
+   ============================================================================ */
+
+.btn-group {
+    display: flex;
+    gap: 0;
+}
+
+.btn-group .btn {
+    border-radius: 0;
+    border-right: var(--border-width-thin) solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-group .btn:first-child {
+    border-radius: var(--border-radius-md) 0 0 var(--border-radius-md);
+}
+
+.btn-group .btn:last-child {
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    border-right: none;
+}
+
+/* ============================================================================
+   MOBILE TOUCH-OPTIMIZED BUTTONS
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Base button styles - 48px minimum (Material Design) */
+    .btn,
+    button:not(.nav-hamburger):not(.modal-close):not(.search-clear),
+    a.btn {
+        min-height: 48px;
+        padding: var(--spacing-touch-md) 20px;
+        font-size: 15px;
+        font-weight: 500;
+        border-radius: var(--border-radius-lg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%; /* Full-width by default on mobile */
+        margin-bottom: var(--spacing-sm);
+        box-sizing: border-box;
+    }
+
+    /* Inline buttons (side-by-side) */
+    .btn-inline,
+    .action-buttons .btn {
+        width: auto;
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    /* Small buttons (still touch-friendly) */
+    .btn-small {
+        min-height: 44px;
+        padding: var(--spacing-touch-sm) var(--spacing-md);
+        font-size: 14px;
+    }
+
+    /* Button groups stack vertically on mobile */
+    .btn-group {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        width: 100%;
+    }
+
+    .btn-group .btn {
+        width: 100%;
+        border-radius: var(--border-radius-md);
+        border-right: none;
+    }
+
+    /* Action button pairs (Relevant/Not Relevant) */
+    .action-buttons,
+    .review-decision-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-sm);
+        width: 100%;
+    }
+
+    .action-buttons .btn,
+    .review-decision-buttons button {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Decision buttons specific styling */
+    .decision-button {
+        min-height: 44px;
+        padding: var(--spacing-touch-sm) var(--spacing-touch-md);
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: var(--border-radius-lg);
+    }
+
+    /* Form flex - stack on mobile */
+    .form-flex {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .form-flex .btn {
+        width: 100%;
+    }
+
+    /* Quick actions on dashboard */
+    .form-inline {
+        width: 100%;
+    }
+
+    .form-inline .btn {
+        width: 100%;
+    }
+}
+
+/* ============================================================================
+   PRESSED STATE (Active/Clicked Visual Feedback)
+   ============================================================================ */
+
+.btn:active,
+.btn.pressed {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   LOADING STATE (For async operations)
+   ============================================================================ */
+
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: button-loading-spinner 0.6s linear infinite;
+}
+
+@keyframes button-loading-spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

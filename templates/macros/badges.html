@@ -1,0 +1,46 @@
+{#
+  Badge Macros
+  Reusable badge components following DRY and SOLID principles
+#}
+
+{# Platform badge - displays IR platform with color coding #}
+{% macro platform_badge(platform, platform_labels) %}
+{% if platform %}
+    {% set label, color = platform_labels.get(platform, (platform, '#6c757d')) %}
+    <span class="platform-badge" style="background:{{ color }}; color:white; padding:2px 8px; border-radius:3px; font-size:0.82rem; font-weight:600;">
+        {{ label }}
+    </span>
+{% else %}
+    <span class="text-muted">Not set</span>
+{% endif %}
+{% endmacro %}
+
+{# Category badge - displays press release category #}
+{% macro category_badge(category, is_breaking=false) %}
+{% if category %}
+    <span class="category-badge {% if is_breaking %}breaking{% endif %}">
+        {{ category }}
+    </span>
+{% else %}
+    <span class="category-badge text-uncategorized">Uncategorized</span>
+{% endif %}
+{% endmacro %}
+
+{# Status badge - generic status indicator #}
+{% macro status_badge(status, variant='secondary') %}
+<span class="badge badge-{{ variant }}">
+    {{ status|title }}
+</span>
+{% endmacro %}
+
+{# Company ticker badge - styled ticker symbol #}
+{% macro ticker_badge(ticker) %}
+<span class="ticker">{{ ticker }}</span>
+{% endmacro %}
+
+{# Success/Error indicator #}
+{% macro indicator(has_data, success_icon='✓', fail_icon='✗') %}
+<span class="{% if has_data %}text-success{% else %}text-danger{% endif %}" style="font-size: 1.2em;">
+    {% if has_data %}{{ success_icon }}{% else %}{{ fail_icon }}{% endif %}
+</span>
+{% endmacro %}

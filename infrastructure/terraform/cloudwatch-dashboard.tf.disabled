@@ -1,0 +1,332 @@
+# ============================================================================
+# CloudWatch Dashboard - Real-Time Monitoring
+# ============================================================================
+# Comprehensive monitoring dashboard for REIT Sheet email pipeline
+#
+# SOLID Compliance:
+#   - Single Responsibility: Only defines dashboard configuration
+#   - Open/Closed: Add widgets without modifying existing ones
+#   - Data-Driven: Widget config from local variables
+#
+# Dashboard Widgets:
+#   1. Lambda Invocations (Pipeline Overview)
+#   2. Success vs Failure Rates (Per-Company Metrics)
+#   3. Scraper Performance by Type
+#   4. Lambda Duration (Performance)
+#   5. SQS Queue Depth (Backlog Monitoring)
+#   6. DLQ Messages (Critical Failures)
+#
+# View Dashboard:
+#   https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=reitsheet-monitoring
+#
+# Last Updated: 2026-03-09
+# -----------------------------------------------------------------------------
+
+resource "aws_cloudwatch_dashboard" "reitsheet" {
+  dashboard_name = "${var.project_name}-monitoring"
+
+  dashboard_body = jsonencode({
+    widgets = [
+      # -----------------------------------------------------------------------
+      # Row 1: Email Pipeline Overview - Lambda Invocations
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 0
+        y      = 0
+        properties = {
+          metrics = [
+            ["AWS/Lambda", "Invocations", { "FunctionName" = local.producer_function, stat = "Sum", label = "Producer" }],
+            ["...", { "FunctionName" = local.parser_function, stat = "Sum", label = "Parser" }],
+            ["...", { "FunctionName" = "${var.project_name}-enricher", stat = "Sum", label = "Enricher" }],
+            ["...", { "FunctionName" = local.scraper_function, stat = "Sum", label = "Scraper" }],
+            ["...", { "FunctionName" = local.playwright_scraper_function, stat = "Sum", label = "Playwright" }]
+          ]
+          period = 300
+          stat   = "Sum"
+          region = var.aws_region
+          title  = "📊 Email Pipeline - Invocations (5min)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 1 (Right): Lambda Errors
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 12
+        y      = 0
+        properties = {
+          metrics = [
+            ["AWS/Lambda", "Errors", { "FunctionName" = local.producer_function, stat = "Sum", label = "Producer" }],
+            ["...", { "FunctionName" = local.parser_function, stat = "Sum", label = "Parser" }],
+            ["...", { "FunctionName" = "${var.project_name}-enricher", stat = "Sum", label = "Enricher" }],
+            ["...", { "FunctionName" = local.scraper_function, stat = "Sum", label = "Scraper" }],
+            ["...", { "FunctionName" = local.playwright_scraper_function, stat = "Sum", label = "Playwright" }]
+          ]
+          period = 300
+          stat   = "Sum"
+          region = var.aws_region
+          title  = "🚨 Lambda Errors (5min)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 2: Per-Company Success Rates
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 0
+        y      = 6
+        properties = {
+          metrics = [
+            ["REITSheet/Companies", "OperationSuccess", { stat = "Sum", label = "Success" }],
+            [".", "OperationFailure", { stat = "Sum", label = "Failure" }]
+          ]
+          period = 3600
+          stat   = "Sum"
+          region = var.aws_region
+          title  = "✅ Success vs Failure Rate (1hr)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 2 (Right): Scraper Performance by Type
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 12
+        y      = 6
+        properties = {
+          metrics = [
+            ["REITSheet/Companies", "OperationSuccess", { "Operation" = "simple_scraping", stat = "Sum", label = "Simple Scraper" }],
+            ["...", { "Operation" = "playwright_scraping", stat = "Sum", label = "Playwright" }],
+            ["...", { "Operation" = "enrichment", stat = "Sum", label = "Enricher" }]
+          ]
+          period = 3600
+          stat   = "Sum"
+          region = var.aws_region
+          title  = "🔧 Scraper Success by Type (1hr)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 3: Lambda Duration (Performance)
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 0
+        y      = 12
+        properties = {
+          metrics = [
+            ["AWS/Lambda", "Duration", { "FunctionName" = local.parser_function, stat = "Average", label = "Parser Avg" }],
+            ["...", { "FunctionName" = local.parser_function, stat = "p99", label = "Parser p99" }],
+            ["...", { "FunctionName" = "${var.project_name}-enricher", stat = "Average", label = "Enricher Avg" }],
+            ["...", { "FunctionName" = local.scraper_function, stat = "Average", label = "Scraper Avg" }],
+            ["...", { "FunctionName" = local.playwright_scraper_function, stat = "Average", label = "Playwright Avg" }]
+          ]
+          period = 300
+          stat   = "Average"
+          region = var.aws_region
+          title  = "⏱️ Lambda Duration (ms)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 3 (Right): Operation Duration (Custom Metrics)
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 12
+        y      = 12
+        properties = {
+          metrics = [
+            ["REITSheet/Companies", "OperationDuration", { "Operation" = "parsing", stat = "Average", label = "Parsing" }],
+            ["...", { "Operation" = "enrichment", stat = "Average", label = "Enrichment" }],
+            ["...", { "Operation" = "simple_scraping", stat = "Average", label = "Simple Scraping" }],
+            ["...", { "Operation" = "playwright_scraping", stat = "Average", label = "Playwright Scraping" }]
+          ]
+          period = 3600
+          stat   = "Average"
+          region = var.aws_region
+          title  = "⏳ Operation Duration by Type (ms)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 4: SQS Queue Depth (Backlog)
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 0
+        y      = 18
+        properties = {
+          metrics = [
+            ["AWS/SQS", "ApproximateNumberOfMessagesVisible", { "QueueName" = local.parse_queue_name, stat = "Maximum", label = "Parse Queue" }],
+            ["...", { "QueueName" = "${var.project_name}-enrich-queue", stat = "Maximum", label = "Enrich Queue" }],
+            ["...", { "QueueName" = local.scrape_queue_name, stat = "Maximum", label = "Scrape Queue" }],
+            ["...", { "QueueName" = local.playwright_queue_name, stat = "Maximum", label = "Playwright Queue" }]
+          ]
+          period = 300
+          stat   = "Maximum"
+          region = var.aws_region
+          title  = "📬 Queue Depth (Messages Waiting)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 4 (Right): CRITICAL - Dead Letter Queue Messages
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 12
+        y      = 18
+        properties = {
+          metrics = [
+            ["AWS/SQS", "ApproximateNumberOfMessagesVisible", { "QueueName" = local.parse_dlq_name, stat = "Maximum", label = "Parse DLQ" }],
+            ["...", { "QueueName" = "${var.project_name}-enrich-dlq", stat = "Maximum", label = "Enrich DLQ" }],
+            ["...", { "QueueName" = local.scrape_dlq_name, stat = "Maximum", label = "Scrape DLQ" }],
+            ["...", { "QueueName" = local.playwright_dlq_name, stat = "Maximum", label = "Playwright DLQ" }]
+          ]
+          period = 300
+          stat   = "Maximum"
+          region = var.aws_region
+          title  = "🚨 Dead Letter Queue Messages (CRITICAL)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+          annotations = {
+            horizontal = [
+              {
+                value = 1
+                label = "Alert Threshold"
+                color = "#d62728"
+              }
+            ]
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 5: Lambda Throttles
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 0
+        y      = 24
+        properties = {
+          metrics = [
+            ["AWS/Lambda", "Throttles", { "FunctionName" = local.producer_function, stat = "Sum", label = "Producer" }],
+            ["...", { "FunctionName" = local.parser_function, stat = "Sum", label = "Parser" }],
+            ["...", { "FunctionName" = "${var.project_name}-enricher", stat = "Sum", label = "Enricher" }],
+            ["...", { "FunctionName" = local.scraper_function, stat = "Sum", label = "Scraper" }],
+            ["...", { "FunctionName" = local.playwright_scraper_function, stat = "Sum", label = "Playwright" }]
+          ]
+          period = 300
+          stat   = "Sum"
+          region = var.aws_region
+          title  = "🔒 Lambda Throttles (5min)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      },
+
+      # -----------------------------------------------------------------------
+      # Row 5 (Right): SQS Age of Oldest Message
+      # -----------------------------------------------------------------------
+      {
+        type   = "metric"
+        width  = 12
+        height = 6
+        x      = 12
+        y      = 24
+        properties = {
+          metrics = [
+            ["AWS/SQS", "ApproximateAgeOfOldestMessage", { "QueueName" = local.parse_queue_name, stat = "Maximum", label = "Parse Queue" }],
+            ["...", { "QueueName" = "${var.project_name}-enrich-queue", stat = "Maximum", label = "Enrich Queue" }],
+            ["...", { "QueueName" = local.scrape_queue_name, stat = "Maximum", label = "Scrape Queue" }],
+            ["...", { "QueueName" = local.playwright_queue_name, stat = "Maximum", label = "Playwright Queue" }]
+          ]
+          period = 300
+          stat   = "Maximum"
+          region = var.aws_region
+          title  = "⏰ Age of Oldest Message (seconds)"
+          yAxis = {
+            left = {
+              min = 0
+            }
+          }
+        }
+      }
+    ]
+  })
+
+  # Note: CloudWatch dashboards do not support tags
+}
+
+# -----------------------------------------------------------------------------
+# Dashboard URL Output
+# -----------------------------------------------------------------------------
+
+output "cloudwatch_dashboard_url" {
+  value       = "https://console.aws.amazon.com/cloudwatch/home?region=${var.aws_region}#dashboards:name=${aws_cloudwatch_dashboard.reitsheet.dashboard_name}"
+  description = "CloudWatch Dashboard URL for real-time monitoring"
+}

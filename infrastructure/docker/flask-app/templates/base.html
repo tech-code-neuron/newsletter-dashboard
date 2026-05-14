@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}{{ config.site.name }}{% endblock %}</title>
+
+    <!-- CSS: Separated from HTML for better maintainability (SOLID) -->
+    <!-- Bootstrap CSS (loaded first so custom styles can override) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}?v=7">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}?v=7">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=7">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/buttons.css') }}?v=9">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/utilities.css') }}?v=7">
+    <!-- Modular responsive CSS (replaces monolithic responsive.css) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive/_index.css') }}?v=1">
+
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% if view_mode == 'desktop' %}force-desktop{% elif view_mode == 'mobile' %}force-mobile{% endif %}">
+    <nav>
+        <!-- Mobile hamburger menu (CSS-only toggle, hidden on desktop) -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+        <label for="nav-toggle" class="nav-hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <div class="nav-left">
+            <h1>{{ config.site.name }}</h1>
+            <ul>
+                {% for item in nav_items %}
+                <li>
+                    <a href="{{ url_for(item.endpoint) }}">
+                        {% if item.icon %}{{ item.icon }} {% endif %}{{ item.label }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="nav-right">
+            {% if session.get('user') %}
+                <span class="user-info">
+                    {% if session.user.picture %}
+                        <img src="{{ session.user.picture }}" alt="" class="user-avatar">
+                    {% endif %}
+                    {{ session.user.name }}
+                    <span class="user-role">({{ session.user.role }})</span>
+                </span>
+                <a href="{{ url_for('auth.logout') }}" class="logout-link">Logout</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="login-link">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <a href="{{ url_for('contact.contact') }}">Contact Us</a>
+        <span class="footer-divider">&middot;</span>
+        <span>&copy; {{ current_year }} {{ config.site.name }}</span>
+    </footer>
+
+    <!-- View Mode Toggle -->
+    <div class="view-mode-toggle">
+        {% if view_mode == 'desktop' %}
+            <a href="{{ url_for('api.set_view_mode', mode='auto') }}" class="view-mode-link">
+                Switch to Auto View
+            </a>
+        {% elif view_mode == 'mobile' %}
+            <a href="{{ url_for('api.set_view_mode', mode='auto') }}" class="view-mode-link">
+                Switch to Auto View
+            </a>
+        {% else %}
+            <span class="view-mode-link show-on-mobile">
+                <a href="{{ url_for('api.set_view_mode', mode='desktop') }}">Desktop View</a>
+            </span>
+            <span class="view-mode-link show-on-desktop">
+                <a href="{{ url_for('api.set_view_mode', mode='mobile') }}">Mobile View</a>
+            </span>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript: Separated from HTML for better maintainability (SOLID) -->
+    <!-- Page-specific JavaScript -->
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Newsletter Signup Lambda Dependencies
+#
+# boto3 is included in AWS Lambda runtime, but listed here for local testing
+
+boto3>=1.28.0

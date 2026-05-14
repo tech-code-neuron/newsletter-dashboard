@@ -1,0 +1,76 @@
+/* ============================================================================
+   TOUCH-OPTIMIZED BUTTONS
+   48px minimum touch targets per Material Design guidelines
+   ============================================================================ */
+
+@media (max-width: 767px) {
+    /* Base button touch targets */
+    .btn,
+    button:not(.nav-hamburger):not(.modal-close) {
+        min-height: var(--touch-target-min);
+        padding: var(--spacing-touch-md) var(--spacing-md);
+        font-size: var(--font-size-mobile-base);
+        border-radius: var(--border-radius-md);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-sm);
+    }
+
+    /* Small buttons - still touch friendly */
+    .btn-small,
+    .btn-xs {
+        min-height: var(--touch-target-small);
+        padding: var(--spacing-touch-sm) var(--spacing-md);
+        font-size: var(--font-size-mobile-sm);
+    }
+
+    /* Full-width buttons on mobile */
+    .btn-block-mobile {
+        width: 100%;
+        display: flex;
+    }
+
+    /* Button groups stack on mobile */
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+        gap: var(--spacing-sm);
+    }
+
+    .btn-group .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Action buttons in lists */
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+
+    .action-buttons .btn {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    /* Generate actions in publisher */
+    .generate-actions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md);
+    }
+
+    .generate-actions .btn {
+        width: 100%;
+    }
+
+    .generate-actions .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) 0;
+    }
+}

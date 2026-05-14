@@ -1,0 +1,73 @@
+{
+  "fonts": {
+    "body": "Georgia, \"Times New Roman\", Times, serif",
+    "ui": "Arial, Helvetica, sans-serif"
+  },
+  "colors": {
+    "primary": "#0066cc",
+    "primary_hover": "#0052a3",
+    "background": "#f9f9f9",
+    "card_bg": "#fafafa",
+    "bg_white": "#ffffff",
+    "border": "#ddd",
+    "border_footer": "#cccccc",
+    "text": "#1a1a1a",
+    "text_secondary": "#666",
+    "text_muted": "#999",
+    "success": "#059669",
+    "error": "#dc2626"
+  },
+  "signup": {
+    "headline": "Get the daily brief before the open",
+    "description": "Daily real estate press releases, offerings, partnerships, and corporate news — all in one place.",
+    "popup_desc": "Delivered before the open.<br>Daily real estate press releases, financings, and corporate news.",
+    "footer": "Free. Unsubscribe anytime.",
+    "api_url": "https://YOUR_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/prod/subscribe"
+  },
+  "footer": {
+    "tagline": "Never miss a REIT release",
+    "contact_email": "hello@reitsheet.co",
+    "privacy_url": "https://reitsheet.co/privacy.html",
+    "copyright": "Copyright 2026 The REIT Sheet. All rights reserved."
+  },
+  "site": {
+    "name": "THE REIT SHEET",
+    "url": "https://reitsheet.co",
+    "logo_url": "https://reitsheet.co/logo.png"
+  },
+  "newsletter": {
+    "logo": {
+      "fontFamily": "Arial, Helvetica, sans-serif",
+      "fontSize": "24px",
+      "fontWeight": "bold",
+      "color": "#0066cc",
+      "letterSpacing": "2px",
+      "textTransform": "uppercase"
+    },
+    "date": {
+      "fontFamily": "Georgia, \"Times New Roman\", Times, serif",
+      "fontSize": "14px",
+      "fontStyle": "italic",
+      "color": "#666"
+    },
+    "company": {
+      "fontFamily": "Arial, Helvetica, sans-serif",
+      "fontSize": "9px",
+      "fontWeight": "bold",
+      "color": "#0066cc",
+      "textTransform": "uppercase",
+      "letterSpacing": "0.5px"
+    },
+    "title": {
+      "fontFamily": "Georgia, \"Times New Roman\", Times, serif",
+      "fontSize": "16px",
+      "color": "#333",
+      "lineHeight": "1.45"
+    },
+    "source": {
+      "fontFamily": "Georgia, \"Times New Roman\", Times, serif",
+      "fontSize": "11px",
+      "color": "#999"
+    }
+  }
+}

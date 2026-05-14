@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}SEC Prospectus Filings - REIT Sheet{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/disclosures.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="disclosures-container">
+    <!-- Header -->
+    <div class="disclosures-header">
+        <h2>Public Offerings</h2>
+    </div>
+
+    <!-- Days Filter -->
+    <div class="disclosures-filters">
+        <form method="GET" class="filter-form">
+            <div class="filter-group">
+                <label for="days-select">Days:</label>
+                <select name="days" id="days-select" onchange="this.form.submit()">
+                    <option value="30" {% if days == 30 %}selected{% endif %}>30 days</option>
+                    <option value="60" {% if days == 60 %}selected{% endif %}>60 days</option>
+                    <option value="90" {% if days == 90 %}selected{% endif %}>90 days</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Disclosures List -->
+    <div class="disclosures-list">
+        {% if disclosures %}
+        <div class="table-container">
+        <table class="disclosures-table">
+            <thead>
+                <tr>
+                    <th class="col-ticker">Ticker</th>
+                    <th class="col-date">Date</th>
+                    <th class="col-form">Form</th>
+                    <th class="col-type">Type</th>
+                    <th class="col-amount">Amount</th>
+                    <th class="col-title">Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in disclosures %}
+                <tr class="disclosure-row">
+                    <td class="col-ticker">
+                        <span class="ticker-badge">{{ d.ticker }}</span>
+                    </td>
+                    <td class="col-date">
+                        {{ d.filing_date_display }}
+                    </td>
+                    <td class="col-form">
+                        <span class="form-badge">{{ d.form_type or '424B5' }}</span>
+                    </td>
+                    <td class="col-type">
+                        {{ d.security_type or 'Securities' }}
+                    </td>
+                    <td class="col-amount">
+                        {{ d.principal_display or '-' }}
+                    </td>
+                    <td class="col-title">
+                        <a href="{{ d.get_detail_url() }}" class="disclosure-title">
+                            {{ d.display_title }}
+                        </a>
+                        {% if d.issuer_type == 'op' %}
+                        <span class="op-badge" title="Operating Partnership filing">OP</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <!-- Mobile Card List -->
+        <div class="mobile-card-list">
+            {% for d in disclosures %}
+            <div class="mobile-card">
+                <div class="mobile-card-header">
+                    <span class="mobile-card-ticker">{{ d.ticker }}</span>
+                    <div class="mobile-card-meta">
+                        <span>{{ d.filing_date_display }}</span>
+                        <span class="form-badge">{{ d.form_type or '424B5' }}</span>
+                    </div>
+                </div>
+                <a href="{{ d.get_detail_url() }}" class="mobile-card-body" style="display: block; text-decoration: none; color: inherit;">
+                    <div class="mobile-card-title">{{ d.display_title }}</div>
+                    {% if d.principal_display and d.principal_display != '-' %}
+                    <div class="mobile-card-preview">{{ d.security_type or 'Securities' }} - {{ d.principal_display }}</div>
+                    {% endif %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('disclosures.disclosure_list', days=days, page=page-1) }}"
+               class="btn btn-small btn-outline">&laquo; Prev</a>
+            {% endif %}
+
+            <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+
+            {% if page < total_pages %}
+            <a href="{{ url_for('disclosures.disclosure_list', days=days, page=page+1) }}"
+               class="btn btn-small btn-outline">Next &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state">
+            <p>No prospectus filings found in the last {{ days }} days.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

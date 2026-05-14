@@ -1,0 +1,163 @@
+{
+  "comment": "CSS selectors and URL patterns for press release scrapers",
+
+  "gcs": {
+    "description": "GlobeNewswire Corporate Solutions (gcs-web.com) - standard variant",
+    "cookie_button": "button[id*='accept']",
+    "link_selector": "a[href*='/static-files/']",
+    "link_url_pattern": "/static-files/"
+  },
+
+  "gcs_with_dates": {
+    "description": "GCS variant with news-release-details pattern (SLG, SUI)",
+    "cookie_button": "button[id*='accept'], button:has-text('Accept')",
+    "link_selector": "a[href*='news-release-details']",
+    "link_url_pattern": "news-release-details",
+    "time_selector": "time[datetime]",
+    "date_container_selector": "div.article-detail, div.news-detail"
+  },
+
+  "q4_detail": {
+    "description": "Q4 sites with /press-releases/detail/ pattern (10 companies)",
+    "cookie_button": "button[id*='accept'], button[class*='accept']",
+    "link_selector": "a[href*='/press-releases/detail/']",
+    "link_url_pattern": "/press-releases/detail/",
+    "time_selector": "time[datetime]",
+    "date_selector": "[class*='date']"
+  },
+
+  "investis": {
+    "description": "Investis Digital platform (O, PK)",
+    "cookie_buttons": ["button:has-text('Accept')", "button:has-text('Allow')", "#onetrust-accept-btn-handler"],
+    "link_selector": "a[href*='/press-releases/']",
+    "link_url_pattern": "/press-releases/",
+    "time_selector": "time[datetime]",
+    "date_selector": "[class*='date']",
+    "min_title_length": 10
+  },
+
+  "welltower": {
+    "description": "Welltower custom platform (WELL)",
+    "cookie_button": "button[id*='accept']",
+    "link_selector": "a[href*='/press-release-details?id=']",
+    "link_url_pattern": "/press-release-details?id="
+  },
+
+  "apollo_accordion": {
+    "description": "Apollo accordion-style releases (ARI)",
+    "cookie_button": "button:has-text('Accept')",
+    "accordion_button": "button:has-text('Press Releases'), a:has-text('Press Releases')",
+    "link_selector": "a[href*='/insights-news/pressreleases/'], a[href*='/pressrelease']",
+    "link_url_pattern": "/insights-news/pressreleases/",
+    "min_title_length": 10
+  },
+
+  "q4_drupal": {
+    "description": "Q4 Drupal platform - HTML and JavaScript variants (24 companies)",
+    "html": {
+      "link_pattern": "news-release-details",
+      "min_title_length": 10
+    },
+    "js": {
+      "cookie_selectors": [
+        "button[id*='accept']",
+        "button[class*='accept']",
+        "a[id*='accept']",
+        "button:has-text('Accept & Close')",
+        "button:has-text('Accept')",
+        "button:has-text('Accept All')",
+        "button:has-text('I Agree')",
+        "button:has-text('I Understand')",
+        "a:has-text('I Understand')",
+        "button:has-text('OK')",
+        "button:has-text('Agree')",
+        "button:has-text('Continue')",
+        "#onetrust-accept-btn-handler",
+        ".optanon-allow-all-button",
+        "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"
+      ],
+      "close_selectors": [
+        "button[class*='close']",
+        "button[aria-label*='close']",
+        "button[aria-label*='Close']",
+        "a[class*='close']",
+        ".modal-close",
+        ".popup-close",
+        "[data-dismiss='modal']",
+        "button:has-text('×')",
+        "button:has-text('✕')"
+      ],
+      "variants": {
+        "evergreen": {
+          "selector": ".evergreen-news-link",
+          "url_pattern": "/press-releases-details/"
+        },
+        "nir-widget": {
+          "selector": ".nir-widget--news--headline a",
+          "url_pattern": "-details/"
+        },
+        "irw": {
+          "selector": "a.irwGaLabel",
+          "url_pattern": "/press-release/2026/"
+        },
+        "module": {
+          "selector": "a.module_headline-link",
+          "min_text_length": 20
+        },
+        "wrapper": {
+          "selector": "a.wrapper-link[href*='/news/detail']",
+          "min_text_length": 20
+        }
+      }
+    }
+  },
+
+  "q4_js": {
+    "description": "Q4 JavaScript platforms with multiple variants (75 companies)",
+    "variants": {
+      "irw": {
+        "link_selector": "a.irwGaLabel[href]",
+        "min_text_length": 20
+      },
+      "module": {
+        "link_selector": "a.module_headline-link[href]",
+        "min_text_length": 20
+      },
+      "wrapper": {
+        "link_selector": "a.wrapper-link[href*='/news/detail']",
+        "min_text_length": 20
+      }
+    }
+  },
+
+  "wordpress_pdf": {
+    "description": "WordPress sites with PDF press releases (EPR, GTY)",
+    "news_item_selector": "div.news-list-item",
+    "title_selector": "strong",
+    "date_selector": "span.date",
+    "pdf_link_selector": "a.btn",
+    "date_format": "%m/%d/%Y"
+  },
+
+  "date_slug": {
+    "description": "Sites with date in URL slug pattern (WY, ACR)",
+    "link_selector": "a[href]",
+    "min_title_length": 20,
+    "date_regex": "/(\\d{4})/(\\d{2})/(\\d{2})/"
+  },
+
+  "q4_pdf": {
+    "description": "Q4 sites linking directly to PDFs (HIW)",
+    "link_selector": "a.PressRelease",
+    "date_selector": "div.PressRelease-date",
+    "date_format": "%m/%d/%Y"
+  },
+
+  "olp_pdf": {
+    "description": "OLP custom platform with PDF links (OLP)",
+    "pdf_link_selector": "a[href$='.pdf']",
+    "container_selector": "div.press-release, div.news-item",
+    "date_selector": "span.date, div.date",
+    "min_title_length": 10
+  }
+}

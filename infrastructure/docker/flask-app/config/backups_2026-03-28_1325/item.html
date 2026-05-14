@@ -1,0 +1,33 @@
+{#
+Single Press Release Item (Web)
+
+Variables expected:
+- item: Press release or disclosure object with:
+  - company_name: Company name
+  - ticker: Stock ticker
+  - title: Display title
+  - url: Link to press release
+- is_headline: boolean - use headline styling
+- is_last: boolean - no bottom border if true
+- config: from get_public_config()
+#}
+{% set company_name = item.company_name or (item.company.name if item.company else '') %}
+{% set ticker = item.ticker or (item.company.ticker if item.company else 'UNK') %}
+{% set title = item.display_title or item.newsletter_title or item.title %}
+{% set url = item.url or '#' %}
+
+{% if is_headline %}
+{# Headline item - premium styling #}
+<div class="newsletter-item headline-item{% if is_last %} item-last{% endif %}">
+    <div class="item-company">
+        <a href="{{ url }}" target="_blank">{{ company_name }} ({{ ticker }})</a>
+    </div>
+    <a href="{{ url }}" class="item-title headline-title" target="_blank">{{ title }}</a>
+</div>
+{% else %}
+{# Secondary item - condensed styling (TICKER: Title) #}
+<div class="newsletter-item secondary-item{% if is_last %} item-last{% endif %}">
+    <a href="{{ url }}" class="item-ticker" target="_blank">{{ ticker }}</a>:
+    <a href="{{ url }}" class="item-title-inline" target="_blank">{{ title }}</a>
+</div>
+{% endif %}

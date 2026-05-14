@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% from 'macros/badges.html' import platform_badge, category_badge %}
+
+{% block title %}{{ company.ticker }} - Press Release Pipeline{% endblock %}
+
+{% block content %}
+<h2>{{ company.name }}</h2>
+
+<div class="card">
+    <div class="grid-2col">
+        <strong>Ticker:</strong>
+        <div><span class="ticker">{{ company.ticker }}</span></div>
+        
+        <strong>Sector:</strong>
+        <div>{{ company.sector or 'Not set' }}</div>
+        
+        <strong>Status:</strong>
+        <div>{{ 'Active' if company.active else 'Inactive' }}</div>
+        
+        <strong>IR Platform:</strong>
+        <div>
+            {{ platform_badge(company.ir_platform, platform_labels) }}
+        </div>
+
+        <strong>Company RSS:</strong>
+        <div>
+            {% if company.company_rss_feed_url %}
+                <a href="{{ company.company_rss_feed_url }}" target="_blank">{{ company.company_rss_feed_url }}</a>
+            {% else %}
+                <span class="text-muted">Not set</span>
+            {% endif %}
+        </div>
+
+        <strong>Company RSS Status:</strong>
+        <div>
+            <div class="btn-group" role="group" style="display: inline-flex; gap: 0.5rem;">
+                <button type="button"
+                        class="btn btn-small rss-status-btn {% if not company.ignore_company_rss %}btn-primary{% endif %}"
+                        data-ticker="{{ company.ticker }}"
+                        data-status="active"
+                        {% if not company.company_rss_feed_url %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                    ✅ Active
+                </button>
+                <button type="button"
+                        class="btn btn-small rss-status-btn {% if company.ignore_company_rss %}btn-primary{% endif %}"
+                        data-ticker="{{ company.ticker }}"
+                        data-status="ignored"
+                        {% if not company.company_rss_feed_url %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                    🚫 Ignored
+                </button>
+            </div>
+        </div>
+
+        <strong>Wire Service RSS:</strong>
+        <div>
+            {% if company.rss_feed_url %}
+                <a href="{{ company.rss_feed_url }}" target="_blank">{{ company.rss_feed_url }}</a>
+            {% else %}
+                <span class="text-muted">Not set</span>
+            {% endif %}
+        </div>
+
+        <strong>IR URL:</strong>
+        <div>
+            {% if company.ir_url %}
+                <a href="{{ company.ir_url }}" target="_blank">{{ company.ir_url }}</a>
+            {% else %}
+                <span class="text-muted">Not set</span>
+            {% endif %}
+        </div>
+
+        <strong>Press Release URL:</strong>
+        <div>
+            {% if company.press_release_url %}
+                <a href="{{ company.press_release_url }}" target="_blank">{{ company.press_release_url }}</a>
+            {% else %}
+                <span class="text-muted">Not set (using IR URL)</span>
+            {% endif %}
+        </div>
+        
+        <strong>Total Releases:</strong>
+        <div>{{ releases|length }}</div>
+    </div>
+
+    <div class="mb-lg">
+        <a href="{{ url_for('companies.edit_company', ticker=company.ticker) }}" class="btn">Edit Company</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Recent Press Releases ({{ releases|length }})</h3>
+
+    {% if releases %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for release in releases %}
+                <tr class="clickable-row" data-href="{{ release.get_detail_url() or url_for('press_releases.edit_press_release', release_id=release.id) }}">
+                    <td>
+                        {{ release.title }}
+                        {% if release.summary %}
+                            <br><small class="text-muted">{{ release.summary[:150] }}{% if release.summary|length > 150 %}...{% endif %}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ category_badge(release.category, release.is_breaking) }}
+                    </td>
+                    <td>{{ release.published_date.strftime('%b %d, %Y') }}</td>
+                    <td>
+                        <a href="{{ release.url }}" class="btn btn-small" target="_blank" onclick="event.stopPropagation()">Source</a>
+                        <a href="{{ release.get_detail_url() or url_for('press_releases.edit_press_release', release_id=release.id) }}" class="btn btn-small btn-secondary" onclick="event.stopPropagation()">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-muted">No press releases yet for this company. Try running the scraper!</p>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/pages/company-detail.js') }}"></script>
+{% endblock %}

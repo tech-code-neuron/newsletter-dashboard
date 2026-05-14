@@ -1,0 +1,205 @@
+{#
+  Modal Component Macros
+  Reusable modal dialog components.
+
+  SOLID Principle: Single Responsibility - one macro per modal pattern.
+  SOLID Principle: DRY - eliminates duplicate modal markup across templates.
+
+  Usage:
+    {% from 'macros/modals.html' import modal, modal_actions %}
+
+    {% call modal('my-modal', 'Modal Title', size='small') %}
+      <p>Modal content goes here</p>
+      {% call modal_actions() %}
+        <button class="btn btn-primary">Save</button>
+        <button class="btn btn-secondary">Cancel</button>
+      {% endcall %}
+    {% endcall %}
+#}
+
+
+{# =============================================================================
+   MODAL
+   Base modal component with overlay, header, and body
+   ============================================================================= #}
+
+{% macro modal(id, title, size='large', show_close=true, extra_class='') %}
+{#
+  Args:
+    id: Unique modal identifier (used for overlay, window, close button IDs)
+    title: Modal header title
+    size: 'small', 'large', or 'fullscreen'
+    show_close: If true, shows X close button in header
+    extra_class: Additional CSS classes for modal window
+#}
+<div class="modal-overlay" id="{{ id }}-overlay"></div>
+<div class="modal-window{% if size == 'small' %} modal-small{% elif size == 'fullscreen' %} modal-fullscreen{% endif %} {{ extra_class }}" id="{{ id }}">
+    <div class="modal-header">
+        <h3>{{ title }}</h3>
+        {% if show_close %}
+        <button type="button" class="modal-close" id="{{ id }}-close" aria-label="Close">&times;</button>
+        {% endif %}
+    </div>
+    <div class="modal-body">
+        {{ caller() }}
+    </div>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   MODAL ACTIONS
+   Footer section for modal buttons
+   ============================================================================= #}
+
+{% macro modal_actions(align='right') %}
+{#
+  Args:
+    align: 'left', 'center', or 'right' (default)
+#}
+<div class="modal-actions modal-actions-{{ align }}">
+    {{ caller() }}
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   CONFIRM MODAL
+   Pre-built confirmation dialog
+   ============================================================================= #}
+
+{% macro confirm_modal(id, title, message, confirm_text='Confirm', cancel_text='Cancel', confirm_class='btn-primary', is_destructive=false) %}
+{#
+  Args:
+    id: Unique modal identifier
+    title: Modal title
+    message: Confirmation message
+    confirm_text: Text for confirm button
+    cancel_text: Text for cancel button
+    confirm_class: CSS class for confirm button
+    is_destructive: If true, uses danger styling
+#}
+{% call modal(id, title, size='small') %}
+    <p class="confirm-message">{{ message }}</p>
+    {% call modal_actions() %}
+        <button type="button" class="btn {{ 'btn-danger' if is_destructive else confirm_class }}" id="{{ id }}-confirm">
+            {{ confirm_text }}
+        </button>
+        <button type="button" class="btn btn-secondary" id="{{ id }}-cancel">
+            {{ cancel_text }}
+        </button>
+    {% endcall %}
+{% endcall %}
+{% endmacro %}
+
+
+{# =============================================================================
+   FORM MODAL
+   Modal with a form inside
+   ============================================================================= #}
+
+{% macro form_modal(id, title, action='', method='POST', size='large') %}
+{#
+  Args:
+    id: Unique modal identifier
+    title: Modal title
+    action: Form action URL (empty for JS handling)
+    method: Form method
+    size: Modal size
+#}
+<div class="modal-overlay" id="{{ id }}-overlay"></div>
+<div class="modal-window{% if size == 'small' %} modal-small{% endif %}" id="{{ id }}">
+    <div class="modal-header">
+        <h3>{{ title }}</h3>
+        <button type="button" class="modal-close" id="{{ id }}-close" aria-label="Close">&times;</button>
+    </div>
+    <form {% if action %}action="{{ action }}"{% endif %} method="{{ method }}" id="{{ id }}-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="modal-body">
+            {{ caller() }}
+        </div>
+    </form>
+</div>
+{% endmacro %}
+
+
+{# =============================================================================
+   TEXT INPUT MODAL
+   Quick modal for single text input (like title editing)
+   ============================================================================= #}
+
+{% macro text_input_modal(id, title, input_id, input_placeholder='', help_text='', save_text='Save', cancel_text='Cancel') %}
+{#
+  Args:
+    id: Unique modal identifier
+    title: Modal title
+    input_id: ID for the text input
+    input_placeholder: Placeholder text
+    help_text: Help text below input
+    save_text: Text for save button
+    cancel_text: Text for cancel button
+#}
+{% call modal(id, title, size='small') %}
+    {% if help_text %}
+    <p class="text-muted">{{ help_text }}</p>
+    {% endif %}
+    <input type="text" id="{{ input_id }}" placeholder="{{ input_placeholder }}" class="form-control">
+    <input type="hidden" id="{{ input_id }}-data">
+    {% call modal_actions() %}
+        <button type="button" class="btn btn-primary" id="{{ id }}-save">{{ save_text }}</button>
+        <button type="button" class="btn btn-secondary" id="{{ id }}-cancel">{{ cancel_text }}</button>
+    {% endcall %}
+{% endcall %}
+{% endmacro %}
+
+
+{# =============================================================================
+   TEXTAREA MODAL
+   Modal with a large textarea (like HTML output)
+   ============================================================================= #}
+
+{% macro textarea_modal(id, title, textarea_id, readonly=true, show_copy=true, copy_text='Copy to Clipboard') %}
+{#
+  Args:
+    id: Unique modal identifier
+    title: Modal title
+    textarea_id: ID for the textarea
+    readonly: If true, textarea is read-only
+    show_copy: If true, shows copy to clipboard button
+    copy_text: Text for copy button
+#}
+{% call modal(id, title, size='large') %}
+    <p class="success-message" id="{{ id }}-message"></p>
+    <textarea id="{{ textarea_id }}" {% if readonly %}readonly{% endif %} class="modal-textarea"></textarea>
+    {% call modal_actions() %}
+        {% if show_copy %}
+        <button type="button" class="btn btn-primary" id="{{ id }}-copy">{{ copy_text }}</button>
+        {% endif %}
+        <button type="button" class="btn btn-secondary" id="{{ id }}-close-btn">Close</button>
+    {% endcall %}
+{% endcall %}
+{% endmacro %}
+
+
+{# =============================================================================
+   FULLSCREEN PREVIEW MODAL
+   For mobile preview of content
+   ============================================================================= #}
+
+{% macro fullscreen_preview_modal(id, title, iframe_id) %}
+{#
+  Args:
+    id: Unique modal identifier
+    title: Modal title
+    iframe_id: ID for the preview iframe
+#}
+<div class="fullscreen-preview-modal" id="{{ id }}">
+    <div class="fullscreen-preview-header">
+        <h3>{{ title }}</h3>
+        <button type="button" class="fullscreen-close-btn" id="{{ id }}-close">&times;</button>
+    </div>
+    <div class="fullscreen-preview-body">
+        <iframe id="{{ iframe_id }}" src="about:blank"></iframe>
+    </div>
+</div>
+{% endmacro %}

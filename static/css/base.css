@@ -1,0 +1,288 @@
+/**
+ * Base Styles
+ *
+ * SOLID Principle: Base layout and typography separated from components.
+ * Uses CSS variables from variables.css for all values.
+ */
+
+/* ============================================================================
+   RESET & BASE
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    line-height: var(--line-height-base);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+/* ============================================================================
+   NAVIGATION
+   ============================================================================ */
+
+nav {
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+nav h1 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--spacing-xl);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    opacity: var(--opacity-hover);
+}
+
+nav a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+/* User Info */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+}
+
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-role {
+    opacity: 0.7;
+    font-size: 0.85em;
+}
+
+.login-link,
+.logout-link {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.login-link:hover,
+.logout-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    text-decoration: none;
+}
+
+/* ============================================================================
+   LAYOUT
+   ============================================================================ */
+
+.container {
+    max-width: var(--width-container);
+    margin: var(--spacing-xl) auto;
+    padding: 0 var(--spacing-xl);
+}
+
+/* ============================================================================
+   FLASH MESSAGES
+   ============================================================================ */
+
+.flash-messages {
+    margin-bottom: var(--spacing-md);
+}
+
+.flash {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.flash.success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border: var(--border-width-thin) solid var(--color-success-border);
+}
+
+.flash.error {
+    background-color: var(--color-danger-bg);
+    color: var(--color-danger-text);
+    border: var(--border-width-thin) solid var(--color-danger-border);
+}
+
+.flash.info {
+    background-color: var(--color-info-bg);
+    color: var(--color-info-text);
+    border: var(--border-width-thin) solid var(--color-info-border);
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+h2 {
+    color: var(--color-text-dark);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: var(--border-width-medium) solid var(--color-border-dark);
+}
+
+/* ============================================================================
+   TABLES
+   ============================================================================ */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--spacing-md);
+}
+
+th {
+    background-color: var(--color-bg-hover);
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: var(--font-weight-semibold);
+    border-bottom: var(--border-width-medium) solid var(--color-border);
+    white-space: nowrap;
+}
+
+td {
+    padding: 0.75rem;
+    border-bottom: var(--border-width-thin) solid var(--color-border);
+    vertical-align: top;
+}
+
+tr:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.clickable-row {
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+}
+
+.clickable-row:hover {
+    background-color: var(--color-bg-hover-alt);
+}
+
+/* ============================================================================
+   FORMS
+   ============================================================================ */
+
+form {
+    max-width: 100%;
+}
+
+form.form-narrow {
+    max-width: var(--width-form-narrow);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+input[type="text"],
+input[type="url"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: var(--border-width-thin) solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-base);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+input[type="checkbox"] {
+    margin-right: var(--spacing-sm);
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--color-text-light);
+}
+
+.text-small {
+    font-size: var(--font-size-sm);
+}
+
+.link-clean {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-clean:hover {
+    text-decoration: none;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.grid-2col {
+    display: grid;
+    grid-template-columns: var(--width-3xl) 1fr;
+    gap: var(--spacing-sm) var(--spacing-md);
+}
+
+.no-border-bottom {
+    border-bottom: none;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-1 {
+    margin-bottom: var(--spacing-md);
+}

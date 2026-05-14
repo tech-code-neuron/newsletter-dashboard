@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% from 'macros/forms.html' import company_form %}
+
+{% block title %}Edit {{ company.ticker }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Edit Company: {{ company.ticker }}</h2>
+
+            {{ company_form(company, sectors, platform_options, submit_text='Save Changes', is_edit=true) }}
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Company Info</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Ticker:</strong> {{ company.ticker }}</p>
+                    <p><strong>Sector:</strong> {{ company.sector or 'Not set' }}</p>
+                    <p><strong>Active:</strong> {{ 'Yes' if company.active else 'No' }}</p>
+                    <hr>
+                    <p class="small text-muted">
+                        <strong>Created:</strong> {{ company.created_at.strftime('%Y-%m-%d') }}<br>
+                        <strong>Updated:</strong> {{ company.updated_at.strftime('%Y-%m-%d') }}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Tips</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Finding Newswire ID:</h6>
+                    <ol class="small">
+                        <li>Visit the company's IR page</li>
+                        <li>Click on any recent press release</li>
+                        <li>Look at the URL for the organization ID</li>
+                        <li>Example URL: <code>/3231625/34254/en/</code></li>
+                        <li>The ID is <code>34254</code></li>
+                    </ol>
+                    
+                    <h6 class="mt-3">GlobeNewswire Test:</h6>
+                    <p class="small">Search: <code>https://www.globenewswire.com/en/search/organization/[Company Name]</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function toggleCustomProvider() {
+    const select = document.getElementById('newswire_provider');
+    const customDiv = document.getElementById('custom_provider_div');
+
+    if (select.value === 'Other') {
+        customDiv.style.display = 'block';
+    } else {
+        customDiv.style.display = 'none';
+    }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCustomProvider();
+});
+</script>
+{% endblock %}

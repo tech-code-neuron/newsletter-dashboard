@@ -1,0 +1,182 @@
+/**
+ * Review Page Styles
+ *
+ * SOLID Principle: Page-specific styles separated from global styles.
+ * Uses CSS variables for all values.
+ */
+
+/* ============================================================================
+   EMAIL ROW STATES
+   ============================================================================ */
+
+.email-row {
+    position: relative;
+    transition: background-color var(--transition-slow);
+}
+
+.email-row.processing {
+    background-color: var(--color-warning-bg);
+    opacity: var(--opacity-muted);
+}
+
+.email-row.success {
+    background-color: var(--color-success-bg);
+}
+
+.email-row.deleted {
+    background-color: var(--color-danger-bg);
+    text-decoration: line-through;
+    opacity: var(--opacity-disabled);
+}
+
+/* ============================================================================
+   SCREENSHOT PREVIEW ON HOVER
+   ============================================================================ */
+
+.screenshot-preview {
+    display: none;
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: var(--z-popover);
+    box-shadow: var(--shadow-lg);
+    border: var(--border-width-medium) solid var(--color-primary);
+    border-radius: var(--border-radius-md);
+    max-width: var(--width-screenshot-preview);
+    max-height: var(--height-screenshot-preview);
+    background: var(--color-bg-white);
+    pointer-events: none;
+    overflow: auto;
+}
+
+.screenshot-preview img {
+    display: block;
+    width: var(--width-screenshot-preview);
+    height: auto;
+    max-width: 100%;
+    border-radius: 2px;
+}
+
+.email-row:hover .screenshot-preview {
+    display: block;
+}
+
+/* ============================================================================
+   SCAN PROGRESS
+   ============================================================================ */
+
+#scan-progress {
+    margin-bottom: var(--spacing-lg);
+}
+
+.progress-bar-container {
+    background-color: var(--color-bg-hover);
+    border-radius: var(--border-radius-md);
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-bar {
+    background-color: var(--color-primary);
+    height: 100%;
+    transition: width var(--transition-slow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+}
+
+.progress-text {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+/* ============================================================================
+   CLICKABLE EMAIL ROWS
+   ============================================================================ */
+
+.clickable-email-row {
+    cursor: pointer;
+}
+
+.clickable-email-row:hover td:not(:last-child) {
+    background-color: var(--color-bg-hover-alt);
+}
+
+/* ============================================================================
+   MODAL - Full email view with zoom
+   ============================================================================ */
+
+.modal-body {
+    background: var(--color-bg);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    box-shadow: var(--shadow-sm);
+    background: var(--color-bg-white);
+    cursor: zoom-in;
+}
+
+.modal-body img.zoomed {
+    cursor: zoom-out;
+    max-width: none;
+    width: auto;
+}
+
+/* ============================================================================
+   BUTTON GROUP - Moved to components/buttons.css
+   ============================================================================ */
+
+/* ============================================================================
+   PROGRESS CONTAINER
+   ============================================================================ */
+
+.progress-stats {
+    margin-top: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.progress-stats strong {
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================================
+   PRESS RELEASE REVIEW - DECISION BUTTONS
+   ============================================================================ */
+
+/* Ensure buttons in decision cells are clickable (override row click) */
+.review-decision-buttons {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.review-decision-buttons form {
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+}
+
+.review-decision-buttons button {
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+    cursor: pointer !important;
+}
+
+/* Prevent row click on decision cell */
+.pr-row .review-decision-buttons {
+    cursor: default;
+}

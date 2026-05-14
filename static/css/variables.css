@@ -1,0 +1,202 @@
+/**
+ * Design Tokens - CSS Variables
+ *
+ * SOLID Principle: Single source of truth for all design values.
+ * Change theme by modifying these variables, not individual styles.
+ */
+
+:root {
+    /* ========================================================================
+       COLORS - Brand & UI
+       ======================================================================== */
+
+    /* Primary brand color */
+    --color-primary: #0066cc;
+    --color-primary-hover: #0052a3;
+    --color-primary-light: #e8f0fe;
+
+    /* Semantic colors */
+    --color-success: #28a745;
+    --color-success-hover: #218838;
+    --color-success-bg: #d4edda;
+    --color-success-border: #c3e6cb;
+    --color-success-text: #155724;
+
+    --color-danger: #dc3545;
+    --color-danger-hover: #c82333;
+    --color-danger-bg: #f8d7da;
+    --color-danger-border: #f5c6cb;
+    --color-danger-text: #721c24;
+
+    --color-warning: #ffc107;
+    --color-warning-hover: #e0a800;
+    --color-warning-bg: #fff3cd;
+    --color-warning-border: #ffeaa7;
+    --color-warning-text: #856404;
+
+    --color-info: #17a2b8;
+    --color-info-hover: #138496;
+    --color-info-bg: #d1ecf1;
+    --color-info-border: #bee5eb;
+    --color-info-text: #0c5460;
+
+    --color-secondary: #6c757d;
+    --color-secondary-hover: #545b62;
+
+    /* Breaking news indicator */
+    --color-breaking: #ff6b6b;
+
+    /* Text colors */
+    --color-text: #333;
+    --color-text-dark: #1a1a1a;
+    --color-text-muted: #666;
+    --color-text-light: #999;
+
+    /* Background colors */
+    --color-bg: #f5f5f5;
+    --color-bg-white: #ffffff;
+    --color-bg-card: #ffffff;
+    --color-bg-hover: #f8f9fa;
+    --color-bg-hover-alt: #f0f8ff;
+
+    /* Border colors */
+    --color-border: #dee2e6;
+    --color-border-light: #ced4da;
+    --color-border-dark: #0066cc;
+
+    /* ========================================================================
+       SPACING - Consistent rhythm
+       ======================================================================== */
+
+    --spacing-xs: 0.25rem;  /* 4px */
+    --spacing-sm: 0.5rem;   /* 8px */
+    --spacing-md: 1rem;     /* 16px */
+    --spacing-lg: 1.5rem;   /* 24px */
+    --spacing-xl: 2rem;     /* 32px */
+    --spacing-2xl: 3rem;    /* 48px */
+
+    /* Mobile spacing (tighter for smaller screens) */
+    --spacing-mobile-sm: 0.5rem;   /* 8px */
+    --spacing-mobile-md: 1rem;     /* 16px */
+    --spacing-mobile-lg: 1.5rem;   /* 24px */
+
+    /* Touch targets (Apple HIG / Material Design recommendations) */
+    --touch-target-min: 44px;      /* Minimum touch target size */
+    --touch-target-small: 40px;    /* Small touch targets */
+    --spacing-touch-sm: 10px;      /* Padding for small touch targets */
+    --spacing-touch-md: 12px;      /* Padding for regular touch targets */
+
+    /* ========================================================================
+       SIZING - Dimensions
+       ======================================================================== */
+
+    /* Column widths (for tables) */
+    --width-xs: 40px;
+    --width-sm: 70px;
+    --width-md: 80px;
+    --width-lg: 90px;
+    --width-xl: 120px;
+    --width-2xl: 130px;
+    --width-3xl: 150px;
+
+    /* Container widths */
+    --width-container: 1200px;
+    --width-form-narrow: 600px;
+    --width-screenshot-preview: 600px;
+    --width-modal: 1000px;
+
+    /* Heights */
+    --height-modal: 90vh;
+    --height-screenshot-preview: 80vh;
+
+    /* ========================================================================
+       TYPOGRAPHY - Font sizing
+       ======================================================================== */
+
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.85rem;    /* 13.6px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-md: 1.125rem;   /* 18px */
+    --font-size-lg: 1.5rem;     /* 24px */
+    --font-size-xl: 2rem;       /* 32px */
+    --font-size-2xl: 2.5rem;    /* 40px */
+
+    /* Mobile typography (optimized for smaller screens) */
+    --font-size-mobile-xs: 0.75rem;   /* 12px */
+    --font-size-mobile-sm: 0.8125rem; /* 13px */
+    --font-size-mobile-base: 0.875rem; /* 14px */
+    --font-size-mobile-md: 1rem;      /* 16px */
+    --font-size-mobile-lg: 1.25rem;   /* 20px */
+    --font-size-mobile-xl: 1.75rem;   /* 28px */
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-base: 1.6;
+
+    /* Font families */
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-family-mono: monospace;
+
+    /* ========================================================================
+       BORDERS - Radius and widths
+       ======================================================================== */
+
+    --border-radius-sm: 3px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
+    --border-radius-xl: 12px;
+    --border-radius-circle: 50%;
+
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
+
+    /* ========================================================================
+       SHADOWS - Depth
+       ======================================================================== */
+
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 4px 40px rgba(0, 0, 0, 0.5);
+
+    /* ========================================================================
+       Z-INDEX - Layering
+       ======================================================================== */
+
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 1000;
+    --z-modal: 2000;
+    --z-popover: 3000;
+    --z-tooltip: 4000;
+
+    /* ========================================================================
+       TRANSITIONS - Animation timing
+       ======================================================================== */
+
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+
+    /* ========================================================================
+       OPACITY - Transparency levels
+       ======================================================================== */
+
+    --opacity-disabled: 0.5;
+    --opacity-muted: 0.7;
+    --opacity-hover: 0.9;
+    --opacity-faint: 0.3;
+
+    /* ========================================================================
+       RESPONSIVE BREAKPOINTS - Mobile-first approach
+       ======================================================================== */
+
+    --breakpoint-tablet: 768px;      /* Tablet and up */
+    --breakpoint-desktop: 1024px;    /* Desktop and up */
+    --breakpoint-large: 1440px;      /* Large desktop and up */
+}

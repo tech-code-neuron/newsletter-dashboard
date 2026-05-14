@@ -1,0 +1,831 @@
+/**
+ * Public Pages - Shared Styles
+ *
+ * Design System for all public-facing pages (check-email, subscribed, etc.)
+ *
+ * CSS Variables are imported from variables.css (generated from design-tokens.json).
+ * DO NOT define :root variables here - edit config/design-tokens.json instead.
+ */
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: var(--spacing-md);
+    background: var(--color-bg);
+    font-family: var(--font-body);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   LAYOUT
+   ============================================================================ */
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.content {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.header {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.header a {
+    text-decoration: none;
+}
+
+.header img {
+    max-width: 100%;
+    width: 400px;
+    height: auto;
+    cursor: pointer;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+.page-title {
+    font-family: var(--font-body);
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--color-text);
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.body-text {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-xl) 0;
+}
+
+.body-text-sm {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-lg) 0;
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.btn-primary {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 12px 32px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+    color: white;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.footer {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-md);
+}
+
+.footer-tagline {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-secondary);
+}
+
+.footer-links {
+    margin-top: 12px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--color-text-secondary);
+}
+
+.footer-divider {
+    color: #ccc;
+    margin: 0 8px;
+}
+
+/* ============================================================================
+   CARDS (for email-style layouts)
+   ============================================================================ */
+
+.card {
+    background: var(--color-card);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: var(--spacing-xl) 40px var(--spacing-lg);
+    background: var(--color-bg);
+    text-align: center;
+}
+
+.card-body {
+    padding: 40px;
+}
+
+.card-footer {
+    padding: var(--spacing-lg) 40px;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+/* ============================================================================
+   PRIVACY PAGE SPECIFIC
+   ============================================================================ */
+
+.page-subtitle {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-xl) 0;
+}
+
+.content-card {
+    background: var(--color-card);
+    padding: var(--spacing-xl) 40px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0 0 12px 0;
+}
+
+.section-title:not(:first-child) {
+    margin-top: var(--spacing-lg);
+}
+
+.section-text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-text);
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+}
+
+.section-list {
+    padding-left: var(--spacing-lg);
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+}
+
+.section-list li {
+    margin-bottom: 6px;
+}
+
+.contact-box {
+    background: #fafafa;
+    padding: var(--spacing-md);
+    border-radius: 6px;
+    margin-top: var(--spacing-lg);
+}
+
+.contact-box .section-title {
+    margin-top: 0;
+}
+
+.contact-box p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   PUBLIC PAGES (verify, unsubscribe, etc.)
+   Flask templates use .public-* classes for consistency
+   ============================================================================ */
+
+.public-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.public-container {
+    max-width: 500px;
+    width: 100%;
+    padding: var(--spacing-md);
+}
+
+.public-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.public-header img {
+    max-width: 280px;
+    height: auto;
+}
+
+.public-content {
+    text-align: center;
+    background: var(--color-card);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: var(--spacing-lg);
+}
+
+.public-title {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: normal;
+    color: var(--color-text);
+    margin: var(--spacing-md) 0;
+}
+
+.public-text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.public-text-sm {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--spacing-lg) 0;
+}
+
+.public-btn {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 12px 32px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: var(--spacing-md);
+}
+
+.public-btn:hover {
+    background: var(--color-primary-hover);
+    color: white;
+}
+
+.public-info-box {
+    background: #f8f9fa;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    text-align: left;
+}
+
+.public-info-box h3 {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--color-text);
+}
+
+.public-info-box ul {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.public-contact-box {
+    background: #f8f9fa;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.public-contact-box p {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+}
+
+.public-contact-box a {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Status Icons */
+.status-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.status-icon-success {
+    color: #28a745;
+}
+
+.status-icon-error {
+    color: #dc3545;
+}
+
+/* Public Footer */
+.public-footer {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+}
+
+.public-footer-tagline {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.public-footer-links {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.public-footer-links a {
+    color: var(--color-text-muted);
+}
+
+.public-footer-divider {
+    color: #ccc;
+    margin: 0 var(--spacing-sm);
+}
+
+.public-footer-copyright {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+/* ============================================================================
+   SIGNUP POPUP (used on privacy page)
+   ============================================================================ */
+
+.signup-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.signup-toggle {
+    display: none;
+}
+
+.signup-trigger {
+    color: var(--color-primary);
+    cursor: pointer;
+    border-bottom: 1px dashed var(--color-primary);
+}
+
+.signup-popup {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: var(--spacing-md) 20px;
+    width: 280px;
+    display: none;
+    z-index: 100;
+}
+
+.signup-popup::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--color-border);
+}
+
+.signup-popup::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid var(--color-card);
+}
+
+.signup-toggle:checked ~ .signup-popup {
+    display: block;
+}
+
+.signup-close-btn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 20px;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.signup-close-btn:hover {
+    color: var(--color-text);
+}
+
+.popup-form input[name="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    border: 1px solid var(--color-border);
+    box-sizing: border-box;
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+}
+
+.popup-form button {
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: var(--font-body);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
+
+.popup-form button:hover {
+    background: var(--color-primary-hover);
+}
+
+/* ============================================================================
+   HOMEPAGE - Navigation
+   ============================================================================ */
+
+.nav {
+    text-align: center;
+    padding: 12px 0;
+    font-family: var(--font-ui);
+    font-size: 13px;
+}
+
+.nav a {
+    color: var(--color-primary);
+    text-decoration: none;
+    margin: 0 12px;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================================
+   HOMEPAGE - Date Display
+   ============================================================================ */
+
+.date-display {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-text);
+    margin-top: 4px;
+}
+
+/* ============================================================================
+   HOMEPAGE - Section Headers
+   ============================================================================ */
+
+.section-header-primary {
+    font-family: var(--font-ui);
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 3px solid var(--color-primary);
+}
+
+.section-header-secondary {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-lg);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* ============================================================================
+   HOMEPAGE - Press Release Items
+   ============================================================================ */
+
+.release-section {
+    padding: var(--spacing-md) 0 var(--spacing-lg) 0;
+    border-bottom: 3px solid var(--color-primary);
+}
+
+.release-item {
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.release-item:last-child {
+    border-bottom: none;
+}
+
+.release-ticker {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.release-ticker:hover {
+    text-decoration: underline;
+}
+
+.release-title {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    margin-top: 5px;
+}
+
+.release-title:hover {
+    color: var(--color-primary);
+}
+
+.release-title-inline {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+}
+
+.release-title-inline:hover {
+    color: var(--color-primary);
+}
+
+.release-company {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: #0061ff;
+    text-decoration: none;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* ============================================================================
+   HOMEPAGE - Signup Box
+   ============================================================================ */
+
+.signup-box {
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    margin-top: var(--spacing-xl);
+    padding: 20px var(--spacing-lg);
+    text-align: center;
+    background: #fafafa;
+}
+
+.signup-headline {
+    font-family: var(--font-body);
+    font-size: 17px;
+    color: var(--color-text);
+    margin-bottom: 6px;
+}
+
+.signup-description {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+.signup-form {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signup-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+}
+
+.signup-button {
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    font-size: 14px;
+    font-family: var(--font-body);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
+
+.signup-button:hover {
+    background: var(--color-primary-hover);
+}
+
+.signup-footer {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin-top: 12px;
+}
+
+/* ============================================================================
+   HOMEPAGE - Content Area
+   ============================================================================ */
+
+.content-area {
+    padding: 0 var(--spacing-md);
+}
+
+/* Hidden preview text for email clients */
+.preview-text {
+    display: none;
+    max-height: 0;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   ARCHIVE PAGE - Navigation
+   ============================================================================ */
+
+.archive-nav {
+    background: #f8f9fa;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-sm);
+}
+
+.archive-nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.archive-nav .nav-link {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--color-primary);
+    text-decoration: none;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.archive-nav .nav-link:hover {
+    text-decoration: underline;
+}
+
+.archive-nav .nav-disabled {
+    color: var(--color-text-muted);
+    cursor: default;
+}
+
+.archive-nav .nav-disabled:hover {
+    text-decoration: none;
+}
+
+.archive-nav .nav-home {
+    font-weight: bold;
+}
+
+/* ============================================================================
+   ARCHIVE PAGE - Banner
+   ============================================================================ */
+
+.archive-banner {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #856404;
+    text-align: center;
+}
+
+.archive-banner a {
+    color: #856404;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.archive-banner a:hover {
+    color: #533f03;
+}
+
+/* ============================================================================
+   ARCHIVE PAGE - Bottom Navigation
+   ============================================================================ */
+
+.archive-bottom-nav {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid #e5e5e5;
+}
+
+.archive-bottom-nav .nav-link {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.archive-bottom-nav .nav-link:hover {
+    text-decoration: underline;
+}

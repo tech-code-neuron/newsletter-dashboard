@@ -1,0 +1,20 @@
+<!-- Navigation -->
+<div class="nav">
+    <a href="{{ config.site.url }}">Front Page</a> |
+    {% if yesterday_url %}
+    <a href="{{ yesterday_url }}">Yesterday's Issue</a> |
+    {% endif %}
+    <span class="signup-wrapper">
+        <input type="checkbox" id="nav-signup-toggle" class="signup-toggle">
+        <label for="nav-signup-toggle" class="signup-trigger" data-cta="signup_nav">Get This Brief Before the Open</label>
+        <div class="signup-popup">
+            <label for="nav-signup-toggle" class="signup-close-btn">&times;</label>
+            <div class="body-text-sm mb-md">Subscribe to {{ config.site.name }}</div>
+            <form action="{{ config.signup.api_url }}" method="POST" class="popup-form" novalidate>
+                <input type="email" name="email" id="nav-email" aria-label="Email address" placeholder="{{ config.signup.placeholder }}" required>
+                <button type="submit" data-cta="signup_nav">Subscribe</button>
+            </form>
+            <div class="signup-footer">{{ config.signup.footer }}</div>
+        </div>
+    </span>
+</div>

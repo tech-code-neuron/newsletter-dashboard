@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+
+{% block title %}Edit {{ company.ticker }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Edit Company: {{ company.ticker }}</h2>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <!-- Ticker Symbol -->
+                <div class="form-group">
+                    <label for="ticker">Ticker Symbol *</label>
+                    {{ form.ticker(class="form-control") }}
+                    {% if form.ticker.errors %}
+                        <div class="error-message">{{ form.ticker.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Stock ticker symbol (e.g., AMT, DLR, PLD)</small>
+                </div>
+
+                <!-- Company Name (Required) -->
+                <div class="form-group">
+                    <label for="name">{{ form.name.label }} *</label>
+                    {{ form.name(class="form-control") }}
+                    {% if form.name.errors %}
+                        <div class="error-message">{{ form.name.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Company Type (Public/Private) -->
+                <div class="form-group">
+                    <label for="is_public">{{ form.is_public.label }} *</label>
+                    {{ form.is_public(class="form-control") }}
+                    {% if form.is_public.errors %}
+                        <div class="error-message">{{ form.is_public.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Private companies won't show ticker symbol in newsletters</small>
+                </div>
+
+                <!-- Lead Sponsor (for private companies) -->
+                <div class="form-group" id="lead_sponsor_group">
+                    <label for="lead_sponsor">{{ form.lead_sponsor.label }}</label>
+                    {{ form.lead_sponsor(class="form-control sponsor-input") }}
+                    <div class="sponsor-feedback" id="lead_sponsor_feedback"></div>
+                    {% if form.lead_sponsor.errors %}
+                        <div class="error-message">{{ form.lead_sponsor.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Primary PE sponsor (for private companies)</small>
+                </div>
+
+                <!-- Second Sponsor -->
+                <div class="form-group" id="second_sponsor_group">
+                    <label for="second_sponsor">{{ form.second_sponsor.label }}</label>
+                    {{ form.second_sponsor(class="form-control sponsor-input") }}
+                    <div class="sponsor-feedback" id="second_sponsor_feedback"></div>
+                    {% if form.second_sponsor.errors %}
+                        <div class="error-message">{{ form.second_sponsor.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Secondary sponsor (for joint ventures)</small>
+                </div>
+
+                <!-- Sponsor datalist for autocomplete -->
+                <datalist id="sponsor-datalist">
+                    {% for sponsor in sponsors %}
+                    <option value="{{ sponsor }}">
+                    {% endfor %}
+                </datalist>
+
+                <!-- Sector -->
+                <div class="form-group">
+                    <label for="sector">{{ form.sector.label }}</label>
+                    {{ form.sector(class="form-control") }}
+                    {% if form.sector.errors %}
+                        <div class="error-message">{{ form.sector.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- IR URL -->
+                <div class="form-group">
+                    <label for="ir_url">{{ form.ir_url.label }}</label>
+                    {{ form.ir_url(class="form-control") }}
+                    {% if form.ir_url.errors %}
+                        <div class="error-message">{{ form.error_message.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Main IR website (e.g., https://investors.company.com)</small>
+                </div>
+
+                <!-- Press Release URL -->
+                <div class="form-group">
+                    <label for="press_release_url">{{ form.press_release_url.label }}</label>
+                    {{ form.press_release_url(class="form-control") }}
+                    {% if form.press_release_url.errors %}
+                        <div class="error-message">{{ form.press_release_url.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Specific press release page if different from IR URL</small>
+                </div>
+
+                <!-- Company RSS -->
+                <div class="form-group">
+                    <label for="company_rss_feed_url">{{ form.company_rss_feed_url.label }}</label>
+                    {{ form.company_rss_feed_url(class="form-control") }}
+                    {% if form.company_rss_feed_url.errors %}
+                        <div class="error-message">{{ form.company_rss_feed_url.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Company's own RSS/Atom feed (from their IR website)</small>
+                </div>
+
+                <!-- Wire Service RSS -->
+                <div class="form-group">
+                    <label for="rss_feed_url">{{ form.rss_feed_url.label }}</label>
+                    {{ form.rss_feed_url(class="form-control") }}
+                    {% if form.rss_feed_url.errors %}
+                        <div class="error-message">{{ form.rss_feed_url.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Wire service RSS feed (GlobeNewswire, PR Newswire, etc.)</small>
+                </div>
+
+                <!-- IR Platform -->
+                <div class="form-group">
+                    <label for="ir_platform">{{ form.ir_platform.label }}</label>
+                    {{ form.ir_platform(class="form-control") }}
+                    {% if form.ir_platform.errors %}
+                        <div class="error-message">{{ form.ir_platform.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Which scraper method to use for this company</small>
+                </div>
+
+                <!-- Scraper Variant -->
+                <div class="form-group">
+                    <label for="scraper_variant">{{ form.scraper_variant.label }}</label>
+                    {{ form.scraper_variant(class="form-control") }}
+                    {% if form.scraper_variant.errors %}
+                        <div class="error-message">{{ form.scraper_variant.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Override the default scraper for special cases (e.g., AMT uses gcs_with_dates)</small>
+                </div>
+
+                <hr class="my-4">
+                <h5>Playwright Configuration</h5>
+                <p class="text-muted">Required only when IR Platform is set to "Playwright Scraper"</p>
+
+                <!-- Playwright URL -->
+                <div class="form-group">
+                    <label for="playwright_url">{{ form.playwright_url.label }}</label>
+                    {{ form.playwright_url(class="form-control") }}
+                    {% if form.playwright_url.errors %}
+                        <div class="error-message">{{ form.playwright_url.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">URL for Playwright to visit (usually same as press release URL)</small>
+                </div>
+
+                <!-- Playwright Selector -->
+                <div class="form-group">
+                    <label for="playwright_selector">{{ form.playwright_selector.label }}</label>
+                    {{ form.playwright_selector(class="form-control") }}
+                    {% if form.playwright_selector.errors %}
+                        <div class="error-message">{{ form.playwright_selector.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">CSS selector to wait for (e.g., .press-release-item)</small>
+                </div>
+
+                <!-- Playwright Wait Condition -->
+                <div class="form-group">
+                    <label for="playwright_wait_for">{{ form.playwright_wait_for.label }}</label>
+                    {{ form.playwright_wait_for(class="form-control") }}
+                    {% if form.playwright_wait_for.errors %}
+                        <div class="error-message">{{ form.playwright_wait_for.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">When to consider page loaded (selector = wait for CSS selector)</small>
+                </div>
+
+                <hr class="my-4">
+                <h5>SEC EDGAR Configuration</h5>
+                <p class="text-muted">SEC filing identifiers for 8-K and other filing ingestion</p>
+
+                <!-- CIK -->
+                <div class="form-group">
+                    <label for="cik">{{ form.cik.label }}</label>
+                    <div class="input-group">
+                        {{ form.cik(class="form-control") }}
+                        {% if company.cik %}
+                        <div class="input-group-append">
+                            <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.cik }}&type=8-K"
+                               target="_blank" class="btn btn-outline-secondary" title="View 8-K filings">
+                                8-K Filings
+                            </a>
+                            <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.cik }}&type=8-K&output=atom"
+                               target="_blank" class="btn btn-outline-secondary" title="SEC RSS Feed">
+                                RSS
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if form.cik.errors %}
+                        <div class="error-message">{{ form.cik.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">SEC Central Index Key (10 digits, e.g., 0001728951)</small>
+                </div>
+
+                <!-- OP CIK -->
+                <div class="form-group">
+                    <label for="op_cik">{{ form.op_cik.label }}</label>
+                    <div class="input-group">
+                        {{ form.op_cik(class="form-control") }}
+                        {% if company.op_cik %}
+                        <div class="input-group-append">
+                            <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.op_cik }}&type=8-K"
+                               target="_blank" class="btn btn-outline-secondary" title="View OP 8-K filings">
+                                OP 8-K
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if form.op_cik.errors %}
+                        <div class="error-message">{{ form.op_cik.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Operating Partnership CIK (if OP files separately, e.g., Simon Property Group, L.P.)</small>
+                </div>
+
+                <!-- OP Name -->
+                <div class="form-group">
+                    <label for="op_name">{{ form.op_name.label }}</label>
+                    {{ form.op_name(class="form-control") }}
+                    {% if form.op_name.errors %}
+                        <div class="error-message">{{ form.op_name.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">OP legal name (e.g., "Simon Property Group, L.P.")</small>
+                </div>
+
+                <!-- OP Has Unique Filings -->
+                <div class="form-group">
+                    <div class="form-check">
+                        {{ form.op_has_unique_filings(class="form-check-input") }}
+                        <label class="form-check-label" for="op_has_unique_filings">
+                            {{ form.op_has_unique_filings.label.text }}
+                        </label>
+                    </div>
+                    {% if form.op_has_unique_filings.errors %}
+                        <div class="error-message">{{ form.op_has_unique_filings.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Check if OP publishes 424Bs, credit agreements, or other filings not filed by the REIT</small>
+                </div>
+
+                <hr class="my-4">
+                <h5>Newswire Configuration</h5>
+                <p class="text-muted">Configure newswire service for scraping press releases</p>
+
+                <!-- Newswire Provider -->
+                <div class="form-group">
+                    <label for="newswire_provider">{{ form.newswire_provider.label }}</label>
+                    {{ form.newswire_provider(class="form-control") }}
+                    {% if form.newswire_provider.errors %}
+                        <div class="error-message">{{ form.newswire_provider.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Which wire service hosts this company's press releases</small>
+                </div>
+
+                <!-- Custom Provider (shown when "Other" selected) -->
+                <div class="form-group" id="custom_provider_div" style="display: none;">
+                    <label for="custom_provider">{{ form.custom_provider.label }}</label>
+                    {{ form.custom_provider(class="form-control") }}
+                    {% if form.custom_provider.errors %}
+                        <div class="error-message">{{ form.custom_provider.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Enter custom provider name</small>
+                </div>
+
+                <!-- Newswire ID -->
+                <div class="form-group">
+                    <label for="newswire_id">{{ form.newswire_id.label }}</label>
+                    {{ form.newswire_id(class="form-control") }}
+                    {% if form.newswire_id.errors %}
+                        <div class="error-message">{{ form.newswire_id.errors[0] }}</div>
+                    {% endif %}
+                    <small class="text-muted">Organization ID on the newswire service<br>Example: AAT on GlobeNewswire = <code>34254</code><br>Found in press release URLs like /news-release/2026/02/03/3231625/<strong>34254</strong>/en/...</small>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Active Checkbox -->
+                <div class="form-group">
+                    <div class="form-check">
+                        {{ form.active(class="form-check-input") }}
+                        <label class="form-check-label" for="active">
+                            {{ form.active.label.text }}
+                        </label>
+                    </div>
+                    {% if form.active.errors %}
+                        <div class="error-message">{{ form.active.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{{ url_for('companies.company_detail', ticker=company.ticker) }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Company Info</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Ticker:</strong> {{ company.ticker }}</p>
+                    <p><strong>Sector:</strong> {{ company.sector or 'Not set' }}</p>
+                    <p><strong>Active:</strong> {{ 'Yes' if company.active else 'No' }}</p>
+                    <hr>
+                    <p class="small text-muted">
+                        <strong>Created:</strong> {{ company.created_at|format_date('%Y-%m-%d') }}<br>
+                        <strong>Updated:</strong> {{ company.updated_at|format_date('%Y-%m-%d') }}
+                    </p>
+                </div>
+            </div>
+
+            {% if company.cik %}
+            <div class="card mt-3">
+                <div class="card-header bg-info text-white">
+                    <h5>SEC EDGAR Links</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>REIT CIK:</strong> {{ company.cik }}</p>
+                    <div class="d-flex flex-column gap-1 mb-3">
+                        <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.cik }}&type=8-K"
+                           target="_blank" class="btn btn-sm btn-outline-primary">
+                            View 8-K Filings
+                        </a>
+                        <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.cik }}&type=10-K"
+                           target="_blank" class="btn btn-sm btn-outline-secondary">
+                            View 10-K Filings
+                        </a>
+                        <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.cik }}"
+                           target="_blank" class="btn btn-sm btn-outline-secondary">
+                            All Filings
+                        </a>
+                    </div>
+                    {% if company.op_cik %}
+                    <hr>
+                    <p class="mb-2"><strong>OP CIK:</strong> {{ company.op_cik }}</p>
+                    <p class="small text-muted mb-2">{{ company.op_name or 'Operating Partnership' }}</p>
+                    <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={{ company.op_cik }}"
+                       target="_blank" class="btn btn-sm btn-outline-primary">
+                        OP Filings
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5>Tips</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Finding Newswire ID:</h6>
+                    <ol class="small">
+                        <li>Visit the company's IR page</li>
+                        <li>Click on any recent press release</li>
+                        <li>Look at the URL for the organization ID</li>
+                        <li>Example URL: <code>/3231625/34254/en/</code></li>
+                        <li>The ID is <code>34254</code></li>
+                    </ol>
+
+                    <h6 class="mt-3">GlobeNewswire Test:</h6>
+                    <p class="small">Search: <code>https://www.globenewswire.com/en/search/organization/[Company Name]</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.sponsor-feedback {
+    margin-top: 4px;
+    font-size: 0.85em;
+    min-height: 1.5em;
+}
+.sponsor-feedback.valid {
+    color: var(--color-success, #28a745);
+}
+.sponsor-feedback.new {
+    color: var(--color-warning, #856404);
+    background: #fff3cd;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.sponsor-feedback.warning {
+    color: #856404;
+    background: #fff3cd;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.sponsor-feedback.blocked {
+    color: var(--color-danger, #dc3545);
+    background: #f8d7da;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.sponsor-input.is-blocked {
+    border-color: var(--color-danger, #dc3545);
+}
+.sponsor-input.is-warning {
+    border-color: #ffc107;
+}
+.sponsor-input.is-valid {
+    border-color: var(--color-success, #28a745);
+}
+.badge-new {
+    background: #856404;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    margin-right: 4px;
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Sponsor validation data (server-controlled, safe)
+const SPONSORS = {{ sponsors | tojson }};
+const SPONSOR_ALIASES = {{ sponsor_aliases | tojson }};
+
+// Levenshtein distance for typo detection
+function levenshtein(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i-1) === a.charAt(j-1)) {
+                matrix[i][j] = matrix[i-1][j-1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i-1][j-1] + 1,
+                    matrix[i][j-1] + 1,
+                    matrix[i-1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+function normalize(s) {
+    return (s || '').toLowerCase().trim();
+}
+
+function getAliasMatch(input) {
+    const norm = normalize(input);
+    const canonical = SPONSOR_ALIASES[norm];
+    // Don't suggest alias if user already typed the canonical form
+    if (canonical && normalize(canonical) === norm) {
+        return null;
+    }
+    return canonical || null;
+}
+
+function isExactMatch(input) {
+    const norm = normalize(input);
+    return SPONSORS.some(s => normalize(s) === norm);
+}
+
+function findSimilar(input) {
+    const norm = normalize(input);
+    if (!norm || norm.length < 3) return [];
+
+    const similar = [];
+    for (const sponsor of SPONSORS) {
+        const sponsorNorm = normalize(sponsor);
+
+        if (sponsorNorm.includes(norm) || norm.includes(sponsorNorm)) {
+            similar.push({ sponsor, reason: 'contains', distance: 0 });
+            continue;
+        }
+
+        const dist = levenshtein(norm, sponsorNorm);
+        const maxLen = Math.max(norm.length, sponsorNorm.length);
+        const similarity = 1 - (dist / maxLen);
+
+        if (similarity > 0.75) {
+            similar.push({ sponsor, reason: 'typo', distance: dist, similarity });
+        } else if (similarity > 0.5 && norm.length > 4) {
+            similar.push({ sponsor, reason: 'similar', distance: dist, similarity });
+        }
+
+        const inputWords = norm.split(/\s+/);
+        const sponsorWords = sponsorNorm.split(/\s+/);
+        const commonWords = inputWords.filter(w => w.length > 2 && sponsorWords.some(sw => sw.includes(w) || w.includes(sw)));
+        if (commonWords.length > 0 && !similar.some(s => s.sponsor === sponsor)) {
+            similar.push({ sponsor, reason: 'word-match', distance: 10 - commonWords.length });
+        }
+    }
+
+    similar.sort((a, b) => a.distance - b.distance);
+    return similar.slice(0, 3);
+}
+
+function setFeedback(el, type, prefix, sponsorName) {
+    el.textContent = '';
+    el.className = 'sponsor-feedback ' + type;
+
+    if (type === 'valid') {
+        el.textContent = '✓ Known sponsor';
+    } else if (type === 'blocked') {
+        const strong = document.createElement('strong');
+        strong.textContent = prefix;
+        el.appendChild(strong);
+        el.appendChild(document.createTextNode(' ' + sponsorName));
+    } else if (type === 'warning' || type === 'new') {
+        const badge = document.createElement('span');
+        badge.className = 'badge-new';
+        badge.textContent = 'NEW';
+        el.appendChild(badge);
+        el.appendChild(document.createTextNode(' ' + prefix + sponsorName));
+    }
+}
+
+function validateSponsor(input, feedbackEl) {
+    const inputEl = feedbackEl.previousElementSibling;
+    inputEl.classList.remove('is-blocked', 'is-warning', 'is-valid');
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'sponsor-feedback';
+
+    if (!input || !input.trim()) return true;
+
+    const trimmed = input.trim();
+
+    const aliasMatch = getAliasMatch(trimmed);
+    if (aliasMatch) {
+        setFeedback(feedbackEl, 'blocked', 'Use:', aliasMatch);
+        inputEl.classList.add('is-blocked');
+        return false;
+    }
+
+    if (isExactMatch(trimmed)) {
+        setFeedback(feedbackEl, 'valid', '', '');
+        inputEl.classList.add('is-valid');
+        return true;
+    }
+
+    const similar = findSimilar(trimmed);
+    if (similar.length > 0) {
+        const best = similar[0];
+
+        if (best.reason === 'typo' || (best.reason === 'contains' && best.sponsor.toLowerCase() !== trimmed.toLowerCase())) {
+            setFeedback(feedbackEl, 'blocked', 'Did you mean:', best.sponsor + '?');
+            inputEl.classList.add('is-blocked');
+            return false;
+        }
+
+        if (best.reason === 'similar' || best.reason === 'word-match') {
+            setFeedback(feedbackEl, 'warning', 'Similar to: ', similar.map(s => s.sponsor).join(', '));
+            inputEl.classList.add('is-warning');
+            return true;
+        }
+    }
+
+    setFeedback(feedbackEl, 'new', 'Will be added to sponsor list', '');
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const leadInput = document.getElementById('lead_sponsor');
+    const leadFeedback = document.getElementById('lead_sponsor_feedback');
+    const secondInput = document.getElementById('second_sponsor');
+    const secondFeedback = document.getElementById('second_sponsor_feedback');
+
+    if (leadInput && leadFeedback) {
+        leadInput.addEventListener('blur', () => validateSponsor(leadInput.value, leadFeedback));
+        leadInput.addEventListener('input', () => validateSponsor(leadInput.value, leadFeedback));
+        if (leadInput.value) validateSponsor(leadInput.value, leadFeedback);
+    }
+
+    if (secondInput && secondFeedback) {
+        secondInput.addEventListener('blur', () => validateSponsor(secondInput.value, secondFeedback));
+        secondInput.addEventListener('input', () => validateSponsor(secondInput.value, secondFeedback));
+        if (secondInput.value) validateSponsor(secondInput.value, secondFeedback);
+    }
+
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const blockedInputs = form.querySelectorAll('.sponsor-input.is-blocked');
+            if (blockedInputs.length > 0) {
+                e.preventDefault();
+                blockedInputs[0].focus();
+                alert('Please fix the sponsor field before saving.');
+            }
+        });
+    }
+
+    toggleCustomProvider();
+});
+
+function toggleCustomProvider() {
+    const select = document.getElementById('newswire_provider');
+    const customDiv = document.getElementById('custom_provider_div');
+    if (select && customDiv) {
+        if (select.value === 'Other') {
+            customDiv.classList.remove('hidden');
+        } else {
+            customDiv.classList.add('hidden');
+        }
+    }
+}
+</script>
+{% endblock %}
